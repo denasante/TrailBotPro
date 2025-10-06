@@ -1,0 +1,1 @@
+/home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/ament_cmake_core/41068_ignition_bringupConfig-version.cmake
