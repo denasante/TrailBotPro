@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/git/TrailBotPro/41068_ignition_bringup
+CMAKE_SOURCE_DIR = /home/student/git/TrailBotPro
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup
+CMAKE_BINARY_DIR = /home/student/git/TrailBotPro/build/41068_ignition_bringup
 
 # Utility rule file for 41068_ignition_bringup_uninstall.
 
@@ -67,7 +67,7 @@ include CMakeFiles/41068_ignition_bringup_uninstall.dir/compiler_depend.make
 include CMakeFiles/41068_ignition_bringup_uninstall.dir/progress.make
 
 CMakeFiles/41068_ignition_bringup_uninstall:
-	/usr/bin/cmake -P /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake
+	/usr/bin/cmake -P /home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_uninstall_target/ament_cmake_uninstall_target.cmake
 
 41068_ignition_bringup_uninstall: CMakeFiles/41068_ignition_bringup_uninstall
 41068_ignition_bringup_uninstall: CMakeFiles/41068_ignition_bringup_uninstall.dir/build.make
@@ -82,6 +82,6 @@ CMakeFiles/41068_ignition_bringup_uninstall.dir/clean:
 .PHONY : CMakeFiles/41068_ignition_bringup_uninstall.dir/clean
 
 CMakeFiles/41068_ignition_bringup_uninstall.dir/depend:
-	cd /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/git/TrailBotPro/41068_ignition_bringup /home/student/git/TrailBotPro/41068_ignition_bringup /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup /home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/CMakeFiles/41068_ignition_bringup_uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/student/git/TrailBotPro/build/41068_ignition_bringup && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/git/TrailBotPro /home/student/git/TrailBotPro /home/student/git/TrailBotPro/build/41068_ignition_bringup /home/student/git/TrailBotPro/build/41068_ignition_bringup /home/student/git/TrailBotPro/build/41068_ignition_bringup/CMakeFiles/41068_ignition_bringup_uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/41068_ignition_bringup_uninstall.dir/depend
 

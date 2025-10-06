@@ -1,9 +1,0 @@
-/home/student/git/TrailBotPro/build/CMakeFiles/uninstall.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/41068_ignition_bringup_uninstall.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/test.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/edit_cache.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/rebuild_cache.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/list_install_components.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/install.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/install/local.dir
-/home/student/git/TrailBotPro/build/CMakeFiles/install/strip.dir

@@ -1,8 +1,8 @@
-# Install script for directory: /home/student/git/TrailBotPro/41068_ignition_bringup
+# Install script for directory: /home/student/git/TrailBotPro
 
 # Set the install prefix
 if(NOT DEFINED CMAKE_INSTALL_PREFIX)
-  set(CMAKE_INSTALL_PREFIX "/home/student/git/TrailBotPro/41068_ignition_bringup/install/41068_ignition_bringup")
+  set(CMAKE_INSTALL_PREFIX "/home/student/git/TrailBotPro/install/41068_ignition_bringup")
 endif()
 string(REGEX REPLACE "/$" "" CMAKE_INSTALL_PREFIX "${CMAKE_INSTALL_PREFIX}")
 
@@ -43,7 +43,7 @@ if(NOT DEFINED CMAKE_OBJDUMP)
 endif()
 
 if("x${CMAKE_INSTALL_COMPONENT}x" STREQUAL "xUnspecifiedx" OR NOT CMAKE_INSTALL_COMPONENT)
-  include("/home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/ament_cmake_symlink_install/ament_cmake_symlink_install.cmake")
+  include("/home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_symlink_install/ament_cmake_symlink_install.cmake")
 endif()
 
 if(CMAKE_INSTALL_COMPONENT)
@@ -54,5 +54,5 @@ endif()
 
 string(REPLACE ";" "\n" CMAKE_INSTALL_MANIFEST_CONTENT
        "${CMAKE_INSTALL_MANIFEST_FILES}")
-file(WRITE "/home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/${CMAKE_INSTALL_MANIFEST}"
+file(WRITE "/home/student/git/TrailBotPro/build/41068_ignition_bringup/${CMAKE_INSTALL_MANIFEST}"
      "${CMAKE_INSTALL_MANIFEST_CONTENT}")

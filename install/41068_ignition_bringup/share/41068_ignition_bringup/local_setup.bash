@@ -1,1 +1,1 @@
-/home/student/git/TrailBotPro/41068_ignition_bringup/build/41068_ignition_bringup/ament_cmake_environment_hooks/local_setup.bash
+/home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_environment_hooks/local_setup.bash
