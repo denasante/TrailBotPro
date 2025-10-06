@@ -1,4 +1,3 @@
-
 #include "drone_controller.h"
 
 DroneController::DroneController() : Node("drone_controller") {
