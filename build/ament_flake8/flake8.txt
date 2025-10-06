@@ -1,0 +1,33 @@
+-- run_test.py: invoking following command in '/home/student/ros2_ws/src/TrailBotPro':
+ - /opt/ros/humble/bin/ament_flake8 --xunit-file /home/student/ros2_ws/src/TrailBotPro/build/test_results/41068_ignition_bringup/flake8.xunit.xml
+
+        arguments=['-topic', '/robot_description', '-z', '2.0'] # z is height above ground
+                                                               ^
+1     E261 at least two spaces before inline comment
+3     E902 FileNotFoundError: [Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py'
+
+./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py:0:1: E902 FileNotFoundError: [Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py'
+
+./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py:0:1: E902 FileNotFoundError: [Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py'
+
+./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py:0:1: E902 FileNotFoundError: [Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py'
+
+./launch/41068_ignition_drone.launch.py:93:64: E261 at least two spaces before inline comment
+
+
+5 files checked
+4 errors
+
+'E'-type errors: 4
+
+Checked files:
+
+* ./install/_local_setup_util_sh.py
+* ./install/_local_setup_util_ps1.py
+* ./launch/41068_navigation.launch.py
+* ./launch/41068_ignition.launch.py
+* ./launch/41068_ignition_drone.launch.py
+
+
+-- run_test.py: return code 1
+-- run_test.py: verify result file '/home/student/ros2_ws/src/TrailBotPro/build/test_results/41068_ignition_bringup/flake8.xunit.xml'

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite
+  name="41068_ignition_bringup.pep257"
+  tests="8"
+  errors="0"
+  failures="3"
+  time="0.120"
+>
+  <testcase
+    name="unknown (./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py:-)"
+    classname="41068_ignition_bringup.pep257"
+  >
+      <failure message="[Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py'"/>
+  </testcase>
+  <testcase
+    name="unknown (./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py:-)"
+    classname="41068_ignition_bringup.pep257"
+  >
+      <failure message="[Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py'"/>
+  </testcase>
+  <testcase
+    name="unknown (./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py:-)"
+    classname="41068_ignition_bringup.pep257"
+  >
+      <failure message="[Errno 2] No such file or directory: './install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py'"/>
+  </testcase>
+  <testcase
+    name="./install/_local_setup_util_ps1.py"
+    classname="41068_ignition_bringup.pep257"/>
+  <testcase
+    name="./install/_local_setup_util_sh.py"
+    classname="41068_ignition_bringup.pep257"/>
+  <testcase
+    name="./launch/41068_ignition.launch.py"
+    classname="41068_ignition_bringup.pep257"/>
+  <testcase
+    name="./launch/41068_ignition_drone.launch.py"
+    classname="41068_ignition_bringup.pep257"/>
+  <testcase
+    name="./launch/41068_navigation.launch.py"
+    classname="41068_ignition_bringup.pep257"/>
+  <system-out>Checked files:
+* ./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py
+* ./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py
+* ./install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py
+* ./install/_local_setup_util_ps1.py
+* ./install/_local_setup_util_sh.py
+* ./launch/41068_ignition.launch.py
+* ./launch/41068_ignition_drone.launch.py
+* ./launch/41068_navigation.launch.py</system-out>
+</testsuite>

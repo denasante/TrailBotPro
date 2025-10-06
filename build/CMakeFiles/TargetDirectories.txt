@@ -1,5 +1,6 @@
 /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/uninstall.dir
 /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/41068_ignition_bringup_uninstall.dir
+/home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/trail_mission.dir
 /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/test.dir
 /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/edit_cache.dir
 /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/rebuild_cache.dir

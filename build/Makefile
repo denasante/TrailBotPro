@@ -197,6 +197,67 @@ uninstall/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/41068_ignition_bringup_uninstall.dir/build.make CMakeFiles/41068_ignition_bringup_uninstall.dir/build
 .PHONY : 41068_ignition_bringup_uninstall/fast
 
+#=============================================================================
+# Target rules for targets named trail_mission
+
+# Build rule for target.
+trail_mission: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 trail_mission
+.PHONY : trail_mission
+
+# fast build rule for target.
+trail_mission/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/build
+.PHONY : trail_mission/fast
+
+src/mission_interface.o: src/mission_interface.cpp.o
+.PHONY : src/mission_interface.o
+
+# target to build an object file
+src/mission_interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.o
+.PHONY : src/mission_interface.cpp.o
+
+src/mission_interface.i: src/mission_interface.cpp.i
+.PHONY : src/mission_interface.i
+
+# target to preprocess a source file
+src/mission_interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.i
+.PHONY : src/mission_interface.cpp.i
+
+src/mission_interface.s: src/mission_interface.cpp.s
+.PHONY : src/mission_interface.s
+
+# target to generate assembly for a file
+src/mission_interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.s
+.PHONY : src/mission_interface.cpp.s
+
+src/rover_controller.o: src/rover_controller.cpp.o
+.PHONY : src/rover_controller.o
+
+# target to build an object file
+src/rover_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.o
+.PHONY : src/rover_controller.cpp.o
+
+src/rover_controller.i: src/rover_controller.cpp.i
+.PHONY : src/rover_controller.i
+
+# target to preprocess a source file
+src/rover_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.i
+.PHONY : src/rover_controller.cpp.i
+
+src/rover_controller.s: src/rover_controller.cpp.s
+.PHONY : src/rover_controller.s
+
+# target to generate assembly for a file
+src/rover_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.s
+.PHONY : src/rover_controller.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -212,6 +273,13 @@ help:
 	@echo "... test"
 	@echo "... 41068_ignition_bringup_uninstall"
 	@echo "... uninstall"
+	@echo "... trail_mission"
+	@echo "... src/mission_interface.o"
+	@echo "... src/mission_interface.i"
+	@echo "... src/mission_interface.s"
+	@echo "... src/rover_controller.o"
+	@echo "... src/rover_controller.i"
+	@echo "... src/rover_controller.s"
 .PHONY : help
 
 

@@ -7,7 +7,7 @@
 				{
 					"build" : ".",
 					"hasInstallRule" : true,
-					"jsonFile" : "directory-.-Debug-f51b70d11e485559b59b.json",
+					"jsonFile" : "directory-.-Debug-f785e4942b622ff6929c.json",
 					"minimumCMakeVersion" : 
 					{
 						"string" : "3.12"
@@ -17,7 +17,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -33,7 +34,8 @@
 					"targetIndexes" : 
 					[
 						0,
-						1
+						1,
+						2
 					]
 				}
 			],
@@ -42,14 +44,21 @@
 				{
 					"directoryIndex" : 0,
 					"id" : "41068_ignition_bringup_uninstall::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-41068_ignition_bringup_uninstall-Debug-9549fae4c38bfd355f17.json",
+					"jsonFile" : "target-41068_ignition_bringup_uninstall-Debug-2a03645652a0f6183ce4.json",
 					"name" : "41068_ignition_bringup_uninstall",
 					"projectIndex" : 0
 				},
 				{
 					"directoryIndex" : 0,
+					"id" : "trail_mission::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-trail_mission-Debug-ed59a26368f30c910d93.json",
+					"name" : "trail_mission",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
 					"id" : "uninstall::@6890427a1f51a3e7e1df",
-					"jsonFile" : "target-uninstall-Debug-7ed161eeadd99e38c4ec.json",
+					"jsonFile" : "target-uninstall-Debug-208c77e6ed48bbfabbd1.json",
 					"name" : "uninstall",
 					"projectIndex" : 0
 				}
