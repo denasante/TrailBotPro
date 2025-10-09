@@ -1,3 +1,5 @@
+/home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/dronecontroller
+/home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/mission_interface
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/41068.rviz
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/gazebo_bridge.yaml
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/nav2_params.yaml
@@ -29,8 +31,6 @@
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/top_plate.dae
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/wheel.dae
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/wheel.urdf.xacro
-/home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/large_demo.sdf
-/home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/simple_trees.sdf
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/common_properties.urdf.xacro
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/hull.dae
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_fl.dae
@@ -46,6 +46,8 @@
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/3.png
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/4.png
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/5.png
+/home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/large_demo.sdf
+/home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/simple_trees.sdf
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/package_run_dependencies/41068_ignition_bringup
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/parent_prefix_path/41068_ignition_bringup
 /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/ament_prefix_path.sh

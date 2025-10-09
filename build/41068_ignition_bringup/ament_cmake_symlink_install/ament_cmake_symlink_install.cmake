@@ -310,8 +310,11 @@ message(STATUS "Execute custom install script")
 
 # begin of custom install code
 
-# install(DIRECTORY "config" "launch" "models" "urdf" "worlds" "urdf_drone" "DESTINATION" "share/41068_ignition_bringup")
-ament_cmake_symlink_install_directory("/home/student/git/TrailBotPro" DIRECTORY "config" "launch" "models" "urdf" "worlds" "urdf_drone" "DESTINATION" "share/41068_ignition_bringup")
+# install("TARGETS" "dronecontroller" "mission_interface" "DESTINATION" "lib/41068_ignition_bringup")
+include("/home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_symlink_install_targets_0_${CMAKE_INSTALL_CONFIG_NAME}.cmake")
+
+# install(DIRECTORY "config" "launch" "models" "urdf" "urdf_drone" "worlds" "DESTINATION" "share/41068_ignition_bringup")
+ament_cmake_symlink_install_directory("/home/student/git/TrailBotPro" DIRECTORY "config" "launch" "models" "urdf" "urdf_drone" "worlds" "DESTINATION" "share/41068_ignition_bringup")
 
 # install(FILES "/home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/41068_ignition_bringup" "DESTINATION" "share/ament_index/resource_index/package_run_dependencies")
 ament_cmake_symlink_install_files("/home/student/git/TrailBotPro" FILES "/home/student/git/TrailBotPro/build/41068_ignition_bringup/ament_cmake_index/share/ament_index/resource_index/package_run_dependencies/41068_ignition_bringup" "DESTINATION" "share/ament_index/resource_index/package_run_dependencies")

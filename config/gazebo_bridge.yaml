@@ -67,3 +67,30 @@
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "ignition.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
+
+
+
+  # ======================================================
+# Parrot Drone Bridges
+# ======================================================
+
+# Clock (keep time consistent)
+- ros_topic_name: "/clock"
+  gz_topic_name: "/clock"
+  ros_type_name: "rosgraph_msgs/msg/Clock"
+  gz_type_name: "gz.msgs.Clock"
+  direction: GZ_TO_ROS
+
+# Parrot odometry (GZ -> ROS)
+- ros_topic_name: "/parrot/odometry"
+  gz_topic_name: "/model/parrot/odometry"
+  ros_type_name: "nav_msgs/msg/Odometry"
+  gz_type_name: "ignition.msgs.Odometry"
+  direction: GZ_TO_ROS
+
+# Parrot velocity command (ROS -> GZ)
+- ros_topic_name: "/parrot/cmd_vel"
+  gz_topic_name: "/model/parrot/cmd_vel"
+  ros_type_name: "geometry_msgs/msg/Twist"
+  gz_type_name: "ignition.msgs.Twist"
+  direction: ROS_TO_GZ

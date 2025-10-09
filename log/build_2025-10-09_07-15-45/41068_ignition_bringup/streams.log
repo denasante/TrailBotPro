@@ -1,0 +1,85 @@
+[0.029s] Invoking command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/student/git/TrailBotPro/build/41068_ignition_bringup -- -j8 -l8
+[0.166s] [ 50%] Built target dronecontroller
+[0.196s] [35m[1mConsolidate compiler generated dependencies of target mission_interface[0m
+[0.267s] [ 75%] [32mBuilding CXX object CMakeFiles/mission_interface.dir/mission_interface.cpp.o[0m
+[4.613s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:[m[K In constructor ‘[01m[KMissionInterface::MissionInterface()[m[K’:
+[4.613s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:125:3:[m[K [01;31m[Kerror: [m[K‘[01m[Ktarget_topic_[m[K’ was not declared in this scope
+[4.613s]   125 |   [01;31m[Ktarget_topic_[m[K = declare_parameter<std::string>("target_topic", "/mission/target");
+[4.613s]       |   [01;31m[K^~~~~~~~~~~~~[m[K
+[4.627s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:126:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kstatus_topic_[m[K’ was not declared in this scope
+[4.628s]   126 |   [01;31m[Kstatus_topic_[m[K = declare_parameter<std::string>("status_topic", "/mission/status");
+[4.628s]       |   [01;31m[K^~~~~~~~~~~~~[m[K
+[4.640s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:131:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kwaypoints_[m[K’ was not declared in this scope
+[4.641s]   131 |   [01;31m[Kwaypoints_[m[K = {
+[4.642s]       |   [01;31m[K^~~~~~~~~~[m[K
+[4.654s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:136:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kcurrent_idx_[m[K’ was not declared in this scope
+[4.654s]   136 |   [01;31m[Kcurrent_idx_[m[K = 0;
+[4.654s]       |   [01;31m[K^~~~~~~~~~~~[m[K
+[4.664s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:141:3:[m[K [01;31m[Kerror: [m[K‘[01m[Kpub_target_[m[K’ was not declared in this scope
+[4.664s]   141 |   [01;31m[Kpub_target_[m[K = create_publisher<geometry_msgs::msg::PoseStamped>(target_topic_, qos);
+[4.664s]       |   [01;31m[K^~~~~~~~~~~[m[K
+[4.667s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:141:54:[m[K [01;31m[Kerror: [m[K‘[01m[KPoseStamped[m[K’ is not a member of ‘[01m[Kgeometry_msgs::msg[m[K’
+[4.667s]   141 |   pub_target_ = create_publisher<geometry_msgs::msg::[01;31m[KPoseStamped[m[K>(target_topic_, qos);
+[4.668s]       |                                                      [01;31m[K^~~~~~~~~~~[m[K
+[4.679s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:142:3:[m[K [01;31m[Kerror: [m[K‘[01m[Ksub_status_[m[K’ was not declared in this scope; did you mean ‘[01m[Ksi_status[m[K’?
+[4.679s]   142 |   [01;31m[Ksub_status_[m[K = create_subscription<std_msgs::msg::String>(
+[4.680s]       |   [01;31m[K^~~~~~~~~~~[m[K
+[4.680s]       |   [32m[Ksi_status[m[K
+[4.682s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:142:52:[m[K [01;31m[Kerror: [m[K‘[01m[KString[m[K’ is not a member of ‘[01m[Kstd_msgs::msg[m[K’
+[4.682s]   142 |   sub_status_ = create_subscription<std_msgs::msg::[01;31m[KString[m[K>(
+[4.682s]       |                                                    [01;31m[K^~~~~~[m[K
+[4.685s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:144:36:[m[K [01;31m[Kerror: [m[K‘[01m[Kstatus_cb[m[K’ is not a member of ‘[01m[KMissionInterface[m[K’
+[4.685s]   144 |       std::bind(&MissionInterface::[01;31m[Kstatus_cb[m[K, this, std::placeholders::_1));
+[4.685s]       |                                    [01;31m[K^~~~~~~~~[m[K
+[4.688s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:145:3:[m[K [01;31m[Kerror: [m[K‘[01m[Ksub_odom_[m[K’ was not declared in this scope
+[4.688s]   145 |   [01;31m[Ksub_odom_[m[K = create_subscription<nav_msgs::msg::Odometry>(
+[4.688s]       |   [01;31m[K^~~~~~~~~[m[K
+[4.711s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:[m[K At global scope:
+[4.711s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:159:55:[m[K [01;31m[Kerror: [m[K‘[01m[KString[m[K’ in namespace ‘[01m[Kstd_msgs::msg[m[K’ does not name a type
+[4.712s]   159 | void MissionInterface::status_cb(const std_msgs::msg::[01;31m[KString[m[K::SharedPtr msg)
+[4.712s]       |                                                       [01;31m[K^~~~~~[m[K
+[4.714s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:159:73:[m[K [01;31m[Kerror: [m[Kexpected unqualified-id before ‘[01m[Kmsg[m[K’
+[4.714s]   159 | void MissionInterface::status_cb(const std_msgs::msg::String::SharedPtr [01;31m[Kmsg[m[K)
+[4.714s]       |                                                                         [01;31m[K^~~[m[K
+[4.714s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:159:72:[m[K [01;31m[Kerror: [m[Kexpected ‘[01m[K)[m[K’ before ‘[01m[Kmsg[m[K’
+[4.714s]   159 | void MissionInterface::status_cb[34m[K([m[Kconst std_msgs::msg::String::SharedPtr[01;31m[K [m[K[32m[Kmsg[m[K)
+[4.714s]       |                                 [34m[K~[m[K                                      [01;31m[K^[m[K[32m[K~~~[m[K
+[4.714s]       |                                                                        [32m[K)[m[K
+[4.714s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:159:73:[m[K [01;31m[Kerror: [m[Kexpected initializer before ‘[01m[Kmsg[m[K’
+[4.715s]   159 | void MissionInterface::status_cb(const std_msgs::msg::String::SharedPtr [01;31m[Kmsg[m[K)
+[4.715s]       |                                                                         [01;31m[K^~~[m[K
+[4.715s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:170:6:[m[K [01;31m[Kerror: [m[Kno declaration matches ‘[01m[Kvoid MissionInterface::send_target(double, double, double)[m[K’
+[4.715s]   170 | void [01;31m[KMissionInterface[m[K::send_target(double x, double y, double yaw)
+[4.715s]       |      [01;31m[K^~~~~~~~~~~~~~~~[m[K
+[4.715s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:170:6:[m[K [01;36m[Knote: [m[Kno functions named ‘[01m[Kvoid MissionInterface::send_target(double, double, double)[m[K’
+[4.715s] In file included from [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:113[m[K:
+[4.715s] [01m[K/home/student/git/TrailBotPro/mission_interface.h:9:7:[m[K [01;36m[Knote: [m[K‘[01m[Kclass MissionInterface[m[K’ defined here
+[4.715s]     9 | class [01;36m[KMissionInterface[m[K : public rclcpp::Node {
+[4.715s]       |       [01;36m[K^~~~~~~~~~~~~~~~[m[K
+[4.731s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:[m[K In member function ‘[01m[Kvoid MissionInterface::tick()[m[K’:
+[4.732s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:193:19:[m[K [01;31m[Kerror: [m[K‘[01m[Kwaypoints_[m[K’ was not declared in this scope
+[4.732s]   193 |       send_target([01;31m[Kwaypoints_[m[K[current_idx_].x, waypoints_[current_idx_].y, waypoints_[current_idx_].yaw);
+[4.732s]       |                   [01;31m[K^~~~~~~~~~[m[K
+[4.749s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:193:30:[m[K [01;31m[Kerror: [m[K‘[01m[Kcurrent_idx_[m[K’ was not declared in this scope
+[4.749s]   193 |       send_target(waypoints_[[01;31m[Kcurrent_idx_[m[K].x, waypoints_[current_idx_].y, waypoints_[current_idx_].yaw);
+[4.749s]       |                              [01;31m[K^~~~~~~~~~~~[m[K
+[4.762s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:193:7:[m[K [01;31m[Kerror: [m[K‘[01m[Ksend_target[m[K’ was not declared in this scope
+[4.762s]   193 |       [01;31m[Ksend_target[m[K(waypoints_[current_idx_].x, waypoints_[current_idx_].y, waypoints_[current_idx_].yaw);
+[4.762s]       |       [01;31m[K^~~~~~~~~~~[m[K
+[4.763s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:194:23:[m[K [01;31m[Kerror: [m[K‘[01m[KWAIT_ARRIVAL[m[K’ is not a member of ‘[01m[KMissionInterface::Phase[m[K’
+[4.763s]   194 |       phase_ = Phase::[01;31m[KWAIT_ARRIVAL[m[K;
+[4.763s]       |                       [01;31m[K^~~~~~~~~~~~[m[K
+[4.763s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:197:17:[m[K [01;31m[Kerror: [m[K‘[01m[KWAIT_ARRIVAL[m[K’ is not a member of ‘[01m[KMissionInterface::Phase[m[K’
+[4.764s]   197 |     case Phase::[01;31m[KWAIT_ARRIVAL[m[K:
+[4.764s]       |                 [01;31m[K^~~~~~~~~~~~[m[K
+[4.765s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:210:25:[m[K [01;31m[Kerror: [m[K‘[01m[KWAIT_ARRIVAL[m[K’ is not a member of ‘[01m[KMissionInterface::Phase[m[K’
+[4.765s]   210 |         phase_ = Phase::[01;31m[KWAIT_ARRIVAL[m[K;
+[4.766s]       |                         [01;31m[K^~~~~~~~~~~~[m[K
+[4.766s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:185:10:[m[K [01;35m[Kwarning: [m[Kenumeration value ‘[01m[KFORWARD[m[K’ not handled in switch [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wswitch-Wswitch]8;;[m[K]
+[4.768s]   185 |   switch [01;35m[K([m[Kphase_)
+[4.768s]       |          [01;35m[K^[m[K
+[4.768s] [01m[K/home/student/git/TrailBotPro/mission_interface.cpp:185:10:[m[K [01;35m[Kwarning: [m[Kenumeration value ‘[01m[KREVERSE[m[K’ not handled in switch [[01;35m[K]8;;https://gcc.gnu.org/onlinedocs/gcc/Warning-Options.html#index-Wswitch-Wswitch]8;;[m[K]
+[9.199s] gmake[2]: *** [CMakeFiles/mission_interface.dir/build.make:76: CMakeFiles/mission_interface.dir/mission_interface.cpp.o] Error 1
+[9.200s] gmake[1]: *** [CMakeFiles/Makefile2:165: CMakeFiles/mission_interface.dir/all] Error 2
+[9.200s] gmake: *** [Makefile:146: all] Error 2
+[9.210s] Invoked command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup' returned '2': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/student/git/TrailBotPro/build/41068_ignition_bringup -- -j8 -l8

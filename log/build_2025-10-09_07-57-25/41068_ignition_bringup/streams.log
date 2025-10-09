@@ -1,0 +1,76 @@
+[0.038s] Invoking command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/student/git/TrailBotPro/build/41068_ignition_bringup -- -j8 -l8
+[0.103s] [35m[1mConsolidate compiler generated dependencies of target dronecontroller[0m
+[0.167s] [ 25%] [32mBuilding CXX object CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o[0m
+[19.611s] [ 50%] [32m[1mLinking CXX executable dronecontroller[0m
+[20.846s] [ 50%] Built target dronecontroller
+[20.900s] [100%] Built target mission_interface
+[20.932s] Invoked command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --build /home/student/git/TrailBotPro/build/41068_ignition_bringup -- -j8 -l8
+[20.958s] Invoking command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/student/git/TrailBotPro/build/41068_ignition_bringup
+[20.979s] -- Install configuration: ""
+[20.981s] -- Execute custom install script
+[20.981s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/dronecontroller
+[20.981s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/mission_interface
+[20.982s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/41068.rviz
+[20.982s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/gazebo_bridge.yaml
+[20.994s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/nav2_params.yaml
+[20.995s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/robot_localization.yaml
+[20.995s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/slam_params.yaml
+[21.001s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/empty_grass.png
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/forest_overhead.png
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/leaf_litter.png
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/model.config
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/model.sdf
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall.png
+[21.002s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall_transparent.png
+[21.003s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall_transparent_small.png
+[21.003s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/model.config
+[21.003s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/model.sdf
+[21.003s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/materials/textures/empty_grass.png
+[21.004s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/model.config
+[21.004s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/model.sdf
+[21.004s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/common_properties.urdf.xacro
+[21.005s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/husky.gazebo.xacro
+[21.005s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/husky.urdf.xacro
+[21.005s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/base_link.dae
+[21.005s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/bumper.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/jpl04_arch_nosensor.stl
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/top_chassis.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/top_plate.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/wheel.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/wheel.urdf.xacro
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/common_properties.urdf.xacro
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/hull.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_fl.dae
+[21.006s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_fr.dae
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_rl.dae
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_rr.dae
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/model.config
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/model.sdf
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/parrot.gazebo.xacro
+[21.007s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/parrot.urdf.xacro
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/1.png
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/2.png
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/3.png
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/4.png
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/5.png
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/large_demo.sdf
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/simple_trees.sdf
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/package_run_dependencies/41068_ignition_bringup
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/parent_prefix_path/41068_ignition_bringup
+[21.008s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/ament_prefix_path.sh
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/ament_prefix_path.dsv
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/path.sh
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/path.dsv
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.bash
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.sh
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.zsh
+[21.009s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.dsv
+[21.009s] -- Symlinking: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/package.dsv
+[21.019s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/packages/41068_ignition_bringup
+[21.020s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/cmake/41068_ignition_bringupConfig.cmake
+[21.020s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/cmake/41068_ignition_bringupConfig-version.cmake
+[21.021s] -- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/package.xml
+[21.026s] Invoked command in '/home/student/git/TrailBotPro/build/41068_ignition_bringup' returned '0': CMAKE_PREFIX_PATH=${CMAKE_PREFIX_PATH}:/opt/ros/humble /usr/bin/cmake --install /home/student/git/TrailBotPro/build/41068_ignition_bringup

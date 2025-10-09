@@ -197,6 +197,80 @@ uninstall/fast:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/41068_ignition_bringup_uninstall.dir/build.make CMakeFiles/41068_ignition_bringup_uninstall.dir/build
 .PHONY : 41068_ignition_bringup_uninstall/fast
 
+#=============================================================================
+# Target rules for targets named dronecontroller
+
+# Build rule for target.
+dronecontroller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dronecontroller
+.PHONY : dronecontroller
+
+# fast build rule for target.
+dronecontroller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/build
+.PHONY : dronecontroller/fast
+
+#=============================================================================
+# Target rules for targets named mission_interface
+
+# Build rule for target.
+mission_interface: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mission_interface
+.PHONY : mission_interface
+
+# fast build rule for target.
+mission_interface/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/build
+.PHONY : mission_interface/fast
+
+dronecontroller.o: dronecontroller.cpp.o
+.PHONY : dronecontroller.o
+
+# target to build an object file
+dronecontroller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o
+.PHONY : dronecontroller.cpp.o
+
+dronecontroller.i: dronecontroller.cpp.i
+.PHONY : dronecontroller.i
+
+# target to preprocess a source file
+dronecontroller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.i
+.PHONY : dronecontroller.cpp.i
+
+dronecontroller.s: dronecontroller.cpp.s
+.PHONY : dronecontroller.s
+
+# target to generate assembly for a file
+dronecontroller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.s
+.PHONY : dronecontroller.cpp.s
+
+mission_interface.o: mission_interface.cpp.o
+.PHONY : mission_interface.o
+
+# target to build an object file
+mission_interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.o
+.PHONY : mission_interface.cpp.o
+
+mission_interface.i: mission_interface.cpp.i
+.PHONY : mission_interface.i
+
+# target to preprocess a source file
+mission_interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.i
+.PHONY : mission_interface.cpp.i
+
+mission_interface.s: mission_interface.cpp.s
+.PHONY : mission_interface.s
+
+# target to generate assembly for a file
+mission_interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.s
+.PHONY : mission_interface.cpp.s
+
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -212,6 +286,14 @@ help:
 	@echo "... test"
 	@echo "... 41068_ignition_bringup_uninstall"
 	@echo "... uninstall"
+	@echo "... dronecontroller"
+	@echo "... mission_interface"
+	@echo "... dronecontroller.o"
+	@echo "... dronecontroller.i"
+	@echo "... dronecontroller.s"
+	@echo "... mission_interface.o"
+	@echo "... mission_interface.i"
+	@echo "... mission_interface.s"
 .PHONY : help
 
 

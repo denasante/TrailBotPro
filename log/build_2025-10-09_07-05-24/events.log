@@ -1,0 +1,160 @@
+[0.000000] (-) TimerEvent: {}
+[0.002182] (41068_ignition_bringup) JobQueued: {'identifier': '41068_ignition_bringup', 'dependencies': OrderedDict()}
+[0.002508] (41068_ignition_bringup) JobStarted: {'identifier': '41068_ignition_bringup'}
+[0.015092] (41068_ignition_bringup) JobProgress: {'identifier': '41068_ignition_bringup', 'progress': 'cmake'}
+[0.018746] (41068_ignition_bringup) JobProgress: {'identifier': '41068_ignition_bringup', 'progress': 'build'}
+[0.018869] (41068_ignition_bringup) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/student/git/TrailBotPro/build/41068_ignition_bringup', '--', '-j8', '-l8'], 'cwd': '/home/student/git/TrailBotPro/build/41068_ignition_bringup', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('PYTHON_BASIC_REPL', '1'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'student'), ('SSH_AGENT_PID', '2357'), ('XDG_SESSION_TYPE', 'x11'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/student'), ('CHROME_DESKTOP', 'code.desktop'), ('OLDPWD', '/home/student/git/TrailBotPro'), ('TERM_PROGRAM_VERSION', '1.104.3'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('MANAGERPID', '2255'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '2469'), ('BUNDLED_DEBUGPY_PATH', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/libs/debugpy'), ('XRDP_PULSE_SOURCE_SOCKET', 'xrdp_chansrv_audio_in_socket_10'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('XRDP_PULSE_SINK_SOCKET', 'xrdp_chansrv_audio_out_socket_10'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1002/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '3018'), ('PULSE_SCRIPT', '/etc/xrdp/pulse/default.pa'), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/student/git/TrailBotPro/install:/home/student/robostu_ws/install:/home/student/Desktop/41068_ws/install:/home/student/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'student'), ('JOURNAL_STREAM', '8:19293'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/scripts/noConfigScripts'), ('SESSION_MANAGER', 'local/labNVXMF8:@/tmp/.ICE-unix/2446,unix/labNVXMF8:/tmp/.ICE-unix/2446'), ('INVOCATION_ID', '266d0cf6131f4abf9634bb6a69a3d1a6'), ('XDG_MENU_PREFIX', 'gnome-'), ('XRDP_SOCKET_PATH', '/run/xrdp/sockdir'), ('XDG_RUNTIME_DIR', '/run/user/1002'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':10.0'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-eff258b6eef5dc68.txt'), ('LANG', 'C.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('PYTHONSTARTUP', '/home/student/.config/Code/User/workspaceStorage/d081f97944b255d19d6cf7b2561ad952/ms-python.python/pythonrc.py'), ('XMODIFIERS', '@im=ibus'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1002/vscode-git-d4a6b9a8d9.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AUTH_SOCK', '/run/user/1002/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'Unity'), ('UID', '1002'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('XRDP_SESSION', '1'), ('GPG_AGENT_INFO', '/run/user/1002/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11/'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/student/git/TrailBotPro/build/41068_ignition_bringup'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('SGX_AESM_ADDR', '1'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble')]), 'shell': False}
+[0.100742] (-) TimerEvent: {}
+[0.127909] (41068_ignition_bringup) StdoutLine: {'line': b'\x1b[35m\x1b[1mConsolidate compiler generated dependencies of target dronecontroller\x1b[0m\n'}
+[0.200874] (-) TimerEvent: {}
+[0.204247] (41068_ignition_bringup) StdoutLine: {'line': b'[ 25%] \x1b[32mBuilding CXX object CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o\x1b[0m\n'}
+[0.300991] (-) TimerEvent: {}
+[0.408169] (-) TimerEvent: {}
+[0.513335] (-) TimerEvent: {}
+[0.614905] (-) TimerEvent: {}
+[0.717143] (-) TimerEvent: {}
+[0.817585] (-) TimerEvent: {}
+[0.918429] (-) TimerEvent: {}
+[1.020138] (-) TimerEvent: {}
+[1.120687] (-) TimerEvent: {}
+[1.224230] (-) TimerEvent: {}
+[1.324915] (-) TimerEvent: {}
+[1.428192] (-) TimerEvent: {}
+[1.528716] (-) TimerEvent: {}
+[1.629144] (-) TimerEvent: {}
+[1.729578] (-) TimerEvent: {}
+[1.834186] (-) TimerEvent: {}
+[1.934676] (-) TimerEvent: {}
+[2.035135] (-) TimerEvent: {}
+[2.140510] (-) TimerEvent: {}
+[2.244270] (-) TimerEvent: {}
+[2.344732] (-) TimerEvent: {}
+[2.446391] (-) TimerEvent: {}
+[2.549997] (-) TimerEvent: {}
+[2.651553] (-) TimerEvent: {}
+[2.752293] (-) TimerEvent: {}
+[2.854412] (-) TimerEvent: {}
+[2.955186] (-) TimerEvent: {}
+[3.055641] (-) TimerEvent: {}
+[3.164867] (-) TimerEvent: {}
+[3.265699] (-) TimerEvent: {}
+[3.366686] (-) TimerEvent: {}
+[3.467134] (-) TimerEvent: {}
+[3.567594] (-) TimerEvent: {}
+[3.669079] (-) TimerEvent: {}
+[3.770739] (-) TimerEvent: {}
+[3.874974] (-) TimerEvent: {}
+[3.975915] (-) TimerEvent: {}
+[4.079178] (-) TimerEvent: {}
+[4.179646] (-) TimerEvent: {}
+[4.280367] (-) TimerEvent: {}
+[4.346355] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:\x1b[m\x1b[K In constructor \xe2\x80\x98\x1b[01m\x1b[KDroneController::DroneController()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[4.347391] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:30:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kmission_target_topic_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.347564] (41068_ignition_bringup) StderrLine: {'line': b'   30 |   \x1b[01;31m\x1b[Kmission_target_topic_\x1b[m\x1b[K = declare_parameter<std::string>("mission_target_topic", "/mission/target");\n'}
+[4.348035] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.358950] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:31:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kstatus_topic_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.359311] (41068_ignition_bringup) StderrLine: {'line': b'   31 |   \x1b[01;31m\x1b[Kstatus_topic_\x1b[m\x1b[K      = declare_parameter<std::string>("status_topic", "/mission/status");\n'}
+[4.360282] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.380228] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:45:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kpub_status_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope; did you mean \xe2\x80\x98\x1b[01m\x1b[Ksi_status\x1b[m\x1b[K\xe2\x80\x99?\n'}
+[4.380593] (-) TimerEvent: {}
+[4.383032] (41068_ignition_bringup) StderrLine: {'line': b'   45 |   \x1b[01;31m\x1b[Kpub_status_\x1b[m\x1b[K = create_publisher<std_msgs::msg::String>(status_topic_, qos);\n'}
+[4.383343] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.383505] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[32m\x1b[Ksi_status\x1b[m\x1b[K\n'}
+[4.386873] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:45:49:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[KString\x1b[m\x1b[K\xe2\x80\x99 is not a member of \xe2\x80\x98\x1b[01m\x1b[Kstd_msgs::msg\x1b[m\x1b[K\xe2\x80\x99\n'}
+[4.387154] (41068_ignition_bringup) StderrLine: {'line': b'   45 |   pub_status_ = create_publisher<std_msgs::msg::\x1b[01;31m\x1b[KString\x1b[m\x1b[K>(status_topic_, qos);\n'}
+[4.387383] (41068_ignition_bringup) StderrLine: {'line': b'      |                                                 \x1b[01;31m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[4.415917] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:51:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ksub_target_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.416363] (41068_ignition_bringup) StderrLine: {'line': b'   51 |   \x1b[01;31m\x1b[Ksub_target_\x1b[m\x1b[K = create_subscription<geometry_msgs::msg::PoseStamped>(\n'}
+[4.417635] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.417857] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:52:63:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ktarget_cb\x1b[m\x1b[K\xe2\x80\x99 is not a member of \xe2\x80\x98\x1b[01m\x1b[KDroneController\x1b[m\x1b[K\xe2\x80\x99\n'}
+[4.418022] (41068_ignition_bringup) StderrLine: {'line': b'   52 |       mission_target_topic_, qos, std::bind(&DroneController::\x1b[01;31m\x1b[Ktarget_cb\x1b[m\x1b[K, this, _1));\n'}
+[4.418230] (41068_ignition_bringup) StderrLine: {'line': b'      |                                                               \x1b[01;31m\x1b[K^~~~~~~~~\x1b[m\x1b[K\n'}
+[4.462381] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:57:3:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Khave_target_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.462814] (41068_ignition_bringup) StderrLine: {'line': b'   57 |   \x1b[01;31m\x1b[Khave_target_\x1b[m\x1b[K = false;\n'}
+[4.462984] (41068_ignition_bringup) StderrLine: {'line': b'      |   \x1b[01;31m\x1b[K^~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.471004] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:\x1b[m\x1b[K At global scope:\n'}
+[4.471425] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:77:6:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[Kno declaration matches \xe2\x80\x98\x1b[01m\x1b[Kvoid DroneController::target_cb(geometry_msgs::msg::PoseStamped_<std::allocator<void> >::SharedPtr)\x1b[m\x1b[K\xe2\x80\x99\n'}
+[4.471873] (41068_ignition_bringup) StderrLine: {'line': b'   77 | void \x1b[01;31m\x1b[KDroneController\x1b[m\x1b[K::target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {\n'}
+[4.472013] (41068_ignition_bringup) StderrLine: {'line': b'      |      \x1b[01;31m\x1b[K^~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.472169] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:77:6:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[Kno functions named \xe2\x80\x98\x1b[01m\x1b[Kvoid DroneController::target_cb(geometry_msgs::msg::PoseStamped_<std::allocator<void> >::SharedPtr)\x1b[m\x1b[K\xe2\x80\x99\n'}
+[4.472313] (41068_ignition_bringup) StderrLine: {'line': b'In file included from \x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:1\x1b[m\x1b[K:\n'}
+[4.472463] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.h:10:7:\x1b[m\x1b[K \x1b[01;36m\x1b[Knote: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kclass DroneController\x1b[m\x1b[K\xe2\x80\x99 defined here\n'}
+[4.472639] (41068_ignition_bringup) StderrLine: {'line': b'   10 | class \x1b[01;36m\x1b[KDroneController\x1b[m\x1b[K : public rclcpp::Node {\n'}
+[4.472792] (41068_ignition_bringup) StderrLine: {'line': b'      |       \x1b[01;36m\x1b[K^~~~~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.481143] (-) TimerEvent: {}
+[4.488447] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:\x1b[m\x1b[K In member function \xe2\x80\x98\x1b[01m\x1b[Kvoid DroneController::control_tick()\x1b[m\x1b[K\xe2\x80\x99:\n'}
+[4.488799] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:101:8:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Khave_target_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.488965] (41068_ignition_bringup) StderrLine: {'line': b'  101 |   if (!\x1b[01;31m\x1b[Khave_target_\x1b[m\x1b[K) {\n'}
+[4.489111] (41068_ignition_bringup) StderrLine: {'line': b'      |        \x1b[01;31m\x1b[K^~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.496069] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:107:15:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ktarget_x_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.496457] (41068_ignition_bringup) StderrLine: {'line': b'  107 |   double ex = \x1b[01;31m\x1b[Ktarget_x_\x1b[m\x1b[K - x_;\n'}
+[4.496656] (41068_ignition_bringup) StderrLine: {'line': b'      |               \x1b[01;31m\x1b[K^~~~~~~~~\x1b[m\x1b[K\n'}
+[4.512910] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:108:15:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Ktarget_y_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.513341] (41068_ignition_bringup) StderrLine: {'line': b'  108 |   double ey = \x1b[01;31m\x1b[Ktarget_y_\x1b[m\x1b[K - y_;\n'}
+[4.513502] (41068_ignition_bringup) StderrLine: {'line': b'      |               \x1b[01;31m\x1b[K^~~~~~~~~\x1b[m\x1b[K\n'}
+[4.513645] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:120:22:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[KString\x1b[m\x1b[K\xe2\x80\x99 is not a member of \xe2\x80\x98\x1b[01m\x1b[Kstd_msgs::msg\x1b[m\x1b[K\xe2\x80\x99\n'}
+[4.513769] (41068_ignition_bringup) StderrLine: {'line': b'  120 |       std_msgs::msg::\x1b[01;31m\x1b[KString\x1b[m\x1b[K done;\n'}
+[4.513888] (41068_ignition_bringup) StderrLine: {'line': b'      |                      \x1b[01;31m\x1b[K^~~~~~\x1b[m\x1b[K\n'}
+[4.522182] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:121:7:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kdone\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.522422] (41068_ignition_bringup) StderrLine: {'line': b'  121 |       \x1b[01;31m\x1b[Kdone\x1b[m\x1b[K.data = "ARRIVED";\n'}
+[4.522519] (41068_ignition_bringup) StderrLine: {'line': b'      |       \x1b[01;31m\x1b[K^~~~\x1b[m\x1b[K\n'}
+[4.532406] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:122:7:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Kpub_status_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope; did you mean \xe2\x80\x98\x1b[01m\x1b[Ksi_status\x1b[m\x1b[K\xe2\x80\x99?\n'}
+[4.534657] (41068_ignition_bringup) StderrLine: {'line': b'  122 |       \x1b[01;31m\x1b[Kpub_status_\x1b[m\x1b[K->publish(done);\n'}
+[4.534828] (41068_ignition_bringup) StderrLine: {'line': b'      |       \x1b[01;31m\x1b[K^~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.536005] (41068_ignition_bringup) StderrLine: {'line': b'      |       \x1b[32m\x1b[Ksi_status\x1b[m\x1b[K\n'}
+[4.546747] (41068_ignition_bringup) StderrLine: {'line': b'\x1b[01m\x1b[K/home/student/git/TrailBotPro/dronecontroller.cpp:124:7:\x1b[m\x1b[K \x1b[01;31m\x1b[Kerror: \x1b[m\x1b[K\xe2\x80\x98\x1b[01m\x1b[Khave_target_\x1b[m\x1b[K\xe2\x80\x99 was not declared in this scope\n'}
+[4.549373] (41068_ignition_bringup) StderrLine: {'line': b'  124 |       \x1b[01;31m\x1b[Khave_target_\x1b[m\x1b[K = false;\n'}
+[4.549561] (41068_ignition_bringup) StderrLine: {'line': b'      |       \x1b[01;31m\x1b[K^~~~~~~~~~~~\x1b[m\x1b[K\n'}
+[4.582426] (-) TimerEvent: {}
+[4.683223] (-) TimerEvent: {}
+[4.783692] (-) TimerEvent: {}
+[4.884578] (-) TimerEvent: {}
+[4.987240] (-) TimerEvent: {}
+[5.087739] (-) TimerEvent: {}
+[5.188232] (-) TimerEvent: {}
+[5.289127] (-) TimerEvent: {}
+[5.389596] (-) TimerEvent: {}
+[5.493653] (-) TimerEvent: {}
+[5.641274] (-) TimerEvent: {}
+[5.743154] (-) TimerEvent: {}
+[5.844195] (-) TimerEvent: {}
+[5.946908] (-) TimerEvent: {}
+[6.047422] (-) TimerEvent: {}
+[6.147901] (-) TimerEvent: {}
+[6.249243] (-) TimerEvent: {}
+[6.350532] (-) TimerEvent: {}
+[6.451117] (-) TimerEvent: {}
+[6.553137] (-) TimerEvent: {}
+[6.653622] (-) TimerEvent: {}
+[6.755530] (-) TimerEvent: {}
+[6.857917] (-) TimerEvent: {}
+[6.958392] (-) TimerEvent: {}
+[7.060133] (-) TimerEvent: {}
+[7.163001] (-) TimerEvent: {}
+[7.265372] (-) TimerEvent: {}
+[7.365810] (-) TimerEvent: {}
+[7.466317] (-) TimerEvent: {}
+[7.566808] (-) TimerEvent: {}
+[7.667305] (-) TimerEvent: {}
+[7.769907] (-) TimerEvent: {}
+[7.871243] (-) TimerEvent: {}
+[7.981679] (-) TimerEvent: {}
+[8.082162] (-) TimerEvent: {}
+[8.183799] (-) TimerEvent: {}
+[8.285060] (-) TimerEvent: {}
+[8.385795] (-) TimerEvent: {}
+[8.489137] (-) TimerEvent: {}
+[8.589605] (-) TimerEvent: {}
+[8.689975] (-) TimerEvent: {}
+[8.795128] (-) TimerEvent: {}
+[8.896540] (-) TimerEvent: {}
+[8.999158] (-) TimerEvent: {}
+[9.102910] (-) TimerEvent: {}
+[9.203537] (-) TimerEvent: {}
+[9.268832] (41068_ignition_bringup) StderrLine: {'line': b'gmake[2]: *** [CMakeFiles/dronecontroller.dir/build.make:76: CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o] Error 1\n'}
+[9.272843] (41068_ignition_bringup) StderrLine: {'line': b'gmake[1]: *** [CMakeFiles/Makefile2:139: CMakeFiles/dronecontroller.dir/all] Error 2\n'}
+[9.273067] (41068_ignition_bringup) StderrLine: {'line': b'gmake: *** [Makefile:146: all] Error 2\n'}
+[9.273291] (41068_ignition_bringup) CommandEnded: {'returncode': 2}
+[9.300024] (41068_ignition_bringup) JobEnded: {'identifier': '41068_ignition_bringup', 'rc': 2}
+[9.303798] (-) TimerEvent: {}
+[9.305230] (-) EventReactorShutdown: {}

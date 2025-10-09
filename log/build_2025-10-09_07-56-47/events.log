@@ -1,0 +1,308 @@
+[0.000000] (-) TimerEvent: {}
+[0.002058] (41068_ignition_bringup) JobQueued: {'identifier': '41068_ignition_bringup', 'dependencies': OrderedDict()}
+[0.003083] (41068_ignition_bringup) JobStarted: {'identifier': '41068_ignition_bringup'}
+[0.027755] (41068_ignition_bringup) JobProgress: {'identifier': '41068_ignition_bringup', 'progress': 'cmake'}
+[0.032673] (41068_ignition_bringup) JobProgress: {'identifier': '41068_ignition_bringup', 'progress': 'build'}
+[0.035144] (41068_ignition_bringup) Command: {'cmd': ['/usr/bin/cmake', '--build', '/home/student/git/TrailBotPro/build/41068_ignition_bringup', '--', '-j8', '-l8'], 'cwd': '/home/student/git/TrailBotPro/build/41068_ignition_bringup', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('PYTHON_BASIC_REPL', '1'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'student'), ('SSH_AGENT_PID', '2357'), ('XDG_SESSION_TYPE', 'x11'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/student'), ('CHROME_DESKTOP', 'code.desktop'), ('OLDPWD', '/home/student/git/TrailBotPro'), ('TERM_PROGRAM_VERSION', '1.104.3'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('MANAGERPID', '2255'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '2469'), ('BUNDLED_DEBUGPY_PATH', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/libs/debugpy'), ('XRDP_PULSE_SOURCE_SOCKET', 'xrdp_chansrv_audio_in_socket_10'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('XRDP_PULSE_SINK_SOCKET', 'xrdp_chansrv_audio_out_socket_10'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1002/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '30767'), ('PULSE_SCRIPT', '/etc/xrdp/pulse/default.pa'), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/student/git/TrailBotPro/install:/home/student/robostu_ws/install:/home/student/Desktop/41068_ws/install:/home/student/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'student'), ('JOURNAL_STREAM', '8:19293'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/scripts/noConfigScripts'), ('SESSION_MANAGER', 'local/labNVXMF8:@/tmp/.ICE-unix/2446,unix/labNVXMF8:/tmp/.ICE-unix/2446'), ('INVOCATION_ID', '266d0cf6131f4abf9634bb6a69a3d1a6'), ('XDG_MENU_PREFIX', 'gnome-'), ('XRDP_SOCKET_PATH', '/run/xrdp/sockdir'), ('XDG_RUNTIME_DIR', '/run/user/1002'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':10.0'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-eff258b6eef5dc68.txt'), ('LANG', 'C.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('PYTHONSTARTUP', '/home/student/.config/Code/User/workspaceStorage/d081f97944b255d19d6cf7b2561ad952/ms-python.python/pythonrc.py'), ('XMODIFIERS', '@im=ibus'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1002/vscode-git-d4a6b9a8d9.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AUTH_SOCK', '/run/user/1002/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('UID', '1002'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('XRDP_SESSION', '1'), ('GPG_AGENT_INFO', '/run/user/1002/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11/'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/student/git/TrailBotPro/build/41068_ignition_bringup'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('SGX_AESM_ADDR', '1'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble')]), 'shell': False}
+[0.100714] (-) TimerEvent: {}
+[0.167913] (41068_ignition_bringup) StdoutLine: {'line': b'[ 25%] \x1b[32mBuilding CXX object CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o\x1b[0m\n'}
+[0.202010] (-) TimerEvent: {}
+[0.302717] (-) TimerEvent: {}
+[0.403873] (-) TimerEvent: {}
+[0.505703] (-) TimerEvent: {}
+[0.609714] (-) TimerEvent: {}
+[0.711481] (-) TimerEvent: {}
+[0.811963] (-) TimerEvent: {}
+[0.912865] (-) TimerEvent: {}
+[1.016884] (-) TimerEvent: {}
+[1.117443] (-) TimerEvent: {}
+[1.219093] (-) TimerEvent: {}
+[1.324223] (-) TimerEvent: {}
+[1.425109] (-) TimerEvent: {}
+[1.525636] (-) TimerEvent: {}
+[1.627398] (-) TimerEvent: {}
+[1.728645] (-) TimerEvent: {}
+[1.831260] (-) TimerEvent: {}
+[1.932210] (-) TimerEvent: {}
+[2.034432] (-) TimerEvent: {}
+[2.135855] (-) TimerEvent: {}
+[2.238782] (-) TimerEvent: {}
+[2.341745] (-) TimerEvent: {}
+[2.442279] (-) TimerEvent: {}
+[2.542710] (-) TimerEvent: {}
+[2.644434] (-) TimerEvent: {}
+[2.744890] (-) TimerEvent: {}
+[2.845332] (-) TimerEvent: {}
+[2.948708] (-) TimerEvent: {}
+[3.049112] (-) TimerEvent: {}
+[3.151718] (-) TimerEvent: {}
+[3.255716] (-) TimerEvent: {}
+[3.356208] (-) TimerEvent: {}
+[3.463708] (-) TimerEvent: {}
+[3.564185] (-) TimerEvent: {}
+[3.664789] (-) TimerEvent: {}
+[3.765726] (-) TimerEvent: {}
+[3.868414] (-) TimerEvent: {}
+[3.969416] (-) TimerEvent: {}
+[4.070211] (-) TimerEvent: {}
+[4.174713] (-) TimerEvent: {}
+[4.275172] (-) TimerEvent: {}
+[4.376961] (-) TimerEvent: {}
+[4.478674] (-) TimerEvent: {}
+[4.583817] (-) TimerEvent: {}
+[4.684245] (-) TimerEvent: {}
+[4.785730] (-) TimerEvent: {}
+[4.886151] (-) TimerEvent: {}
+[4.992713] (-) TimerEvent: {}
+[5.093158] (-) TimerEvent: {}
+[5.193573] (-) TimerEvent: {}
+[5.294019] (-) TimerEvent: {}
+[5.397321] (-) TimerEvent: {}
+[5.497807] (-) TimerEvent: {}
+[5.598504] (-) TimerEvent: {}
+[5.699334] (-) TimerEvent: {}
+[5.801704] (-) TimerEvent: {}
+[5.902291] (-) TimerEvent: {}
+[6.003273] (-) TimerEvent: {}
+[6.105843] (-) TimerEvent: {}
+[6.208437] (-) TimerEvent: {}
+[6.308904] (-) TimerEvent: {}
+[6.409545] (-) TimerEvent: {}
+[6.510487] (-) TimerEvent: {}
+[6.614710] (-) TimerEvent: {}
+[6.715627] (-) TimerEvent: {}
+[6.819703] (-) TimerEvent: {}
+[6.920479] (-) TimerEvent: {}
+[7.020946] (-) TimerEvent: {}
+[7.123703] (-) TimerEvent: {}
+[7.224127] (-) TimerEvent: {}
+[7.328219] (-) TimerEvent: {}
+[7.429666] (-) TimerEvent: {}
+[7.530135] (-) TimerEvent: {}
+[7.631670] (-) TimerEvent: {}
+[7.734707] (-) TimerEvent: {}
+[7.835174] (-) TimerEvent: {}
+[7.935851] (-) TimerEvent: {}
+[8.036325] (-) TimerEvent: {}
+[8.139867] (-) TimerEvent: {}
+[8.240327] (-) TimerEvent: {}
+[8.340796] (-) TimerEvent: {}
+[8.441327] (-) TimerEvent: {}
+[8.542776] (-) TimerEvent: {}
+[8.643851] (-) TimerEvent: {}
+[8.746469] (-) TimerEvent: {}
+[8.849708] (-) TimerEvent: {}
+[8.950150] (-) TimerEvent: {}
+[9.050547] (-) TimerEvent: {}
+[9.152380] (-) TimerEvent: {}
+[9.252801] (-) TimerEvent: {}
+[9.355938] (-) TimerEvent: {}
+[9.457294] (-) TimerEvent: {}
+[9.557727] (-) TimerEvent: {}
+[9.662703] (-) TimerEvent: {}
+[9.763998] (-) TimerEvent: {}
+[9.867709] (-) TimerEvent: {}
+[9.968116] (-) TimerEvent: {}
+[10.069481] (-) TimerEvent: {}
+[10.171717] (-) TimerEvent: {}
+[10.274090] (-) TimerEvent: {}
+[10.375682] (-) TimerEvent: {}
+[10.479710] (-) TimerEvent: {}
+[10.580218] (-) TimerEvent: {}
+[10.692747] (-) TimerEvent: {}
+[10.793227] (-) TimerEvent: {}
+[10.894072] (-) TimerEvent: {}
+[10.994532] (-) TimerEvent: {}
+[11.101117] (-) TimerEvent: {}
+[11.201524] (-) TimerEvent: {}
+[11.303712] (-) TimerEvent: {}
+[11.404121] (-) TimerEvent: {}
+[11.504707] (-) TimerEvent: {}
+[11.605712] (-) TimerEvent: {}
+[11.707857] (-) TimerEvent: {}
+[11.809216] (-) TimerEvent: {}
+[11.909652] (-) TimerEvent: {}
+[12.010112] (-) TimerEvent: {}
+[12.111727] (-) TimerEvent: {}
+[12.216704] (-) TimerEvent: {}
+[12.317153] (-) TimerEvent: {}
+[12.417634] (-) TimerEvent: {}
+[12.519143] (-) TimerEvent: {}
+[12.620096] (-) TimerEvent: {}
+[12.720702] (-) TimerEvent: {}
+[12.823951] (-) TimerEvent: {}
+[12.924428] (-) TimerEvent: {}
+[13.025566] (-) TimerEvent: {}
+[13.126122] (-) TimerEvent: {}
+[13.228113] (-) TimerEvent: {}
+[13.329207] (-) TimerEvent: {}
+[13.433715] (-) TimerEvent: {}
+[13.534114] (-) TimerEvent: {}
+[13.635705] (-) TimerEvent: {}
+[13.736359] (-) TimerEvent: {}
+[13.837091] (-) TimerEvent: {}
+[13.937790] (-) TimerEvent: {}
+[14.040936] (-) TimerEvent: {}
+[14.149061] (-) TimerEvent: {}
+[14.249477] (-) TimerEvent: {}
+[14.349944] (-) TimerEvent: {}
+[14.450318] (-) TimerEvent: {}
+[14.551706] (-) TimerEvent: {}
+[14.652404] (-) TimerEvent: {}
+[14.753068] (-) TimerEvent: {}
+[14.858708] (-) TimerEvent: {}
+[14.959201] (-) TimerEvent: {}
+[15.060199] (-) TimerEvent: {}
+[15.160780] (-) TimerEvent: {}
+[15.263802] (-) TimerEvent: {}
+[15.365486] (-) TimerEvent: {}
+[15.466066] (-) TimerEvent: {}
+[15.566516] (-) TimerEvent: {}
+[15.668719] (-) TimerEvent: {}
+[15.769139] (-) TimerEvent: {}
+[15.869652] (-) TimerEvent: {}
+[15.970307] (-) TimerEvent: {}
+[16.072087] (-) TimerEvent: {}
+[16.172580] (-) TimerEvent: {}
+[16.274723] (-) TimerEvent: {}
+[16.375226] (-) TimerEvent: {}
+[16.475694] (-) TimerEvent: {}
+[16.577860] (-) TimerEvent: {}
+[16.678880] (-) TimerEvent: {}
+[16.785727] (-) TimerEvent: {}
+[16.886193] (-) TimerEvent: {}
+[16.987320] (-) TimerEvent: {}
+[17.090237] (-) TimerEvent: {}
+[17.190661] (-) TimerEvent: {}
+[17.292540] (-) TimerEvent: {}
+[17.392995] (-) TimerEvent: {}
+[17.493456] (-) TimerEvent: {}
+[17.594876] (-) TimerEvent: {}
+[17.695277] (-) TimerEvent: {}
+[17.799446] (-) TimerEvent: {}
+[17.900306] (-) TimerEvent: {}
+[18.001140] (-) TimerEvent: {}
+[18.103389] (-) TimerEvent: {}
+[18.207704] (-) TimerEvent: {}
+[18.308129] (-) TimerEvent: {}
+[18.409574] (-) TimerEvent: {}
+[18.510660] (-) TimerEvent: {}
+[18.611057] (-) TimerEvent: {}
+[18.711703] (-) TimerEvent: {}
+[18.813819] (-) TimerEvent: {}
+[18.914451] (-) TimerEvent: {}
+[19.014977] (-) TimerEvent: {}
+[19.115398] (-) TimerEvent: {}
+[19.215807] (-) TimerEvent: {}
+[19.316638] (-) TimerEvent: {}
+[19.420472] (-) TimerEvent: {}
+[19.523703] (-) TimerEvent: {}
+[19.624140] (-) TimerEvent: {}
+[19.724582] (-) TimerEvent: {}
+[19.825007] (-) TimerEvent: {}
+[19.925451] (-) TimerEvent: {}
+[20.030818] (-) TimerEvent: {}
+[20.131258] (-) TimerEvent: {}
+[20.231707] (-) TimerEvent: {}
+[20.332165] (-) TimerEvent: {}
+[20.433729] (-) TimerEvent: {}
+[20.536265] (-) TimerEvent: {}
+[20.636697] (-) TimerEvent: {}
+[20.738720] (-) TimerEvent: {}
+[20.839173] (-) TimerEvent: {}
+[20.939697] (-) TimerEvent: {}
+[21.042083] (-) TimerEvent: {}
+[21.142557] (-) TimerEvent: {}
+[21.243360] (-) TimerEvent: {}
+[21.308367] (41068_ignition_bringup) StdoutLine: {'line': b'[ 50%] \x1b[32m\x1b[1mLinking CXX executable dronecontroller\x1b[0m\n'}
+[21.344963] (-) TimerEvent: {}
+[21.446741] (-) TimerEvent: {}
+[21.550556] (-) TimerEvent: {}
+[21.651096] (-) TimerEvent: {}
+[21.751936] (-) TimerEvent: {}
+[21.852359] (-) TimerEvent: {}
+[21.953855] (-) TimerEvent: {}
+[22.054894] (-) TimerEvent: {}
+[22.163706] (-) TimerEvent: {}
+[22.264167] (-) TimerEvent: {}
+[22.364566] (-) TimerEvent: {}
+[22.466711] (-) TimerEvent: {}
+[22.567447] (-) TimerEvent: {}
+[22.667900] (-) TimerEvent: {}
+[22.705793] (41068_ignition_bringup) StdoutLine: {'line': b'[ 50%] Built target dronecontroller\n'}
+[22.768024] (-) TimerEvent: {}
+[22.769689] (41068_ignition_bringup) StdoutLine: {'line': b'[100%] Built target mission_interface\n'}
+[22.795791] (41068_ignition_bringup) CommandEnded: {'returncode': 0}
+[22.796743] (41068_ignition_bringup) JobProgress: {'identifier': '41068_ignition_bringup', 'progress': 'install'}
+[22.812073] (41068_ignition_bringup) Command: {'cmd': ['/usr/bin/cmake', '--install', '/home/student/git/TrailBotPro/build/41068_ignition_bringup'], 'cwd': '/home/student/git/TrailBotPro/build/41068_ignition_bringup', 'env': OrderedDict([('GJS_DEBUG_TOPICS', 'JS ERROR;JS LOG'), ('PYTHON_BASIC_REPL', '1'), ('LESSOPEN', '| /usr/bin/lesspipe %s'), ('USER', 'student'), ('SSH_AGENT_PID', '2357'), ('XDG_SESSION_TYPE', 'x11'), ('GIT_ASKPASS', '/usr/share/code/resources/app/extensions/git/dist/askpass.sh'), ('SHLVL', '1'), ('LD_LIBRARY_PATH', '/usr/lib/x86_64-linux-gnu/gazebo-11/plugins:/opt/ros/humble/opt/rviz_ogre_vendor/lib:/opt/ros/humble/lib/x86_64-linux-gnu:/opt/ros/humble/lib'), ('HOME', '/home/student'), ('CHROME_DESKTOP', 'code.desktop'), ('OLDPWD', '/home/student/git/TrailBotPro'), ('TERM_PROGRAM_VERSION', '1.104.3'), ('GIO_LAUNCHED_DESKTOP_FILE', '/usr/share/applications/code.desktop'), ('ROS_PYTHON_VERSION', '3'), ('GNOME_SHELL_SESSION_MODE', 'ubuntu'), ('GTK_MODULES', 'gail:atk-bridge'), ('VSCODE_GIT_ASKPASS_MAIN', '/usr/share/code/resources/app/extensions/git/dist/askpass-main.js'), ('VSCODE_GIT_ASKPASS_NODE', '/usr/share/code/code'), ('MANAGERPID', '2255'), ('PYDEVD_DISABLE_FILE_VALIDATION', '1'), ('SYSTEMD_EXEC_PID', '2469'), ('BUNDLED_DEBUGPY_PATH', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/libs/debugpy'), ('XRDP_PULSE_SOURCE_SOCKET', 'xrdp_chansrv_audio_in_socket_10'), ('VSCODE_PYTHON_AUTOACTIVATE_GUARD', '1'), ('XRDP_PULSE_SINK_SOCKET', 'xrdp_chansrv_audio_out_socket_10'), ('DBUS_SESSION_BUS_ADDRESS', 'unix:path=/run/user/1002/bus'), ('COLORTERM', 'truecolor'), ('GIO_LAUNCHED_DESKTOP_FILE_PID', '30767'), ('PULSE_SCRIPT', '/etc/xrdp/pulse/default.pa'), ('IM_CONFIG_PHASE', '1'), ('COLCON_PREFIX_PATH', '/home/student/git/TrailBotPro/install:/home/student/robostu_ws/install:/home/student/Desktop/41068_ws/install:/home/student/ros2_ws/install'), ('ROS_DISTRO', 'humble'), ('GTK_IM_MODULE', 'ibus'), ('LOGNAME', 'student'), ('JOURNAL_STREAM', '8:19293'), ('_', '/usr/bin/colcon'), ('ROS_VERSION', '2'), ('XDG_SESSION_CLASS', 'user'), ('TERM', 'xterm-256color'), ('GNOME_DESKTOP_SESSION_ID', 'this-is-deprecated'), ('ROS_LOCALHOST_ONLY', '0'), ('PATH', '/opt/ros/humble/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/bundled/scripts/noConfigScripts'), ('SESSION_MANAGER', 'local/labNVXMF8:@/tmp/.ICE-unix/2446,unix/labNVXMF8:/tmp/.ICE-unix/2446'), ('INVOCATION_ID', '266d0cf6131f4abf9634bb6a69a3d1a6'), ('XDG_MENU_PREFIX', 'gnome-'), ('XRDP_SOCKET_PATH', '/run/xrdp/sockdir'), ('XDG_RUNTIME_DIR', '/run/user/1002'), ('GDK_BACKEND', 'x11'), ('DISPLAY', ':10.0'), ('VSCODE_DEBUGPY_ADAPTER_ENDPOINTS', '/home/student/.vscode/extensions/ms-python.debugpy-2025.10.0-linux-x64/.noConfigDebugAdapterEndpoints/endpoint-eff258b6eef5dc68.txt'), ('LANG', 'C.UTF-8'), ('XDG_CURRENT_DESKTOP', 'Unity'), ('PYTHONSTARTUP', '/home/student/.config/Code/User/workspaceStorage/d081f97944b255d19d6cf7b2561ad952/ms-python.python/pythonrc.py'), ('XMODIFIERS', '@im=ibus'), ('LS_COLORS', 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:'), ('VSCODE_GIT_IPC_HANDLE', '/run/user/1002/vscode-git-d4a6b9a8d9.sock'), ('TERM_PROGRAM', 'vscode'), ('SSH_AUTH_SOCK', '/run/user/1002/keyring/ssh'), ('AMENT_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble'), ('ORIGINAL_XDG_CURRENT_DESKTOP', 'ubuntu:GNOME'), ('UID', '1002'), ('SHELL', '/bin/bash'), ('QT_ACCESSIBILITY', '1'), ('LESSCLOSE', '/usr/bin/lesspipe %s %s'), ('XRDP_SESSION', '1'), ('GPG_AGENT_INFO', '/run/user/1002/gnupg/S.gpg-agent:0:1'), ('GAZEBO_RESOURCE_PATH', '/usr/share/gazebo-11/'), ('GJS_DEBUG_OUTPUT', 'stderr'), ('VSCODE_GIT_ASKPASS_EXTRA_ARGS', ''), ('QT_IM_MODULE', 'ibus'), ('PWD', '/home/student/git/TrailBotPro/build/41068_ignition_bringup'), ('XDG_DATA_DIRS', '/usr/share/gnome:/usr/share/ubuntu:/usr/local/share/:/usr/share/:/var/lib/snapd/desktop'), ('PYTHONPATH', '/opt/ros/humble/lib/python3.10/site-packages:/opt/ros/humble/local/lib/python3.10/dist-packages'), ('SGX_AESM_ADDR', '1'), ('COLCON', '1'), ('CMAKE_PREFIX_PATH', '/home/student/git/TrailBotPro/install/41068_ignition_bringup:/home/student/robostu_ws/install/trailbot_ignition_bringup:/home/student/Desktop/41068_ws/install/41068_ignition_bringup:/opt/ros/humble')]), 'shell': False}
+[22.826299] (41068_ignition_bringup) StdoutLine: {'line': b'-- Install configuration: ""\n'}
+[22.826842] (41068_ignition_bringup) StdoutLine: {'line': b'-- Execute custom install script\n'}
+[22.827142] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/dronecontroller\n'}
+[22.827775] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/lib/41068_ignition_bringup/mission_interface\n'}
+[22.828560] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/41068.rviz\n'}
+[22.829430] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/gazebo_bridge.yaml\n'}
+[22.829656] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/nav2_params.yaml\n'}
+[22.830222] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/robot_localization.yaml\n'}
+[22.830797] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/config/slam_params.yaml\n'}
+[22.831208] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition.launch.py\n'}
+[22.832108] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_ignition_drone.launch.py\n'}
+[22.832317] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/launch/41068_navigation.launch.py\n'}
+[22.832747] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/empty_grass.png\n'}
+[22.834241] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/forest_overhead.png\n'}
+[22.836159] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/materials/textures/leaf_litter.png\n'}
+[22.836328] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/model.config\n'}
+[22.836472] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_plane/model.sdf\n'}
+[22.836635] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall.png\n'}
+[22.836794] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall_transparent.png\n'}
+[22.836941] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/materials/textures/forest_wall_transparent_small.png\n'}
+[22.837080] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/model.config\n'}
+[22.837238] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/forest_wall/model.sdf\n'}
+[22.837377] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/materials/textures/empty_grass.png\n'}
+[22.837520] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/model.config\n'}
+[22.837676] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/models/grass_plane/model.sdf\n'}
+[22.837821] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/common_properties.urdf.xacro\n'}
+[22.837949] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/husky.gazebo.xacro\n'}
+[22.838079] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/husky.urdf.xacro\n'}
+[22.838220] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/base_link.dae\n'}
+[22.838346] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/bumper.dae\n'}
+[22.839117] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/jpl04_arch_nosensor.stl\n'}
+[22.839260] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/top_chassis.dae\n'}
+[22.844744] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/top_plate.dae\n'}
+[22.845068] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/meshes/wheel.dae\n'}
+[22.845250] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf/wheel.urdf.xacro\n'}
+[22.845408] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/common_properties.urdf.xacro\n'}
+[22.845533] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/hull.dae\n'}
+[22.845730] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_fl.dae\n'}
+[22.845847] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_fr.dae\n'}
+[22.845959] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_rl.dae\n'}
+[22.846070] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/meshes/propeller_rr.dae\n'}
+[22.846175] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/model.config\n'}
+[22.847175] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/model.sdf\n'}
+[22.848030] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/parrot.gazebo.xacro\n'}
+[22.848481] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/parrot.urdf.xacro\n'}
+[22.848609] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/1.png\n'}
+[22.849592] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/2.png\n'}
+[22.852801] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/3.png\n'}
+[22.852984] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/4.png\n'}
+[22.853122] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/urdf_drone/thumbnails/5.png\n'}
+[22.853253] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/large_demo.sdf\n'}
+[22.853373] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/worlds/simple_trees.sdf\n'}
+[22.853491] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/package_run_dependencies/41068_ignition_bringup\n'}
+[22.853610] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/parent_prefix_path/41068_ignition_bringup\n'}
+[22.855092] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/ament_prefix_path.sh\n'}
+[22.855245] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/ament_prefix_path.dsv\n'}
+[22.855395] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/path.sh\n'}
+[22.855552] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/environment/path.dsv\n'}
+[22.855712] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.bash\n'}
+[22.855838] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.sh\n'}
+[22.855958] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.zsh\n'}
+[22.856072] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/local_setup.dsv\n'}
+[22.856185] (41068_ignition_bringup) StdoutLine: {'line': b'-- Symlinking: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/package.dsv\n'}
+[22.869165] (-) TimerEvent: {}
+[22.876773] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/ament_index/resource_index/packages/41068_ignition_bringup\n'}
+[22.877185] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/cmake/41068_ignition_bringupConfig.cmake\n'}
+[22.877329] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/cmake/41068_ignition_bringupConfig-version.cmake\n'}
+[22.878243] (41068_ignition_bringup) StdoutLine: {'line': b'-- Up-to-date symlink: /home/student/git/TrailBotPro/install/41068_ignition_bringup/share/41068_ignition_bringup/package.xml\n'}
+[22.886129] (41068_ignition_bringup) CommandEnded: {'returncode': 0}
+[22.947164] (41068_ignition_bringup) JobEnded: {'identifier': '41068_ignition_bringup', 'rc': 0}
+[22.948566] (-) EventReactorShutdown: {}
