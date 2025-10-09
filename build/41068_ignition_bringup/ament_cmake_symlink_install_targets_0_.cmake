@@ -1,1 +1,0 @@
-ament_cmake_symlink_install_targets("TARGET_FILES" "/home/student/git/TrailBotPro/build/41068_ignition_bringup/dronecontroller" "/home/student/git/TrailBotPro/build/41068_ignition_bringup/mission_interface" "TARGETS" "dronecontroller" "mission_interface" "DESTINATION" "lib/41068_ignition_bringup")
