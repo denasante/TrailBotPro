@@ -29,6 +29,10 @@
 cmake_minimum_required(VERSION 3.8)
 project(41068_ignition_bringup)
 
+set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+
 if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
@@ -42,22 +46,26 @@ find_package(visualization_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)            # <-- added
 find_package(cv_bridge REQUIRED)
 find_package(ros_ign_interfaces REQUIRED)
+find_package(std_msgs REQUIRED)
 
 # --- Include directory for headers ---
 include_directories(${CMAKE_CURRENT_SOURCE_DIR})
 
 # --- Drone controller executable ---
-add_executable(dronecontroller ${CMAKE_CURRENT_SOURCE_DIR}/dronecontroller.cpp)
+add_executable(dronecontroller 
+  ${CMAKE_CURRENT_SOURCE_DIR}/dronecontroller.cpp
+)
+
 ament_target_dependencies(dronecontroller
   rclcpp
   sensor_msgs
   geometry_msgs
   visualization_msgs
-  nav_msgs         # <-- added
+  nav_msgs
+  std_msgs        # <-- add this
   cv_bridge
   ros_ign_interfaces
 )
-
 
 # --- Mission Interface executable ---
 add_executable(mission_interface
@@ -70,10 +78,26 @@ ament_target_dependencies(mission_interface
   nav_msgs
 )
 
-# Install both executables
+# --- Rover Controller executable ---
+add_executable(rover_controller 
+  ${CMAKE_CURRENT_SOURCE_DIR}/rover_controller.cpp
+)
+
+ament_target_dependencies(rover_controller
+  rclcpp
+  sensor_msgs
+  geometry_msgs
+  visualization_msgs
+  nav_msgs
+  std_msgs        # <-- add this
+  cv_bridge
+  ros_ign_interfaces
+)
+
 install(TARGETS
   dronecontroller
   mission_interface
+  rover_controller
   DESTINATION lib/${PROJECT_NAME}
 )
 

@@ -117,8 +117,8 @@ using namespace std::chrono_literals;
 
 MissionInterface::MissionInterface()
 : rclcpp::Node("mission_interface"),
-  have_odom_(false),
-  phase_(Phase::WAIT_ODOM)
+  phase_(Phase::WAIT_ODOM),
+  have_odom_(false)
 {
   // Parameters
   odom_topic_   = declare_parameter<std::string>("odom_topic", "/parrot/odometry");
@@ -130,8 +130,9 @@ MissionInterface::MissionInterface()
   // Mission waypoints
   waypoints_ = {
     {2.0, 0.0, 0.0},  // forward
-    {-2.0, 0.0, 0.0},   // back to start
-    {0.0, 3.0, 0.0}
+    {0.0, -3.0, 0.0},
+    {-2.0, 0.0, 0.0},
+    {0.0, 0.0, 0.0}   // back to start
   };
   current_idx_ = 0;
 
@@ -224,4 +225,5 @@ int main(int argc, char **argv)
   rclcpp::shutdown();
   return 0;
 }
+
 

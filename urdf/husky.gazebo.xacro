@@ -91,7 +91,7 @@
       name="ignition::gazebo::systems::OdometryPublisher">
       <topic>model/husky/odometry</topic>
       <odom_publish_frequency>20</odom_publish_frequency>
-      <odom_frame>odom</odom_frame>
+      <odom_frame>husky/odom</odom_frame>
       <robot_base_frame>base_link</robot_base_frame>
     </plugin>
   </gazebo>
@@ -105,12 +105,15 @@
   </gazebo>
 
   <!-- Lidar and cameras use the general Sensors plugin -->
+
+  <!-- 
   <gazebo>
     <plugin
         filename="libignition-gazebo-sensors-system.so"
         name="ignition::gazebo::systems::Sensors">
     </plugin>
   </gazebo>
+  -->
 
   <gazebo reference="base_scan">
     <material>Gazebo/FlatBlack</material>

@@ -27,7 +27,7 @@ def generate_launch_description():
     ld.add_action(use_sim_time_launch_arg)
     rviz_launch_arg = DeclareLaunchArgument(
         'rviz',
-        default_value='False',
+        default_value='True',
         description='Flag to launch RViz'
     )
     ld.add_action(rviz_launch_arg)
@@ -55,13 +55,19 @@ def generate_launch_description():
 
     # Publish odom -> base_link transform **using robot_localization**
     robot_localization_node = Node(
-        package='robot_localization',
-        executable='ekf_node',
-        name='robot_localization',
-        output='screen',
-        parameters=[PathJoinSubstitution([config_path,
-                                          'robot_localization.yaml']),
-                    {'use_sim_time': use_sim_time}]
+    package='robot_localization',
+    executable='ekf_node',
+    name='ekf_husky',
+    output='screen',
+    parameters=[
+        PathJoinSubstitution([config_path, 'robot_localization.yaml']),
+        {'use_sim_time': use_sim_time},
+    ],
+    remappings=[
+        ('odometry', '/odometry'),                 # input (ok either way)
+        ('imu', '/imu'),                           # input (ok either way)
+        ('odometry/filtered', '/husky/odometry/filtered'),  # <-- no leading slash on LHS
+    ],
     )
     ld.add_action(robot_localization_node)
 
