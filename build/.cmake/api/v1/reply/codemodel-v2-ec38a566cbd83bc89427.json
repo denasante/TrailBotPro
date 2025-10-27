@@ -68,8 +68,8 @@
 	"kind" : "codemodel",
 	"paths" : 
 	{
-		"build" : "/home/student/ros2_ws/src/TrailBotPro/build",
-		"source" : "/home/student/ros2_ws/src/TrailBotPro"
+		"build" : "/home/liamsf/robostu1_ws/src/TrailBotPro/build",
+		"source" : "/home/liamsf/robostu1_ws/src/TrailBotPro"
 	},
 	"version" : 
 	{

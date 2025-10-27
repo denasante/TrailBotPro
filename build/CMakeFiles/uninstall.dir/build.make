@@ -53,10 +53,10 @@ RM = /usr/bin/cmake -E rm -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/student/ros2_ws/src/TrailBotPro
+CMAKE_SOURCE_DIR = /home/liamsf/robostu1_ws/src/TrailBotPro
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/student/ros2_ws/src/TrailBotPro/build
+CMAKE_BINARY_DIR = /home/liamsf/robostu1_ws/src/TrailBotPro/build
 
 # Utility rule file for uninstall.
 
@@ -78,6 +78,6 @@ CMakeFiles/uninstall.dir/clean:
 .PHONY : CMakeFiles/uninstall.dir/clean
 
 CMakeFiles/uninstall.dir/depend:
-	cd /home/student/ros2_ws/src/TrailBotPro/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/student/ros2_ws/src/TrailBotPro /home/student/ros2_ws/src/TrailBotPro /home/student/ros2_ws/src/TrailBotPro/build /home/student/ros2_ws/src/TrailBotPro/build /home/student/ros2_ws/src/TrailBotPro/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/liamsf/robostu1_ws/src/TrailBotPro/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/liamsf/robostu1_ws/src/TrailBotPro /home/liamsf/robostu1_ws/src/TrailBotPro /home/liamsf/robostu1_ws/src/TrailBotPro/build /home/liamsf/robostu1_ws/src/TrailBotPro/build /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/uninstall.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/uninstall.dir/depend
 

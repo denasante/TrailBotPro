@@ -11,7 +11,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro/build"
+			"value" : "/home/liamsf/robostu1_ws/src/TrailBotPro/build"
 		},
 		{
 			"name" : "41068_ignition_bringup_IS_TOP_LEVEL",
@@ -35,7 +35,7 @@
 				}
 			],
 			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro"
+			"value" : "/home/liamsf/robostu1_ws/src/TrailBotPro"
 		},
 		{
 			"name" : "AMENT_CMAKE_ENVIRONMENT_GENERATION",
@@ -107,7 +107,7 @@
 				}
 			],
 			"type" : "PATH",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro/build/test_results"
+			"value" : "/home/liamsf/robostu1_ws/src/TrailBotPro/build/test_results"
 		},
 		{
 			"name" : "BUILD_TESTING",
@@ -175,7 +175,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro/build"
+			"value" : "/home/liamsf/robostu1_ws/src/TrailBotPro/build"
 		},
 		{
 			"name" : "CMAKE_CACHE_MAJOR_VERSION",
@@ -735,7 +735,7 @@
 				}
 			],
 			"type" : "INTERNAL",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro"
+			"value" : "/home/liamsf/robostu1_ws/src/TrailBotPro"
 		},
 		{
 			"name" : "CMAKE_INSTALL_PREFIX",
@@ -1471,7 +1471,7 @@
 				}
 			],
 			"type" : "STRING",
-			"value" : "labNVXMF8"
+			"value" : "Liam-Laptop"
 		},
 		{
 			"name" : "TinyXML2_DIR",
@@ -3040,42 +3040,6 @@
 			],
 			"type" : "PATH",
 			"value" : "/opt/ros/humble/share/tracetools/cmake"
-		},
-		{
-			"name" : "trailbot_ignition_bringup_BINARY_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro/build"
-		},
-		{
-			"name" : "trailbot_ignition_bringup_IS_TOP_LEVEL",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "ON"
-		},
-		{
-			"name" : "trailbot_ignition_bringup_SOURCE_DIR",
-			"properties" : 
-			[
-				{
-					"name" : "HELPSTRING",
-					"value" : "Value Computed by CMake"
-				}
-			],
-			"type" : "STATIC",
-			"value" : "/home/student/ros2_ws/src/TrailBotPro"
 		},
 		{
 			"name" : "unique_identifier_msgs_DIR",
