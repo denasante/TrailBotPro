@@ -198,65 +198,115 @@ uninstall/fast:
 .PHONY : 41068_ignition_bringup_uninstall/fast
 
 #=============================================================================
-# Target rules for targets named trail_mission
+# Target rules for targets named dronecontroller
 
 # Build rule for target.
-trail_mission: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 trail_mission
-.PHONY : trail_mission
+dronecontroller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 dronecontroller
+.PHONY : dronecontroller
 
 # fast build rule for target.
-trail_mission/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/build
-.PHONY : trail_mission/fast
+dronecontroller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/build
+.PHONY : dronecontroller/fast
 
-src/mission_interface.o: src/mission_interface.cpp.o
-.PHONY : src/mission_interface.o
+#=============================================================================
+# Target rules for targets named mission_interface
+
+# Build rule for target.
+mission_interface: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 mission_interface
+.PHONY : mission_interface
+
+# fast build rule for target.
+mission_interface/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/build
+.PHONY : mission_interface/fast
+
+#=============================================================================
+# Target rules for targets named rover_controller
+
+# Build rule for target.
+rover_controller: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 rover_controller
+.PHONY : rover_controller
+
+# fast build rule for target.
+rover_controller/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rover_controller.dir/build.make CMakeFiles/rover_controller.dir/build
+.PHONY : rover_controller/fast
+
+dronecontroller.o: dronecontroller.cpp.o
+.PHONY : dronecontroller.o
 
 # target to build an object file
-src/mission_interface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.o
-.PHONY : src/mission_interface.cpp.o
+dronecontroller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.o
+.PHONY : dronecontroller.cpp.o
 
-src/mission_interface.i: src/mission_interface.cpp.i
-.PHONY : src/mission_interface.i
+dronecontroller.i: dronecontroller.cpp.i
+.PHONY : dronecontroller.i
 
 # target to preprocess a source file
-src/mission_interface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.i
-.PHONY : src/mission_interface.cpp.i
+dronecontroller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.i
+.PHONY : dronecontroller.cpp.i
 
-src/mission_interface.s: src/mission_interface.cpp.s
-.PHONY : src/mission_interface.s
+dronecontroller.s: dronecontroller.cpp.s
+.PHONY : dronecontroller.s
 
 # target to generate assembly for a file
-src/mission_interface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/mission_interface.cpp.s
-.PHONY : src/mission_interface.cpp.s
+dronecontroller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/dronecontroller.dir/build.make CMakeFiles/dronecontroller.dir/dronecontroller.cpp.s
+.PHONY : dronecontroller.cpp.s
 
-src/rover_controller.o: src/rover_controller.cpp.o
-.PHONY : src/rover_controller.o
+mission_interface.o: mission_interface.cpp.o
+.PHONY : mission_interface.o
 
 # target to build an object file
-src/rover_controller.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.o
-.PHONY : src/rover_controller.cpp.o
+mission_interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.o
+.PHONY : mission_interface.cpp.o
 
-src/rover_controller.i: src/rover_controller.cpp.i
-.PHONY : src/rover_controller.i
+mission_interface.i: mission_interface.cpp.i
+.PHONY : mission_interface.i
 
 # target to preprocess a source file
-src/rover_controller.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.i
-.PHONY : src/rover_controller.cpp.i
+mission_interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.i
+.PHONY : mission_interface.cpp.i
 
-src/rover_controller.s: src/rover_controller.cpp.s
-.PHONY : src/rover_controller.s
+mission_interface.s: mission_interface.cpp.s
+.PHONY : mission_interface.s
 
 # target to generate assembly for a file
-src/rover_controller.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/trail_mission.dir/build.make CMakeFiles/trail_mission.dir/src/rover_controller.cpp.s
-.PHONY : src/rover_controller.cpp.s
+mission_interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/mission_interface.dir/build.make CMakeFiles/mission_interface.dir/mission_interface.cpp.s
+.PHONY : mission_interface.cpp.s
+
+rover_controller.o: rover_controller.cpp.o
+.PHONY : rover_controller.o
+
+# target to build an object file
+rover_controller.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rover_controller.dir/build.make CMakeFiles/rover_controller.dir/rover_controller.cpp.o
+.PHONY : rover_controller.cpp.o
+
+rover_controller.i: rover_controller.cpp.i
+.PHONY : rover_controller.i
+
+# target to preprocess a source file
+rover_controller.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rover_controller.dir/build.make CMakeFiles/rover_controller.dir/rover_controller.cpp.i
+.PHONY : rover_controller.cpp.i
+
+rover_controller.s: rover_controller.cpp.s
+.PHONY : rover_controller.s
+
+# target to generate assembly for a file
+rover_controller.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/rover_controller.dir/build.make CMakeFiles/rover_controller.dir/rover_controller.cpp.s
+.PHONY : rover_controller.cpp.s
 
 # Help Target
 help:
@@ -273,13 +323,18 @@ help:
 	@echo "... test"
 	@echo "... 41068_ignition_bringup_uninstall"
 	@echo "... uninstall"
-	@echo "... trail_mission"
-	@echo "... src/mission_interface.o"
-	@echo "... src/mission_interface.i"
-	@echo "... src/mission_interface.s"
-	@echo "... src/rover_controller.o"
-	@echo "... src/rover_controller.i"
-	@echo "... src/rover_controller.s"
+	@echo "... dronecontroller"
+	@echo "... mission_interface"
+	@echo "... rover_controller"
+	@echo "... dronecontroller.o"
+	@echo "... dronecontroller.i"
+	@echo "... dronecontroller.s"
+	@echo "... mission_interface.o"
+	@echo "... mission_interface.i"
+	@echo "... mission_interface.s"
+	@echo "... rover_controller.o"
+	@echo "... rover_controller.i"
+	@echo "... rover_controller.s"
 .PHONY : help
 
 

@@ -1,6 +1,8 @@
 /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/uninstall.dir
 /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/41068_ignition_bringup_uninstall.dir
-/home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/trail_mission.dir
+/home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/dronecontroller.dir
+/home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/mission_interface.dir
+/home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/rover_controller.dir
 /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/test.dir
 /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/edit_cache.dir
 /home/liamsf/robostu1_ws/src/TrailBotPro/build/CMakeFiles/rebuild_cache.dir
