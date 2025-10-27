@@ -21,9 +21,9 @@ double RoverController::yaw_from_quat(const geometry_msgs::msg::Quaternion &q){
 // ===== Node =====
 RoverController::RoverController() : rclcpp::Node("rover_controller") {
   // topics (default odom is EKF output; change if you want raw)
-  odom_topic_    = declare_parameter<std::string>("odom_topic", "/husky/odometry/filtered");
+  odom_topic_    = declare_parameter<std::string>("odom_topic", "/odometry");
   scan_topic_    = declare_parameter<std::string>("scan_topic", "/scan");
-  cmd_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/husky/cmd_vel");
+  cmd_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/cmd_vel");
   target_topic_  = declare_parameter<std::string>("mission_target_topic", "/mission/target");
   status_topic_  = declare_parameter<std::string>("status_topic", "/mission/status");
 
@@ -185,23 +185,25 @@ bool RoverController::select_gap_target(double goal_bearing, double &steer_dir, 
 void RoverController::tick(){
   geometry_msgs::msg::Twist cmd;
 
-  if(!have_odom_ || !have_scan_){ pub_cmd_->publish(cmd); return; }
-  if(!have_target_){ pub_cmd_->publish(cmd); return; }
+  if(!have_odom_ || !have_scan_ || !have_target_){ 
+    pub_cmd_->publish(cmd); 
+    return; 
+  }
 
-  // go-to-goal
+  // --- Goal control ---
   double ex = tx_ - x_, ey = ty_ - y_;
   double dist = std::hypot(ex, ey);
   double heading_to_wp = std::atan2(ey, ex);
   double rel_goal = ang_wrap(heading_to_wp - yaw_);
 
-  // arrival check
+  // --- Arrival check ---
   if(dist < pos_tol_){
     if(reached_since_.nanoseconds() == 0) reached_since_ = now();
     if((now() - reached_since_).seconds() >= hold_time_s_){
       std_msgs::msg::String s; s.data = "ARRIVED";
       pub_status_->publish(s);
       have_target_ = false;
-      pub_cmd_->publish(cmd);
+      pub_cmd_->publish(geometry_msgs::msg::Twist{});
       RCLCPP_INFO(get_logger(), "✅ Arrived at target.");
       return;
     }
@@ -209,47 +211,39 @@ void RoverController::tick(){
     reached_since_ = rclcpp::Time{};
   }
 
-  // FTG steering
-  double steer_dir = 0.0, clearance = 0.0;
-  bool have_gap = select_gap_target(rel_goal, steer_dir, clearance);
-
-  // Fallback simple gating if no gap found
-  if(!have_gap){
-    // approximate “front min range” from preprocessed arc around 0 rad
-    float front_min = std::numeric_limits<float>::infinity();
-    if(!scan_preproc_.empty()){
-      int mid = (int)scan_preproc_.size()/2;
-      for(int i=std::max(0, mid-3); i<=std::min(mid+3, (int)scan_preproc_.size()-1); ++i){
-        front_min = std::min(front_min, scan_preproc_[i]);
-      }
+  // --- Simple collision detection (front arc only) ---
+  float front_min = std::numeric_limits<float>::infinity();
+  if(!scan_preproc_.empty()){
+    // take ~±15° around forward direction
+    int mid = (int)scan_preproc_.size()/2;
+    for(int i=std::max(0, mid-5); i<=std::min(mid+5, (int)scan_preproc_.size()-1); ++i){
+      front_min = std::min(front_min, scan_preproc_[i]);
     }
-
-    double scale = 1.0;
-    if(std::isfinite(front_min)){
-      if(front_min < obs_stop_range_){
-        // blocked — rotate toward goal
-        cmd.angular.z = clamp(kp_yaw_ * rel_goal, -turn_rate_block_, turn_rate_block_);
-        pub_cmd_->publish(cmd);
-        return;
-      } else if(front_min < obs_slow_range_){
-        scale = 0.3;
-      }
-    }
-
-    cmd.linear.x  = clamp(kp_lin_ * dist, -max_speed_, max_speed_) * scale;
-    cmd.angular.z = clamp(kp_yaw_ * rel_goal, -max_yaw_rate_, max_yaw_rate_);
-    pub_cmd_->publish(cmd);
-    return;
   }
 
-  // Blend FTG steer with goal direction: here we just steer to gap center
-  double yaw_err = steer_dir; // already relative in rover frame
-  double speed_scale = std::clamp((clearance - ftg_safety_bubble_) / (ftg_max_range_ - ftg_safety_bubble_), 0.2, 1.0);
+  // --- Decide speed ---
+  double v = clamp(kp_lin_ * dist, -max_speed_, max_speed_);
+  double w = clamp(kp_yaw_ * rel_goal, -max_yaw_rate_, max_yaw_rate_);
 
-  cmd.linear.x  = clamp(kp_lin_ * dist, -max_speed_, max_speed_) * speed_scale;
-  cmd.angular.z = clamp(kp_yaw_ * yaw_err, -max_yaw_rate_, max_yaw_rate_);
+  // stop or slow down if obstacle detected
+  if(std::isfinite(front_min)){
+    if(front_min < obs_stop_range_){
+      v = 0.0;
+      RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1000,
+                           "Obstacle detected: %.2fm ahead → stopping", front_min);
+    } else if(front_min < obs_slow_range_){
+      v *= 0.4;
+      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000,
+                           "Obstacle %.2fm ahead → slowing", front_min);
+    }
+  }
+
+  cmd.linear.x  = v;
+  cmd.angular.z = w;
   pub_cmd_->publish(cmd);
 }
+
+
 
 // simple C-style main wrapper (optional)
 int rover_controller_main(int argc, char **argv){
