@@ -1,8 +1,0 @@
--- run_test.py: invoking following command in '/home/student/ros2_ws/src/TrailBotPro':
- - /opt/ros/humble/bin/ament_cppcheck --xunit-file /home/student/ros2_ws/src/TrailBotPro/build/test_results/41068_ignition_bringup/cppcheck.xunit.xml
-
-cppcheck 2.7 has known performance issues and therefore will not be used, set the AMENT_CPPCHECK_ALLOW_SLOW_VERSIONS environment variable to override this.
-
-
--- run_test.py: return code 0
--- run_test.py: verify result file '/home/student/ros2_ws/src/TrailBotPro/build/test_results/41068_ignition_bringup/cppcheck.xunit.xml'
