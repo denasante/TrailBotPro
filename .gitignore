@@ -1,6 +1,9 @@
+# Ignore build artifacts and editor settings
 build/
 log/
 install/
-build/
-log/
-install/
+
+# Ignore editor workspace settings
+.vscode/
+
+# Keep other patterns below as needed
