@@ -9,6 +9,10 @@
 #include <vector>
 #include <cstdint>  // <-- ADD THIS
 
+#include <sensor_msgs/msg/laser_scan.hpp>
+#include <cmath>
+#include <limits>
+
 // NEW: AprilTag detections
 #include <apriltag_msgs/msg/april_tag_detection_array.hpp>
 

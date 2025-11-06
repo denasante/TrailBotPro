@@ -1,10 +1,9 @@
 #include "dronecontroller.h"
 
-#include <cmath>
 #include <algorithm>
 
 // NEW: for tag/flag handling & logging
-#include <apriltag_msgs/msg/april_tag_detection_array.hpp>
+
 
 using std::placeholders::_1;
 
@@ -12,10 +11,10 @@ DroneController::DroneController()
 : rclcpp::Node("dronecontroller")
 {
   // ---- Parameters (with sensible defaults) ----
-  min_x_        = this->declare_parameter("min_x", -5.0);
-  min_y_        = this->declare_parameter("min_y", -5.0);
-  max_x_        = this->declare_parameter("max_x",  5.0);
-  max_y_        = this->declare_parameter("max_y",  5.0);
+  min_x_        = this->declare_parameter("min_x", -7.0);
+  min_y_        = this->declare_parameter("min_y", -7.0);
+  max_x_        = this->declare_parameter("max_x",  7.0);
+  max_y_        = this->declare_parameter("max_y",  7.0);
   lane_spacing_ = this->declare_parameter("lane_spacing", 1.0);
   v_            = this->declare_parameter("v", 0.8);       // m/s
   k_yaw_        = this->declare_parameter("k_yaw", 1.0);   // rad/s per rad
