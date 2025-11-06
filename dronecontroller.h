@@ -7,7 +7,7 @@
 #include <std_msgs/msg/bool.hpp>
 #include <std_msgs/msg/empty.hpp>
 #include <vector>
-#include <cstdint>
+#include <cstdint>  // <-- ADD THIS
 
 // NEW: AprilTag detections
 #include <apriltag_msgs/msg/april_tag_detection_array.hpp>
@@ -33,7 +33,7 @@ private:
   bool use_obstacle_flag_{true};
   bool stop_on_tags_{true};
   int  clear_required_{10};
-  std::vector<int64_t> stop_tag_ids_{};
+  std::vector<int64_t> stop_tag_ids_{};   // <-- CHANGE TO int64_t
 
   // --- Plan / State ---
   std::vector<geometry_msgs::msg::Pose2D> waypoints_;

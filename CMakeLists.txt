@@ -58,11 +58,28 @@ ament_target_dependencies(mission_interface
   rclcpp rclcpp_action std_msgs geometry_msgs nav_msgs nav2_msgs
 )
 
+add_executable(static_camera_info_pub 
+  ${CMAKE_CURRENT_SOURCE_DIR}/static_camera_info_pub.cpp
+)
+target_include_directories(static_camera_info_pub PUBLIC ${PKG_INCLUDE_DIR})
+ament_target_dependencies(static_camera_info_pub
+  rclcpp sensor_msgs
+)
+
+# robust linking for yaml-cpp across distros
+if(TARGET yaml-cpp::yaml-cpp)
+  target_link_libraries(static_camera_info_pub yaml-cpp::yaml-cpp)
+else()
+  target_link_libraries(static_camera_info_pub yaml-cpp)
+endif()
+
+
 # ------------------- Install binaries ----------------
 install(TARGETS
   dronecontroller
   rover_controller
   mission_interface
+  static_camera_info_pub
   DESTINATION lib/${PROJECT_NAME}
 )
 

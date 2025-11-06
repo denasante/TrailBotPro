@@ -5,6 +5,7 @@
 
 // NEW: for tag/flag handling & logging
 #include <apriltag_msgs/msg/april_tag_detection_array.hpp>
+
 using std::placeholders::_1;
 
 DroneController::DroneController()
@@ -24,11 +25,11 @@ DroneController::DroneController()
   // NEW: safety-stop parameters
   use_obstacle_flag_ = this->declare_parameter("use_obstacle_flag", true);
   stop_on_tags_      = this->declare_parameter("stop_on_tags", true);
-  stop_tag_ids_      = this->declare_parameter<std::vector<int64_t>>("stop_tag_ids", std::vector<int64_t>{7,42});
+  stop_tag_ids_ = this->declare_parameter<std::vector<int64_t>>("stop_tag_ids", std::vector<int64_t>{7, 42});
   clear_required_    = this->declare_parameter("clear_required", 10);  // cycles to auto-resume
 
   // ---- Pubs / Subs ----
-  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/drone/cmd_vel", 10);
+  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
 
   // Subscribe to raw odometry (bridged from /model/parrot/odometry -> /odometry)
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
@@ -225,15 +226,21 @@ void DroneController::onObstacle(const std_msgs::msg::Bool &msg) {
 
 void DroneController::onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg) {
   bool hit = false;
-  for (const auto &det : msg.detections) {
-    const int64_t tag_id = static_cast<int64_t>(det.id);  // scalar in your build
+  for (const auto & det : msg.detections) {
+    // In your version, 'det.id' is a single int (not a vector)
+    const int64_t tag_id = static_cast<int64_t>(det.id);
     if (std::find(stop_tag_ids_.begin(), stop_tag_ids_.end(), tag_id) != stop_tag_ids_.end()) {
       hit = true;
       break;
     }
   }
+
   if (hit) {
-    if (!blocked_) { blocked_ = true; clear_count_ = 0; logObstacle("AprilTag"); }
+    if (!blocked_) {
+      blocked_ = true;
+      clear_count_ = 0;
+      logObstacle("AprilTag");
+    }
   } else {
     if (blocked_) clear_count_++;
   }
@@ -244,10 +251,10 @@ void DroneController::logObstacle(const char* source) {
   if (odom_) {
     obstacle_log_.push_back(*odom_);
     const auto &p = odom_->pose.pose.position;
-    RCLCPP_WARN(get_logger(), " Logged obstacle (%s) at (x=%.2f, y=%.2f, z=%.2f)",
+    RCLCPP_WARN(get_logger(), "📍 Logged obstacle (%s) at (x=%.2f, y=%.2f, z=%.2f)",
                 source, p.x, p.y, p.z);
   } else {
-    RCLCPP_WARN(get_logger(), " Logged obstacle (%s) but odometry not yet available.", source);
+    RCLCPP_WARN(get_logger(), "📍 Logged obstacle (%s) but odometry not yet available.", source);
   }
 }
 

@@ -111,3 +111,16 @@
   ros_type_name: "sensor_msgs/msg/PointCloud2"
   gz_type_name: "ignition.msgs.PointCloudPacked"
   direction: GZ_TO_ROS
+
+# Parrot LiDAR
+- ros_topic_name: "/parrot/scan"
+  gz_topic_name: "/model/parrot/scan"
+  ros_type_name: "sensor_msgs/msg/LaserScan"
+  gz_type_name: "ignition.msgs.LaserScan"
+  direction: GZ_TO_ROS
+
+- ros_topic_name: "/parrot/scan/points"
+  gz_topic_name: "/model/parrot/scan/points"
+  ros_type_name: "sensor_msgs/msg/PointCloud2"
+  gz_type_name: "ignition.msgs.PointCloudPacked"
+  direction: GZ_TO_ROS
