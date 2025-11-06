@@ -4,7 +4,6 @@
 #include <algorithm>
 
 // NEW: for tag/flag handling & logging
-#include <apriltag_msgs/msg/april_tag_detection_array.hpp>
 using std::placeholders::_1;
 
 DroneController::DroneController()
@@ -23,8 +22,6 @@ DroneController::DroneController()
 
   // NEW: safety-stop parameters
   use_obstacle_flag_ = this->declare_parameter("use_obstacle_flag", true);
-  stop_on_tags_      = this->declare_parameter("stop_on_tags", true);
-  stop_tag_ids_      = this->declare_parameter<std::vector<int64_t>>("stop_tag_ids", std::vector<int64_t>{7,42});
   clear_required_    = this->declare_parameter("clear_required", 10);  // cycles to auto-resume
 
   // ---- Pubs / Subs ----
@@ -46,16 +43,9 @@ DroneController::DroneController()
         "/detections/obstacle", 10, std::bind(&DroneController::onObstacle, this, std::placeholders::_1));
   }
 
-  // NEW: optional AprilTag stop trigger (choose IDs that mean “stop”)
-  if (stop_on_tags_) {
-    tag_sub_ = create_subscription<apriltag_msgs::msg::AprilTagDetectionArray>(
-        "/tag_detections", 10, std::bind(&DroneController::onTags, this, std::placeholders::_1));
-  }
-
   RCLCPP_INFO(get_logger(),
-    "DroneController ready. Topics: /cmd_vel, /odometry, /mission/pause, /mission/stop%s%s",
-    use_obstacle_flag_ ? ", /detections/obstacle" : "",
-    stop_on_tags_ ? ", /tag_detections" : "");
+    "DroneController ready. Topics: /cmd_vel, /odometry, /mission/pause, /mission/stop%s",
+    use_obstacle_flag_ ? ", /detections/obstacle" : "");
 
   // Build rectangular boustrophedon plan
   buildLawnmowerPlan();
@@ -219,22 +209,6 @@ void DroneController::onObstacle(const std_msgs::msg::Bool &msg) {
     }
   } else {
     // contribute to clear window
-    if (blocked_) clear_count_++;
-  }
-}
-
-void DroneController::onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg) {
-  bool hit = false;
-  for (const auto &det : msg.detections) {
-    const int64_t tag_id = static_cast<int64_t>(det.id);  // scalar in your build
-    if (std::find(stop_tag_ids_.begin(), stop_tag_ids_.end(), tag_id) != stop_tag_ids_.end()) {
-      hit = true;
-      break;
-    }
-  }
-  if (hit) {
-    if (!blocked_) { blocked_ = true; clear_count_ = 0; logObstacle("AprilTag"); }
-  } else {
     if (blocked_) clear_count_++;
   }
 }

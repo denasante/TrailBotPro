@@ -25,7 +25,6 @@ find_package(tf2_ros REQUIRED)
 find_package(tf2 REQUIRED)
 find_package(tf2_geometry_msgs REQUIRED)
 find_package(yaml-cpp REQUIRED)
-find_package(apriltag_msgs REQUIRED)
 
 # If your headers live in the package root, keep this; otherwise point to "include"
 set(PKG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -38,7 +37,7 @@ add_executable(dronecontroller
 target_include_directories(dronecontroller PUBLIC ${PKG_INCLUDE_DIR})
 ament_target_dependencies(dronecontroller
   rclcpp std_msgs geometry_msgs nav_msgs sensor_msgs visualization_msgs
-  cv_bridge ros_ign_interfaces tf2_ros tf2_geometry_msgs apriltag_msgs
+  cv_bridge ros_ign_interfaces tf2_ros tf2_geometry_msgs
 )
 
 add_executable(rover_controller

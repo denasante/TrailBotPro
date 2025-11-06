@@ -9,9 +9,6 @@
 #include <vector>
 #include <cstdint>
 
-// NEW: AprilTag detections
-#include <apriltag_msgs/msg/april_tag_detection_array.hpp>
-
 class DroneController : public rclcpp::Node {
 public:
   DroneController();
@@ -31,9 +28,7 @@ private:
 
   // NEW: safety-stop params
   bool use_obstacle_flag_{true};
-  bool stop_on_tags_{true};
   int  clear_required_{10};
-  std::vector<int64_t> stop_tag_ids_{};
 
   // --- Plan / State ---
   std::vector<geometry_msgs::msg::Pose2D> waypoints_;
@@ -65,11 +60,9 @@ private:
 
   // NEW: safety-stop inputs
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr obstacle_flag_sub_;  // /detections/obstacle
-  rclcpp::Subscription<apriltag_msgs::msg::AprilTagDetectionArray>::SharedPtr tag_sub_;  // /tag_detections
 
   // NEW: safety-stop handlers & logger
   void onObstacle(const std_msgs::msg::Bool &msg);
-  void onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg);
   void logObstacle(const char* source);
 
   // --- Logging (you already had these; kept intact) ---
