@@ -28,7 +28,7 @@ DroneController::DroneController()
   clear_required_    = this->declare_parameter("clear_required", 10);  // cycles to auto-resume
 
   // ---- Pubs / Subs ----
-  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/drone/cmd_vel", 10);
 
   // Subscribe to raw odometry (bridged from /model/parrot/odometry -> /odometry)
   odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(

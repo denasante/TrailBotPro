@@ -158,31 +158,6 @@ def generate_launch_description():
     )
     ld.add_action(parrot_bridge)
 
-    cam_info = Node(
-        package='41068_ignition_bringup',
-        executable='static_camera_info_pub',
-        name='static_camera_info_pub',
-        parameters=[{'camera_info_yaml': PathJoinSubstitution([config_path, 'camera_info.yaml'])}]
-    )
-
-    apriltag = Node(
-        package='apriltag_ros', executable='apriltag_node',
-        parameters=[{
-            'image_transport': 'raw',
-            'family': 'tag36h11',
-            'size': 0.20,                   # 20 cm tag in the world
-            'max_hamming': 1
-        }],
-        remappings=[
-            ('/image_rect', '/camera/image'),
-            ('/camera_info', '/camera/camera_info')
-        ],
-        output='screen'
-    )
-    
-    ld.add_action(cam_info)
-    ld.add_action(apriltag)
-
     drone = Node(
     package='41068_ignition_bringup',
     executable='dronecontroller',
