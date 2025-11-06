@@ -1,90 +1,49 @@
-// #ifndef MISSION_INTERFACE_H
-// #define MISSION_INTERFACE_H
-
-// #include <rclcpp/rclcpp.hpp>
-// #include <geometry_msgs/msg/twist.hpp>
-// #include <nav_msgs/msg/odometry.hpp>
-
-// // Interface mission: go forward until x >= 2, pause, reverse until x <= 0.
-// class MissionInterface : public rclcpp::Node {
-// public:
-//   MissionInterface();
-
-// private:
-//   // Parameters
-//   std::string odom_topic_;
-//   std::string cmd_vel_topic_;
-//   double fwd_speed_;
-//   double rev_speed_;
-//   double target_forward_x_;
-//   double target_back_x_;
-//   double pause_secs_;
-
-//   // State variables
-//   bool have_odom_;
-//   double x_;
-//   rclcpp::Time pause_start_;
-
-//   // ROS interfaces
-//   rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_;
-//   rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_;
-//   rclcpp::TimerBase::SharedPtr timer_;
-
-//   // Enum for mission phases
-//   enum class Phase { WAIT_ODOM, FORWARD, PAUSE, REVERSE, DONE };
-//   Phase phase_;
-
-//   // Functions
-//   void tick();
-//   void publish_stop();
-// };
-
-// #endif // MISSION_INTERFACE_H
-
-
-// ----------------
-// ----------------
-
-
 #pragma once
-#include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
-#include <nav_msgs/msg/odometry.hpp>
-#include <std_msgs/msg/string.hpp>
 
-class MissionInterface : public rclcpp::Node
-{
+#include <rclcpp/rclcpp.hpp>
+#include <rclcpp_action/rclcpp_action.hpp>
+
+#include <geometry_msgs/msg/pose_stamped.hpp>
+#include <nav2_msgs/action/navigate_to_pose.hpp>
+
+#include <string>
+#include <vector>
+
+class MissionInterface : public rclcpp::Node {
 public:
+  using NavigateToPose = nav2_msgs::action::NavigateToPose;
+  using GoalHandleNav  = rclcpp_action::ClientGoalHandle<NavigateToPose>;
+
   MissionInterface();
 
 private:
-  struct Waypoint {
-    double x, y, yaw;
-  };
+  // --- callbacks / flow ---
+  void waypointCb(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
+  void sendGoal(const geometry_msgs::msg::PoseStamped &pose);
 
-  enum class Phase { WAIT_ODOM, WAIT_ARRIVAL, PAUSE, DONE };
-  Phase phase_;
+  // --- CSV mission helpers ---
+  bool loadCsv(const std::string &path,
+               std::vector<geometry_msgs::msg::PoseStamped> &out);
+  void startCsvMissionIfAny();
+  void sendNextFromList();
 
-  // ROS interfaces
-  rclcpp::Publisher<geometry_msgs::msg::PoseStamped>::SharedPtr pub_target_;
-  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_odom_;
-  rclcpp::Subscription<std_msgs::msg::String>::SharedPtr sub_status_;
-  rclcpp::TimerBase::SharedPtr timer_;
+  // --- small helpers (declared only; defined in .cpp) ---
+  static bool isZeroQuat(const geometry_msgs::msg::Quaternion &q);
+  static geometry_msgs::msg::Quaternion yawToQuat(double yaw_rad);
 
-  // Parameters
-  std::string odom_topic_, target_topic_, status_topic_;
-  double pause_secs_;
+  // --- params ---
+  std::string frame_id_   = "map";
+  double      timeout_sec_ = 120.0;
+  std::string path_csv_    = "";     // empty = no CSV mission
+  bool        loop_path_   = false;  // loop waypoints when true
 
-  // Mission state
-  std::vector<Waypoint> waypoints_;
-  size_t current_idx_;
-  bool have_odom_;
-  double x_;
-  rclcpp::Time pause_start_;
+  // --- ROS entities ---
+  rclcpp_action::Client<NavigateToPose>::SharedPtr nav_client_;
+  rclcpp::TimerBase::SharedPtr connect_timer_;
+  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr wp_sub_;
 
-  // Helpers
-  void status_cb(const std_msgs::msg::String::SharedPtr msg);
-  void send_target(double x, double y, double yaw);
-  void tick();
+  // --- state ---
+  bool goal_active_ = false;
+  std::vector<geometry_msgs::msg::PoseStamped> waypoints_;
+  std::size_t next_idx_ = 0;
 };
-

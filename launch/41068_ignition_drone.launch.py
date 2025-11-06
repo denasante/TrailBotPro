@@ -90,7 +90,7 @@ def generate_launch_description():
         executable='create',
         output='screen',
         parameters=[{'use_sim_time': use_sim_time}],
-        arguments=['-topic', '/robot_description', '-z', '2.0'] # z is height above ground
+        arguments=['-topic', '/robot_description', '-name', 'parrot', '-x', '-5.0', '-y', '-5.0','-z', '2.0'] # z is height above ground
     )
     ld.add_action(robot_spawner)
 
@@ -116,6 +116,16 @@ def generate_launch_description():
     )
     ld.add_action(rviz_node)
 
+    slam = IncludeLaunchDescription(
+        PathJoinSubstitution([FindPackageShare('slam_toolbox'),
+                             'launch', 'online_async_launch.py']),
+        launch_arguments={
+            'use_sim_time': use_sim_time,
+            'slam_params_file': PathJoinSubstitution([config_path, 'slam_params.yaml'])
+        }.items()
+    )
+    ld.add_action(slam)
+
     # Nav2 enables mapping and waypoint following
     nav2 = IncludeLaunchDescription(
         PathJoinSubstitution([pkg_path,
@@ -127,5 +137,73 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('nav2'))
     )
     ld.add_action(nav2)
+
+    parrot_bridge = Node(
+        package='ros_gz_bridge',
+        executable='parameter_bridge',
+        output='screen',
+        arguments=[
+            '/model/parrot/odometry@nav_msgs/msg/Odometry@ignition.msgs.Odometry',
+            '/model/parrot/imu@sensor_msgs/msg/Imu@ignition.msgs.IMU',
+            '/model/parrot/cmd_vel@geometry_msgs/msg/Twist@ignition.msgs.Twist',
+            '/model/parrot/camera/image@sensor_msgs/msg/Image@ignition.msgs.Image',
+        ],
+        remappings=[
+            ('/model/parrot/odometry', '/odometry'),
+            ('/model/parrot/imu', '/imu'),
+            ('/model/parrot/cmd_vel', '/drone/cmd_vel'),   # <-- key line
+            ('/model/parrot/camera/image', '/camera/image'),
+        ],
+        parameters=[{'use_sim_time': use_sim_time}],
+    )
+    ld.add_action(parrot_bridge)
+
+    cam_info = Node(
+        package='41068_ignition_bringup',
+        executable='static_camera_info_pub',
+        name='static_camera_info_pub',
+        parameters=[{'camera_info_yaml': PathJoinSubstitution([config_path, 'camera_info.yaml'])}]
+    )
+
+    apriltag = Node(
+        package='apriltag_ros', executable='apriltag_node',
+        parameters=[{
+            'image_transport': 'raw',
+            'family': 'tag36h11',
+            'size': 0.20,                   # 20 cm tag in the world
+            'max_hamming': 1
+        }],
+        remappings=[
+            ('/image_rect', '/camera/image'),
+            ('/camera_info', '/camera/camera_info')
+        ],
+        output='screen'
+    )
+    
+    ld.add_action(cam_info)
+    ld.add_action(apriltag)
+
+    drone = Node(
+    package='41068_ignition_bringup',
+    executable='dronecontroller',
+    name='dronecontroller',
+    output='screen',
+    parameters=[
+        {'use_sim_time': use_sim_time},
+        {
+            'use_obstacle_flag': True,
+            'stop_on_tags': True,
+            'stop_tag_ids': [7, 42],
+            'clear_required': 10,
+        }
+    ],
+    remappings=[
+        ('/model/parrot/odometry', '/odometry'),
+        # ('/cmd_vel', '/parrot/cmd_vel'),
+        ('/tag_detections', '/tag_detections'),
+        ('/detections/obstacle', '/detections/obstacle'),
+    ]
+)
+    ld.add_action(drone)
 
     return ld

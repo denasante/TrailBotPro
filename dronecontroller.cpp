@@ -1,150 +1,268 @@
 #include "dronecontroller.h"
+
 #include <cmath>
 #include <algorithm>
-#include <chrono>
 
+// NEW: for tag/flag handling & logging
+#include <apriltag_msgs/msg/april_tag_detection_array.hpp>
 using std::placeholders::_1;
-using namespace std::chrono_literals;
 
-// --- helpers ---
-static inline double clamp(double v, double lo, double hi) {
-  return std::max(lo, std::min(hi, v));
+DroneController::DroneController()
+: rclcpp::Node("dronecontroller")
+{
+  // ---- Parameters (with sensible defaults) ----
+  min_x_        = this->declare_parameter("min_x", -5.0);
+  min_y_        = this->declare_parameter("min_y", -5.0);
+  max_x_        = this->declare_parameter("max_x",  5.0);
+  max_y_        = this->declare_parameter("max_y",  5.0);
+  lane_spacing_ = this->declare_parameter("lane_spacing", 1.0);
+  v_            = this->declare_parameter("v", 0.8);       // m/s
+  k_yaw_        = this->declare_parameter("k_yaw", 1.0);   // rad/s per rad
+  waypoint_tol_ = this->declare_parameter("waypoint_tol", 0.25);
+  timer_hz_     = this->declare_parameter("timer_hz", 20.0);
+
+  // NEW: safety-stop parameters
+  use_obstacle_flag_ = this->declare_parameter("use_obstacle_flag", true);
+  stop_on_tags_      = this->declare_parameter("stop_on_tags", true);
+  stop_tag_ids_      = this->declare_parameter<std::vector<int64_t>>("stop_tag_ids", std::vector<int64_t>{7,42});
+  clear_required_    = this->declare_parameter("clear_required", 10);  // cycles to auto-resume
+
+  // ---- Pubs / Subs ----
+  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("/cmd_vel", 10);
+
+  // Subscribe to raw odometry (bridged from /model/parrot/odometry -> /odometry)
+  odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
+      "/odometry", 10, std::bind(&DroneController::odomCb, this, _1));
+
+  pause_sub_ = create_subscription<std_msgs::msg::Bool>(
+      "/mission/pause", 10, std::bind(&DroneController::onPause, this, std::placeholders::_1));
+
+  stop_sub_ = create_subscription<std_msgs::msg::Empty>(
+      "/mission/stop", 10, std::bind(&DroneController::onStop, this, std::placeholders::_1));
+
+  // NEW: optional obstacle flag (std_msgs/Bool) that latches a stop
+  if (use_obstacle_flag_) {
+    obstacle_flag_sub_ = create_subscription<std_msgs::msg::Bool>(
+        "/detections/obstacle", 10, std::bind(&DroneController::onObstacle, this, std::placeholders::_1));
+  }
+
+  // NEW: optional AprilTag stop trigger (choose IDs that mean “stop”)
+  if (stop_on_tags_) {
+    tag_sub_ = create_subscription<apriltag_msgs::msg::AprilTagDetectionArray>(
+        "/tag_detections", 10, std::bind(&DroneController::onTags, this, std::placeholders::_1));
+  }
+
+  RCLCPP_INFO(get_logger(),
+    "DroneController ready. Topics: /cmd_vel, /odometry, /mission/pause, /mission/stop%s%s",
+    use_obstacle_flag_ ? ", /detections/obstacle" : "",
+    stop_on_tags_ ? ", /tag_detections" : "");
+
+  // Build rectangular boustrophedon plan
+  buildLawnmowerPlan();
+
+  RCLCPP_INFO(get_logger(),
+      "DroneController: rectangular sweep; rect=[%.2f,%.2f]→[%.2f,%.2f], "
+      "spacing=%.2f m, lanes=%zu, v=%.2f m/s, k_yaw=%.2f, tol=%.2f m",
+      min_x_, min_y_, max_x_, max_y_, lane_spacing_,
+      waypoints_.size(), v_, k_yaw_, waypoint_tol_);
+
+  // Timer (control loop)
+  using namespace std::chrono_literals;
+  const auto period = std::chrono::duration<double>(1.0 / std::max(1.0, timer_hz_));
+  timer_ = this->create_wall_timer(
+      std::chrono::duration_cast<std::chrono::milliseconds>(period),
+      std::bind(&DroneController::step, this));
 }
 
-double DroneController::angle_wrap(double a) {
-  while (a > M_PI)  a -= 2.0 * M_PI;
-  while (a < -M_PI) a += 2.0 * M_PI;
+void DroneController::odomCb(const nav_msgs::msg::Odometry & msg) {
+  odom_ = std::make_shared<nav_msgs::msg::Odometry>(msg);
+}
+
+void DroneController::step() {
+  // Auto-clear (resume) after stable all-clear
+  if (blocked_ && clear_count_ >= clear_required_) {
+    blocked_ = false;
+    clear_count_ = 0;
+    RCLCPP_INFO(get_logger(), "RESUME: Clear condition met");
+  }
+
+  if (stopped_ || paused_ || blocked_) {
+    publishStop();
+    if (stopped_) return;
+
+    // Friendly status throttles
+    if (paused_) {
+      RCLCPP_INFO_THROTTLE(get_logger(), *this->get_clock(), 2000, "Paused → holding.");
+    } else if (blocked_) {
+      RCLCPP_WARN_THROTTLE(get_logger(), *this->get_clock(), 2000, "Blocked → safety stop.");
+    }
+    return;
+  }
+
+  if (!odom_) {
+    // no odometry yet → hold still
+    geometry_msgs::msg::Twist zero;
+    cmd_pub_->publish(zero);
+    return;
+  }
+
+  if (wpt_idx_ >= waypoints_.size()) {
+    geometry_msgs::msg::Twist zero;
+    cmd_pub_->publish(zero);
+    RCLCPP_INFO_THROTTLE(get_logger(), *this->get_clock(), 2000,
+                         "Survey complete. Holding position.");
+    return;
+  }
+
+  driveToWaypoint();
+}
+
+void DroneController::buildLawnmowerPlan() {
+  waypoints_.clear();
+  if (max_x_ < min_x_) std::swap(max_x_, min_x_);
+  if (max_y_ < min_y_) std::swap(max_y_, min_y_);
+
+  // Number of columns (ensure inclusive of max_x)
+  const int cols = std::max(1, static_cast<int>(
+      std::floor((max_x_ - min_x_) / std::max(0.01, lane_spacing_)) + 1));
+
+  for (int i = 0; i < cols; ++i) {
+    const double x = min_x_ + i * lane_spacing_;
+    geometry_msgs::msg::Pose2D p1, p2;
+
+    if (i % 2 == 0) {
+      // Up column
+      p1.x = x; p1.y = min_y_;
+      p2.x = x; p2.y = max_y_;
+    } else {
+      // Down column
+      p1.x = x; p1.y = max_y_;
+      p2.x = x; p2.y = min_y_;
+    }
+    waypoints_.push_back(p1);
+    waypoints_.push_back(p2);
+  }
+
+  // Keep index at first waypoint
+  wpt_idx_ = 0;
+}
+
+double DroneController::wrapToPi(double a) {
+  while (a >  M_PI) a -= 2*M_PI;
+  while (a < -M_PI) a += 2*M_PI;
   return a;
 }
 
-double DroneController::yaw_from_quat(double x, double y, double z, double w) {
-  return std::atan2(2.0 * (w * z + x * y),
-                    1.0 - 2.0 * (y * y + z * z));
-}
+void DroneController::driveToWaypoint() {
+  const auto &o = *odom_;
+  const double x = o.pose.pose.position.x;
+  const double y = o.pose.pose.position.y;
 
-// --- constructor ---
-DroneController::DroneController() : rclcpp::Node("dronecontroller") {
-  // Parameters
-  odom_topic_        = declare_parameter<std::string>("odom_topic", "/parrot/odometry");
-  cmd_vel_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/parrot/cmd_vel");
-  mission_target_topic_ = declare_parameter<std::string>("mission_target_topic", "/mission/target");
-  status_topic_      = declare_parameter<std::string>("status_topic", "/mission/status");
+  // yaw from quaternion (robust, no tf dependency)
+  const auto &q = o.pose.pose.orientation;
+  const double yaw = std::atan2(2.0*(q.w*q.z + q.x*q.y),
+                                1.0 - 2.0*(q.y*q.y + q.z*q.z));
 
-  kp_lin_            = declare_parameter<double>("kp_lin", 0.8);
-  kp_yaw_            = declare_parameter<double>("kp_yaw", 1.0);
-  max_speed_         = declare_parameter<double>("max_speed", 0.8);
-  max_yaw_rate_      = declare_parameter<double>("max_yaw_rate", 0.8);
-  pos_tol_           = declare_parameter<double>("pos_tol", 0.25);
-  yaw_tol_           = declare_parameter<double>("yaw_tol", 0.25);
-  hold_time_s_       = declare_parameter<double>("hold_time_s", 0.5);
+  const auto &wpt = waypoints_[wpt_idx_];
+  const double dx = wpt.x - x;
+  const double dy = wpt.y - y;
+  const double dist = std::hypot(dx, dy);
 
-  auto qos = rclcpp::QoS(10).reliable();
+  const double target_yaw = std::atan2(dy, dx);
+  const double err_yaw = wrapToPi(target_yaw - yaw);
 
-  // Publishers
-  pub_cmd_ = create_publisher<geometry_msgs::msg::Twist>(cmd_vel_topic_, qos);
-  pub_status_ = create_publisher<std_msgs::msg::String>(status_topic_, qos);
-
-  // Subscribers
-  sub_odom_ = create_subscription<nav_msgs::msg::Odometry>(
-      odom_topic_, qos, std::bind(&DroneController::odom_cb, this, _1));
-
-  sub_target_ = create_subscription<geometry_msgs::msg::PoseStamped>(
-      mission_target_topic_, qos, std::bind(&DroneController::target_cb, this, _1));
-
-  timer_ = create_wall_timer(50ms, std::bind(&DroneController::control_tick, this));
-
-  have_odom_ = false;
-  have_target_ = false;
-  within_tol_since_ = rclcpp::Time{};
-
-  RCLCPP_INFO(get_logger(),
-              "DroneController up. Tracking mission targets on '%s', publishing status on '%s'.",
-              mission_target_topic_.c_str(), status_topic_.c_str());
-}
-
-// --- Callbacks ---
-void DroneController::odom_cb(const nav_msgs::msg::Odometry::SharedPtr msg) {
-  x_ = msg->pose.pose.position.x;
-  y_ = msg->pose.pose.position.y;
-  yaw_ = yaw_from_quat(
-      msg->pose.pose.orientation.x,
-      msg->pose.pose.orientation.y,
-      msg->pose.pose.orientation.z,
-      msg->pose.pose.orientation.w);
-  have_odom_ = true;
-}
-
-void DroneController::target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
-  target_x_ = msg->pose.position.x;
-  target_y_ = msg->pose.position.y;
-  target_yaw_ = yaw_from_quat(
-      msg->pose.orientation.x,
-      msg->pose.orientation.y,
-      msg->pose.orientation.z,
-      msg->pose.orientation.w);
-  have_target_ = true;
-  within_tol_since_ = rclcpp::Time{};
-  RCLCPP_INFO(get_logger(), "Received new mission target (x=%.2f, y=%.2f, yaw=%.2f)",
-              target_x_, target_y_, target_yaw_);
-}
-
-// --- Control loop ---
-void DroneController::control_tick() {
   geometry_msgs::msg::Twist cmd;
+  // Simple heading P: turn toward target
+  cmd.angular.z = k_yaw_ * err_yaw;
+  // Forward speed modulated by alignment (keeps it from arcing too wide)
+  cmd.linear.x  = v_ * std::cos(err_yaw);
 
-  if (!have_odom_) {
-    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000, "Waiting for odometry...");
-    pub_cmd_->publish(cmd);
-    return;
+  // Clamp for safety
+  cmd.angular.z = std::clamp(cmd.angular.z, -1.5, 1.5);
+  cmd.linear.x  = std::clamp(cmd.linear.x,   0.0,  v_);
+
+  cmd_pub_->publish(cmd);
+
+  if (dist < waypoint_tol_) {
+    ++wpt_idx_;
+    RCLCPP_INFO(get_logger(), "Reached waypoint %zu/%zu (%.2f, %.2f)",
+                wpt_idx_, waypoints_.size(), wpt.x, wpt.y);
   }
+}
 
-  if (!have_target_) {
-    pub_cmd_->publish(cmd); // stop
-    return;
+// ----------------- Safety Stop Callbacks -----------------
+
+void DroneController::onPause(const std_msgs::msg::Bool &msg) {
+  paused_ = msg.data;
+  if (paused_) {
+    RCLCPP_WARN(get_logger(), "PAUSE received → holding position (zero velocity).");
+    publishStop();
+  } else {
+    RCLCPP_INFO(get_logger(), "PAUSE=false → resuming motion.");
   }
+}
 
-  // Compute errors
-  double ex = target_x_ - x_;
-  double ey = target_y_ - y_;
-  double dist = std::hypot(ex, ey);
-  double heading_to_wp = std::atan2(ey, ex);
-  double yaw_err = angle_wrap(heading_to_wp - yaw_);
+void DroneController::onStop(const std_msgs::msg::Empty &) {
+  if (!stopped_) {
+    RCLCPP_ERROR(get_logger(), "STOP received → permanent stop for this run.");
+  }
+  stopped_ = true;
+  publishStop();
+}
 
-  // Check if within tolerance
-  if (dist < pos_tol_) {
-    if (within_tol_since_.nanoseconds() == 0)
-      within_tol_since_ = now();
-
-    double held = (now() - within_tol_since_).seconds();
-    if (held >= hold_time_s_) {
-      std_msgs::msg::String done;
-      done.data = "ARRIVED";
-      pub_status_->publish(done);
-      RCLCPP_INFO(get_logger(), "✅ Arrived at target (x=%.2f, y=%.2f). Holding.", target_x_, target_y_);
-      have_target_ = false;
-      pub_cmd_->publish(cmd);
-      return;
+void DroneController::onObstacle(const std_msgs::msg::Bool &msg) {
+  if (msg.data) {
+    if (!blocked_) {
+      blocked_ = true;
+      clear_count_ = 0;
+      logObstacle("ObstacleFlag");
     }
   } else {
-    within_tol_since_ = rclcpp::Time{};
+    // contribute to clear window
+    if (blocked_) clear_count_++;
   }
-
-  // Compute control
-  double vx_cmd = kp_lin_ * dist;
-  double wz_cmd = kp_yaw_ * yaw_err;
-  vx_cmd = clamp(vx_cmd, -max_speed_, max_speed_);
-  wz_cmd = clamp(wz_cmd, -max_yaw_rate_, max_yaw_rate_);
-
-  cmd.linear.x = vx_cmd;
-  cmd.angular.z = wz_cmd;
-  pub_cmd_->publish(cmd);
 }
 
-// --- main ---
-int main(int argc, char **argv) {
+void DroneController::onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg) {
+  bool hit = false;
+  for (const auto &det : msg.detections) {
+    const int64_t tag_id = static_cast<int64_t>(det.id);  // scalar in your build
+    if (std::find(stop_tag_ids_.begin(), stop_tag_ids_.end(), tag_id) != stop_tag_ids_.end()) {
+      hit = true;
+      break;
+    }
+  }
+  if (hit) {
+    if (!blocked_) { blocked_ = true; clear_count_ = 0; logObstacle("AprilTag"); }
+  } else {
+    if (blocked_) clear_count_++;
+  }
+}
+
+void DroneController::logObstacle(const char* source) {
+  // record current odom snapshot (if available)
+  if (odom_) {
+    obstacle_log_.push_back(*odom_);
+    const auto &p = odom_->pose.pose.position;
+    RCLCPP_WARN(get_logger(), " Logged obstacle (%s) at (x=%.2f, y=%.2f, z=%.2f)",
+                source, p.x, p.y, p.z);
+  } else {
+    RCLCPP_WARN(get_logger(), " Logged obstacle (%s) but odometry not yet available.", source);
+  }
+}
+
+// ----------------- Utilities -----------------
+
+void DroneController::publishStop() {
+  geometry_msgs::msg::Twist zero{};
+  cmd_pub_->publish(zero);
+}
+
+// ----------------- main -----------------
+int main(int argc, char ** argv) {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<DroneController>());
+  auto node = std::make_shared<DroneController>();
+  rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;
 }
-

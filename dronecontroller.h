@@ -1,53 +1,78 @@
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/msg/twist.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
-#include <std_msgs/msg/string.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+#include <geometry_msgs/msg/pose2_d.hpp>  // Pose2D
+#include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/empty.hpp>
+#include <vector>
+#include <cstdint>
 
-class DroneController : public rclcpp::Node
-{
+// NEW: AprilTag detections
+#include <apriltag_msgs/msg/april_tag_detection_array.hpp>
+
+class DroneController : public rclcpp::Node {
 public:
   DroneController();
 
 private:
-  // --- Helpers ---
-  double angle_wrap(double a);
-  double yaw_from_quat(double x, double y, double z, double w);
-
-  // --- ROS interfaces ---
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_status_;
-
-  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_odom_;
-  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub_target_;
+  // --- ROS ---
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_pub_;
+  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
+  nav_msgs::msg::Odometry::SharedPtr odom_;
 
-  // --- Parameters ---
-  std::string odom_topic_;
-  std::string cmd_vel_topic_;
-  std::string mission_target_topic_;
-  std::string status_topic_;
+  // --- Params ---
+  double min_x_, min_y_, max_x_, max_y_;
+  double lane_spacing_;
+  double v_, k_yaw_, waypoint_tol_;
+  double timer_hz_;
 
-  double kp_lin_, kp_yaw_;
-  double max_speed_, max_yaw_rate_;
-  double pos_tol_, yaw_tol_;
-  double hold_time_s_;
+  // NEW: safety-stop params
+  bool use_obstacle_flag_{true};
+  bool stop_on_tags_{true};
+  int  clear_required_{10};
+  std::vector<int64_t> stop_tag_ids_{};
 
-  // --- Drone state ---
-  double x_{0.0}, y_{0.0}, yaw_{0.0};
-  bool have_odom_{false};
+  // --- Plan / State ---
+  std::vector<geometry_msgs::msg::Pose2D> waypoints_;
+  std::size_t wpt_idx_{0};
 
-  // --- Target state ---
-  double target_x_{0.0}, target_y_{0.0}, target_yaw_{0.0};
-  bool have_target_{false};
-  rclcpp::Time within_tol_since_;
+  // NEW: safety-stop state
+  bool blocked_{false};
+  int  clear_count_{0};
 
   // --- Callbacks ---
-  void odom_cb(const nav_msgs::msg::Odometry::SharedPtr msg);
-  void target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
+  void odomCb(const nav_msgs::msg::Odometry & msg);
+  void step();
 
-  // --- Control loop ---
-  void control_tick();
+  // --- Helpers ---
+  void buildLawnmowerPlan();
+  void driveToWaypoint();
+  static double wrapToPi(double a);
+
+  // --- Pause/Stop Control ---
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr pause_sub_;
+  rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr stop_sub_;
+  bool paused_{false};
+  bool stopped_{false};
+
+  // control callbacks
+  void onPause(const std_msgs::msg::Bool &msg);
+  void onStop(const std_msgs::msg::Empty &);
+  void publishStop();
+
+  // NEW: safety-stop inputs
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr obstacle_flag_sub_;  // /detections/obstacle
+  rclcpp::Subscription<apriltag_msgs::msg::AprilTagDetectionArray>::SharedPtr tag_sub_;  // /tag_detections
+
+  // NEW: safety-stop handlers & logger
+  void onObstacle(const std_msgs::msg::Bool &msg);
+  void onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg);
+  void logObstacle(const char* source);
+
+  // --- Logging (you already had these; kept intact) ---
+  nav_msgs::msg::Odometry current_odom_;
+  std::vector<nav_msgs::msg::Odometry> obstacle_log_;
 };
