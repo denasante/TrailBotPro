@@ -3,8 +3,11 @@
 #include <algorithm>
 
 // NEW: for tag/flag handling & logging
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> a0f2b1af31f16b5703c05b5c0130d6a351ebba3d
 using std::placeholders::_1;
 
 DroneController::DroneController()
@@ -23,8 +26,11 @@ DroneController::DroneController()
 
   // NEW: safety-stop parameters
   use_obstacle_flag_ = this->declare_parameter("use_obstacle_flag", true);
+<<<<<<< HEAD
   stop_on_tags_      = this->declare_parameter("stop_on_tags", true);
   stop_tag_ids_ = this->declare_parameter<std::vector<int64_t>>("stop_tag_ids", std::vector<int64_t>{7, 42});
+=======
+>>>>>>> a0f2b1af31f16b5703c05b5c0130d6a351ebba3d
   clear_required_    = this->declare_parameter("clear_required", 10);  // cycles to auto-resume
 
   // ---- Pubs / Subs ----
@@ -46,16 +52,9 @@ DroneController::DroneController()
         "/detections/obstacle", 10, std::bind(&DroneController::onObstacle, this, std::placeholders::_1));
   }
 
-  // NEW: optional AprilTag stop trigger (choose IDs that mean “stop”)
-  if (stop_on_tags_) {
-    tag_sub_ = create_subscription<apriltag_msgs::msg::AprilTagDetectionArray>(
-        "/tag_detections", 10, std::bind(&DroneController::onTags, this, std::placeholders::_1));
-  }
-
   RCLCPP_INFO(get_logger(),
-    "DroneController ready. Topics: /cmd_vel, /odometry, /mission/pause, /mission/stop%s%s",
-    use_obstacle_flag_ ? ", /detections/obstacle" : "",
-    stop_on_tags_ ? ", /tag_detections" : "");
+    "DroneController ready. Topics: /cmd_vel, /odometry, /mission/pause, /mission/stop%s",
+    use_obstacle_flag_ ? ", /detections/obstacle" : "");
 
   // Build rectangular boustrophedon plan
   buildLawnmowerPlan();
@@ -223,6 +222,7 @@ void DroneController::onObstacle(const std_msgs::msg::Bool &msg) {
   }
 }
 
+<<<<<<< HEAD
 void DroneController::onTags(const apriltag_msgs::msg::AprilTagDetectionArray &msg) {
   bool hit = false;
   for (const auto & det : msg.detections) {
@@ -245,6 +245,8 @@ void DroneController::onTags(const apriltag_msgs::msg::AprilTagDetectionArray &m
   }
 }
 
+=======
+>>>>>>> a0f2b1af31f16b5703c05b5c0130d6a351ebba3d
 void DroneController::logObstacle(const char* source) {
   // record current odom snapshot (if available)
   if (odom_) {
