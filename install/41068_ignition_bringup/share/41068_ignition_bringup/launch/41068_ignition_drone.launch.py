@@ -1,1 +1,1 @@
-/home/student/git/TrailBotPro/launch/41068_ignition_drone.launch.py
+/home/student/ros2_ws/src/TrailBotPro/launch/41068_ignition_drone.launch.py
