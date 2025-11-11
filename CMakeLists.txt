@@ -66,4 +66,27 @@ install(
   DESTINATION share/${PROJECT_NAME}
 )
 
+# ------------------- Install Python nodes ----------------
+install(PROGRAMS
+  drone_object_detector_bamboo.py
+  tree_detector.py
+  drone_keyboard_teleop.py
+  square_pattern_flight.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install Python scripts
+install(PROGRAMS
+  scripts/object_landmark_mapper.py
+  scripts/frontier_explorer.py
+  scripts/drone_goal_publisher.py
+  DESTINATION lib/${PROJECT_NAME}
+)
+
+# Install config files
+install(DIRECTORY config/
+  DESTINATION share/${PROJECT_NAME}/config
+)
+
+
 ament_package()

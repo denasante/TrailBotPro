@@ -1,0 +1,60 @@
+### Parrot Drone EKF Configuration (3D Mode) ###
+### IMPORTANT: Frame names are WITHOUT namespace prefix
+### The launch file namespace='parrot' will add 'parrot/' automatically!
+robot_localization:
+    ros__parameters:
+        frequency: 50.0
+        two_d_mode: false  # 3D mode for aerial vehicle
+        publish_acceleration: false
+        publish_tf: true
+        map_frame: map           # Will become parrot/map
+        odom_frame: odom         # Will become parrot/odom
+        base_link_frame: base_link  # Will become parrot/base_link
+        world_frame: odom        # Will become parrot/odom
+
+        # Odometry from Gazebo
+        odom0: odometry
+        odom0_config: [true,  true,  true,     # ✅ Enable X, Y, Z position
+                      false, false, false,     # Roll, Pitch, Yaw position (disabled - use velocities)
+                      true,  true,  true,      # ✅ X, Y, Z velocity enabled
+                      false, false, true,      # ✅ Yaw rate enabled  
+                      false, false, false]     # Accelerations disabled
+
+        # IMU data
+        imu0: imu
+        imu0_config: [false, false, false,     # Position (IMU doesn't provide this)
+                      true,  true,  true,      # ✅ Enable Roll, Pitch, Yaw orientation
+                      false, false, false,     # Velocity (IMU doesn't provide this directly)
+                      false, false, true,      # ✅ Yaw rate enabled
+                      true,  true,  true]      # ✅ Enable linear accelerations X, Y, Z
+
+        # Process noise covariance (Q)
+        process_noise_covariance: [0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.05, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.03, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.06, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.025,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.025,0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.04, 0.0,  0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.02, 0.0,  0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,  0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.01, 0.0,
+                                   0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.0,  0.015]
+
+        # Delays (in seconds)
+        odom0_queue_size: 10
+        imu0_queue_size: 10
+        
+        # Differential mode
+        odom0_differential: false
+        imu0_differential: false
+
+        # Remove gravitational acceleration
+        imu0_remove_gravitational_acceleration: true
+
+        # Debug
+        print_diagnostics: false

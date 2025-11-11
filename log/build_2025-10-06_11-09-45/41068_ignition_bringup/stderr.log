@@ -1,7 +1,0 @@
-WARNING: Package name "41068_ignition_bringup" does not follow the naming conventions. It should start with a lower case letter and only contain lower case letters, digits, underscores, and dashes.
-[33mCMake Warning:
-  Manually-specified variables were not used by the project:
-
-    CMAKE_EXPORT_COMPILE_COMMANDS
-
-[0m

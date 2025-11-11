@@ -1,0 +1,61 @@
+
+<!--
+Copyright 2020 Google LLC.
+
+This work is licensed under the Creative Commons Attribution 4.0
+International License. To view a copy of this license, visit
+http://creativecommons.org/licenses/by/4.0/ or send a letter
+to Creative Commons, PO Box 1866, Mountain View, CA 94042, USA.
+
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <model name="Schleich_Lion_Action_Figure">
+    <link name="link_0">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <uri>meshes/model.obj</uri>
+          </mesh>
+        </geometry>
+      </visual>
+      <collision name="collision_0">
+        <geometry>
+          <mesh>
+            <uri>meshes/model.obj</uri>
+          </mesh>
+        </geometry>
+      </collision>
+    </link>
+  </model>
+</sdf>
+
+
+-->
+
+<?xml version="1.0"?>
+<sdf version="1.8">
+  <model name="Lion_Action_Figure">
+    <static>true</static>
+    <self_collide>false</self_collide>
+    <link name="link_0">
+      <visual name="visual">
+        <geometry>
+          <mesh>
+            <!-- Use the green bamboo mesh -->
+            <uri>meshes/Lion.dae</uri>
+            <scale>0.02 0.02 0.02</scale>
+          </mesh>
+        </geometry>
+        <cast_shadows>false</cast_shadows>
+      </visual>
+      <collision name="collision_0">
+        <geometry>
+          <mesh>
+            <uri>meshes/model.dae</uri>
+          </mesh>
+        </geometry>
+      </collision>
+
+    </link>
+  </model>
+</sdf>

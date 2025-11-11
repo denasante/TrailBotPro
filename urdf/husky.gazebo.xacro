@@ -104,13 +104,6 @@
     </plugin>
   </gazebo>
 
-  <!-- Lidar and cameras use the general Sensors plugin -->
-  <gazebo>
-    <plugin
-        filename="libignition-gazebo-sensors-system.so"
-        name="ignition::gazebo::systems::Sensors">
-    </plugin>
-  </gazebo>
 
   <gazebo reference="base_scan">
     <material>Gazebo/FlatBlack</material>
@@ -143,7 +136,7 @@
       <always_on>true</always_on>
     </sensor>
   </gazebo>
-
+  
   <gazebo reference="camera_link">
     <sensor name="rgbd_camera" type="rgbd_camera">
       <camera>
