@@ -112,18 +112,5 @@
       <pose>-7 1 0 0 0 0</pose>
       </include>
 
-          <!-- Lion_Action_Figure -->
-      <include>
-      <uri>model://Lion_Action_Figure</uri>
-      <name>Lion_Action_Figure_1</name>
-      <pose>5 -2 0 0 0 0</pose>
-      </include>
-      <include>
-      <uri>model://Lion_Action_Figure</uri>
-      <name>Lion_Action_Figure_2</name>
-      <pose>-9 6 0 0 0 0</pose>
-      </include>
-
-
   </world>
 </sdf>
