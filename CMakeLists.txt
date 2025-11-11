@@ -12,6 +12,7 @@ endif()
 # ------------------- Dependencies -------------------
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
+find_package(rclcpp_action REQUIRED)
 find_package(std_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(nav_msgs REQUIRED)
@@ -19,6 +20,11 @@ find_package(sensor_msgs REQUIRED)
 find_package(visualization_msgs REQUIRED)
 find_package(cv_bridge REQUIRED)
 find_package(ros_ign_interfaces REQUIRED)
+find_package(nav2_msgs REQUIRED)
+find_package(tf2_ros REQUIRED)
+find_package(tf2 REQUIRED)
+find_package(tf2_geometry_msgs REQUIRED)
+find_package(yaml-cpp REQUIRED)
 
 # If your headers live in the package root, keep this; otherwise point to "include"
 set(PKG_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR})
@@ -31,7 +37,7 @@ add_executable(dronecontroller
 target_include_directories(dronecontroller PUBLIC ${PKG_INCLUDE_DIR})
 ament_target_dependencies(dronecontroller
   rclcpp std_msgs geometry_msgs nav_msgs sensor_msgs visualization_msgs
-  cv_bridge ros_ign_interfaces
+  cv_bridge ros_ign_interfaces tf2_ros tf2_geometry_msgs
 )
 
 add_executable(rover_controller
@@ -48,14 +54,31 @@ add_executable(mission_interface
 )
 target_include_directories(mission_interface PUBLIC ${PKG_INCLUDE_DIR})
 ament_target_dependencies(mission_interface
-  rclcpp std_msgs geometry_msgs nav_msgs
+  rclcpp rclcpp_action std_msgs geometry_msgs nav_msgs nav2_msgs
 )
+
+add_executable(static_camera_info_pub 
+  ${CMAKE_CURRENT_SOURCE_DIR}/static_camera_info_pub.cpp
+)
+target_include_directories(static_camera_info_pub PUBLIC ${PKG_INCLUDE_DIR})
+ament_target_dependencies(static_camera_info_pub
+  rclcpp sensor_msgs
+)
+
+# robust linking for yaml-cpp across distros
+if(TARGET yaml-cpp::yaml-cpp)
+  target_link_libraries(static_camera_info_pub yaml-cpp::yaml-cpp)
+else()
+  target_link_libraries(static_camera_info_pub yaml-cpp)
+endif()
+
 
 # ------------------- Install binaries ----------------
 install(TARGETS
   dronecontroller
   rover_controller
   mission_interface
+  static_camera_info_pub
   DESTINATION lib/${PROJECT_NAME}
 )
 

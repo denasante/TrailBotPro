@@ -1,53 +1,68 @@
 #pragma once
 
 #include <rclcpp/rclcpp.hpp>
-#include <geometry_msgs/msg/twist.hpp>
-#include <geometry_msgs/msg/pose_stamped.hpp>
 #include <nav_msgs/msg/odometry.hpp>
-#include <std_msgs/msg/string.hpp>
+#include <geometry_msgs/msg/twist.hpp>
+#include <geometry_msgs/msg/pose2_d.hpp>
+#include <std_msgs/msg/bool.hpp>
+#include <std_msgs/msg/empty.hpp>
+#include <sensor_msgs/msg/laser_scan.hpp>
 
-class DroneController : public rclcpp::Node
-{
+#include <vector>
+#include <string>
+#include <cmath>
+#include <limits>
+
+class DroneController : public rclcpp::Node {
 public:
   DroneController();
 
 private:
-  // --- Helpers ---
-  double angle_wrap(double a);
-  double yaw_from_quat(double x, double y, double z, double w);
-
-  // --- ROS interfaces ---
-  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr pub_cmd_;
-  rclcpp::Publisher<std_msgs::msg::String>::SharedPtr pub_status_;
-
-  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr sub_odom_;
-  rclcpp::Subscription<geometry_msgs::msg::PoseStamped>::SharedPtr sub_target_;
+  // --- Publishers / Subscribers / Timer ---
+  rclcpp::Publisher<geometry_msgs::msg::Twist>::SharedPtr cmd_pub_;
+  rclcpp::Subscription<nav_msgs::msg::Odometry>::SharedPtr odom_sub_;
+  rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub_;
+  rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr   pause_sub_;
+  rclcpp::Subscription<std_msgs::msg::Empty>::SharedPtr  stop_sub_;
   rclcpp::TimerBase::SharedPtr timer_;
 
+  // --- State ---
+  nav_msgs::msg::Odometry::SharedPtr odom_;
+  std::vector<geometry_msgs::msg::Pose2D> waypoints_;
+  std::size_t wpt_idx_{0};
+  bool paused_{false};
+  bool stopped_{false};
+
+  // Avoidance state
+  bool  blocked_{false};
+  int   clear_count_{0};
+  int   detour_dir_{+1};  // +1 = left, -1 = right
+
   // --- Parameters ---
-  std::string odom_topic_;
-  std::string cmd_vel_topic_;
-  std::string mission_target_topic_;
-  std::string status_topic_;
+  // sweep / control
+  double min_x_, min_y_, max_x_, max_y_;
+  double lane_spacing_;
+  double v_, k_yaw_, waypoint_tol_;
+  double timer_hz_;
 
-  double kp_lin_, kp_yaw_;
-  double max_speed_, max_yaw_rate_;
-  double pos_tol_, yaw_tol_;
-  double hold_time_s_;
-
-  // --- Drone state ---
-  double x_{0.0}, y_{0.0}, yaw_{0.0};
-  bool have_odom_{false};
-
-  // --- Target state ---
-  double target_x_{0.0}, target_y_{0.0}, target_yaw_{0.0};
-  bool have_target_{false};
-  rclcpp::Time within_tol_since_;
+  // lidar / avoidance
+  std::string scan_topic_;
+  double scan_stop_dist_;
+  double scan_clear_dist_;
+  double scan_front_half_angle_deg_;
+  int    scan_required_hits_;
 
   // --- Callbacks ---
-  void odom_cb(const nav_msgs::msg::Odometry::SharedPtr msg);
-  void target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg);
+  void odomCb(const nav_msgs::msg::Odometry & msg);
+  void onScan(const sensor_msgs::msg::LaserScan &msg);
+  void onPause(const std_msgs::msg::Bool &msg);
+  void onStop(const std_msgs::msg::Empty &);
 
-  // --- Control loop ---
-  void control_tick();
+  // --- Control loop & helpers ---
+  void step();
+  void buildLawnmowerPlan();
+  void driveToWaypoint();
+  static double wrapToPi(double a);
+  void publishStop();
+  void logObstacle(const char* source);
 };

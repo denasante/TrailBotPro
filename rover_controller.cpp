@@ -1,257 +1,201 @@
 #include "rover_controller.h"
+
 #include <algorithm>
 #include <cmath>
 #include <limits>
+#include <vector>
 
-using std::placeholders::_1;
+using geometry_msgs::msg::PoseStamped;
+using nav_msgs::msg::OccupancyGrid;
 
-// ===== Helpers =====
-double RoverController::clamp(double v, double lo, double hi){
-  return std::max(lo, std::min(hi, v));
-}
-double RoverController::ang_wrap(double a){
-  while(a >  M_PI) a -= 2.0*M_PI;
-  while(a < -M_PI) a += 2.0*M_PI;
-  return a;
-}
-double RoverController::yaw_from_quat(const geometry_msgs::msg::Quaternion &q){
-  return std::atan2(2.0*(q.w*q.z + q.x*q.y), 1.0 - 2.0*(q.y*q.y + q.z*q.z));
-}
+RoverController::RoverController() : Node("rover_controller")
+{
+  // Declare + read parameters
+  this->declare_parameter<std::string>("map_frame", map_frame_);
+  this->declare_parameter<int>("min_cluster_cells", min_cluster_cells_);
+  this->declare_parameter<double>("goal_offset_m", goal_offset_m_);
+  this->declare_parameter<double>("replan_period_sec", replan_period_sec_);
+  this->declare_parameter<double>("min_goal_sep_m", min_goal_sep_m_);
 
-// ===== Node =====
-RoverController::RoverController() : rclcpp::Node("rover_controller") {
-  // topics (default odom is EKF output; change if you want raw)
-  odom_topic_    = declare_parameter<std::string>("odom_topic", "/odometry");
-  scan_topic_    = declare_parameter<std::string>("scan_topic", "/scan");
-  cmd_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/cmd_vel");
-  target_topic_  = declare_parameter<std::string>("mission_target_topic", "/mission/target");
-  status_topic_  = declare_parameter<std::string>("status_topic", "/mission/status");
+  this->get_parameter("map_frame", map_frame_);
+  this->get_parameter("min_cluster_cells", min_cluster_cells_);
+  this->get_parameter("goal_offset_m", goal_offset_m_);
+  this->get_parameter("replan_period_sec", replan_period_sec_);
+  this->get_parameter("min_goal_sep_m", min_goal_sep_m_);
 
-  // control gains
-  kp_lin_        = declare_parameter<double>("kp_lin", 0.8);
-  kp_yaw_        = declare_parameter<double>("kp_yaw", 1.2);
-  max_speed_     = declare_parameter<double>("max_speed", 0.8);
-  max_yaw_rate_  = declare_parameter<double>("max_yaw_rate", 1.0);
-  pos_tol_       = declare_parameter<double>("pos_tol", 0.25);
-  hold_time_s_   = declare_parameter<double>("hold_time_s", 0.5);
+  // Publisher: waypoints to MissionInterface
+  wp_pub_ = this->create_publisher<PoseStamped>("/waypoint", 10);
 
-  // simple obstacle gating (fallback if FTG finds no gap)
-  obs_stop_range_  = declare_parameter<double>("obs_stop_range", 0.6);
-  obs_slow_range_  = declare_parameter<double>("obs_slow_range", 1.0);
-  turn_rate_block_ = declare_parameter<double>("turn_rate_on_block", 0.6);
+  // Subscriber: occupancy grid from Nav2/map_server or SLAM
+  map_sub_ = this->create_subscription<OccupancyGrid>(
+      "/map", rclcpp::QoS(1).transient_local().reliable(),
+      std::bind(&RoverController::mapCb, this, std::placeholders::_1));
 
-  // FTG parameters
-  ftg_front_fov_rad_ = declare_parameter<double>("ftg_front_fov_deg", 120.0) * M_PI/180.0;
-  ftg_min_range_     = declare_parameter<double>("ftg_min_range", 0.20);
-  ftg_max_range_     = declare_parameter<double>("ftg_max_range", 8.0);
-  ftg_safety_bubble_ = declare_parameter<double>("ftg_safety_bubble", 0.35);
-  ftg_smooth_kernel_ = declare_parameter<int>("ftg_smooth_kernel", 3);
-  ftg_downsample_    = declare_parameter<int>("ftg_downsample", 2);
+  // Periodic replan timer
+  replan_timer_ = this->create_wall_timer(
+      std::chrono::duration<double>(replan_period_sec_),
+      std::bind(&RoverController::timerTick, this));
 
-  auto qos = rclcpp::QoS(50).reliable();
-
-  pub_cmd_    = create_publisher<geometry_msgs::msg::Twist>(cmd_topic_, qos);
-  pub_status_ = create_publisher<std_msgs::msg::String>(status_topic_, qos);
-
-  sub_odom_   = create_subscription<nav_msgs::msg::Odometry>(odom_topic_, qos,
-                  std::bind(&RoverController::odom_cb, this, _1));
-  sub_scan_   = create_subscription<sensor_msgs::msg::LaserScan>(scan_topic_, qos,
-                  std::bind(&RoverController::scan_cb, this, _1));
-  sub_target_ = create_subscription<geometry_msgs::msg::PoseStamped>(target_topic_, qos,
-                  std::bind(&RoverController::target_cb, this, _1));
-
-  using namespace std::chrono_literals;
-  timer_ = create_wall_timer(50ms, std::bind(&RoverController::tick, this));
-
-  have_odom_ = have_scan_ = have_target_ = false;
-  ftg_has_front_ = false;
-
-  RCLCPP_INFO(get_logger(), "RoverController listening: odom=%s scan=%s, cmd=%s",
-              odom_topic_.c_str(), scan_topic_.c_str(), cmd_topic_.c_str());
+  RCLCPP_INFO(get_logger(),
+              "RoverController up. frame=%s, min_cluster=%d, offset=%.2f m, "
+              "replan=%.1f s, min_goal_sep=%.2f m",
+              map_frame_.c_str(), min_cluster_cells_, goal_offset_m_,
+              replan_period_sec_, min_goal_sep_m_);
 }
 
-// ===== callbacks =====
-void RoverController::odom_cb(const nav_msgs::msg::Odometry::SharedPtr msg){
-  x_ = msg->pose.pose.position.x;
-  y_ = msg->pose.pose.position.y;
-  yaw_ = yaw_from_quat(msg->pose.pose.orientation);
-  have_odom_ = true;
+void RoverController::mapCb(const OccupancyGrid::SharedPtr msg)
+{
+  latest_map_ = msg;
 }
 
-void RoverController::scan_cb(const sensor_msgs::msg::LaserScan::SharedPtr msg){
-  preprocess_scan(*msg);
-  have_scan_ = true;
-}
-
-void RoverController::target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg){
-  tx_ = msg->pose.position.x;
-  ty_ = msg->pose.position.y;
-  have_target_ = true;
-  reached_since_ = rclcpp::Time{};
-  RCLCPP_INFO(get_logger(), "New target: (%.2f, %.2f)", tx_, ty_);
-}
-
-// ===== FTG: preprocess scan =====
-void RoverController::preprocess_scan(const sensor_msgs::msg::LaserScan &msg){
-  angle_min_ = msg.angle_min;
-  angle_increment_ = msg.angle_increment;
-
-  // Only keep a front arc (±ftg_front_fov_rad_/2)
-  int i_min = std::max(0, (int)std::floor((-ftg_front_fov_rad_/2 - msg.angle_min)/msg.angle_increment));
-  int i_max = std::min((int)msg.ranges.size()-1,
-                       (int)std::ceil(( ftg_front_fov_rad_/2 - msg.angle_min)/msg.angle_increment));
-
-  // Downsample + clamp to [min,max] + simple moving-average smoothing
-  std::vector<float> tmp;
-  std::vector<double> angs;
-  tmp.reserve((i_max - i_min + 1) / std::max(1, ftg_downsample_));
-  angs.reserve(tmp.capacity());
-
-  for(int i = i_min; i <= i_max; i += std::max(1, ftg_downsample_)){
-    float r = msg.ranges[i];
-    if(!std::isfinite(r)) r = ftg_max_range_;
-    r = (float)clamp(r, ftg_min_range_, ftg_max_range_);
-    tmp.push_back(r);
-    angs.push_back(msg.angle_min + i * msg.angle_increment);
+void RoverController::timerTick()
+{
+  if (!latest_map_) {
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 3000,
+                    "Waiting for /map before searching frontiers…");
+    return;
   }
 
-  // smooth
-  scan_preproc_.resize(tmp.size());
-  int k = std::max(1, ftg_smooth_kernel_);
-  for(size_t i=0; i<tmp.size(); ++i){
-    int a = std::max<int>(0, (int)i - k);
-    int b = std::min<int>((int)tmp.size()-1, (int)i + k);
-    double acc = 0.0;
-    int cnt = 0;
-    for(int j=a; j<=b; ++j){ acc += tmp[j]; ++cnt; }
-    scan_preproc_[i] = (float)(acc / std::max(1, cnt));
+  double gx = 0.0, gy = 0.0;
+  if (!findBestFrontier(gx, gy)) {
+    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 3000,
+                    "No suitable frontier found (maybe fully explored?)");
+    return;
   }
 
-  scan_angles_ = std::move(angs);
-  ftg_has_front_ = !scan_preproc_.empty();
+  // Enforce minimum separation from last goal to avoid spam
+  if (last_goal_) {
+    const auto &lg = last_goal_.value();
+    double dx = gx - lg.pose.position.x;
+    double dy = gy - lg.pose.position.y;
+    if ((dx * dx + dy * dy) < sqr(min_goal_sep_m_)) {
+      // too close to previous goal; skip this tick
+      return;
+    }
+  }
+
+  PoseStamped out;
+  out.header.stamp = now();
+  out.header.frame_id = map_frame_;
+  out.pose.position.x = gx;
+  out.pose.position.y = gy;
+  out.pose.position.z = 0.0;
+  out.pose.orientation.w = 1.0; // yaw=0, Nav2 can refine orientation
+
+  wp_pub_->publish(out);
+  last_goal_ = out;
+
+  RCLCPP_INFO(get_logger(),
+              "Published frontier goal: (%.2f, %.2f) in %s",
+              gx, gy, map_frame_.c_str());
 }
 
-// ===== FTG: choose gap direction =====
-bool RoverController::select_gap_target(double goal_bearing, double &steer_dir, double &clearance){
-  if(!ftg_has_front_ || scan_preproc_.empty()) return false;
+bool RoverController::inBounds(int ix, int iy) const
+{
+  if (!latest_map_) return false;
+  const auto &info = latest_map_->info;
+  return (ix >= 0 && iy >= 0 &&
+          ix < static_cast<int>(info.width) &&
+          iy < static_cast<int>(info.height));
+}
 
-  // Build "bubble" mask around close obstacles
-  std::vector<float> bubble = scan_preproc_;
-  for(size_t i=0; i<bubble.size(); ++i){
-    if(bubble[i] < ftg_safety_bubble_){
-      // inflate neighbors by reducing their range
-      int spread = 2; // cells on either side
-      for(int d=-spread; d<=spread; ++d){
-        int j = (int)i + d;
-        if(j>=0 && j<(int)bubble.size()){
-          bubble[j] = std::min(bubble[j], (float)ftg_safety_bubble_);
-        }
+int RoverController::idx(int ix, int iy) const
+{
+  const auto &info = latest_map_->info;
+  return iy * static_cast<int>(info.width) + ix;
+}
+
+bool RoverController::isFrontierCell(int ix, int iy) const
+{
+  // Frontier = free cell adjacent to at least one unknown
+  if (!inBounds(ix, iy)) return false;
+  int i = idx(ix, iy);
+  const auto &data = latest_map_->data;
+
+  // Free?
+  if (data[i] != 0) return false; // 0=free, 100=occ, -1=unknown
+
+  // 8-neighborhood: look for unknown
+  static const int nb[8][2] = {
+      {-1, -1}, {0, -1}, {1, -1},
+      {-1,  0},          {1,  0},
+      {-1,  1}, {0,  1}, {1,  1}
+  };
+
+  for (auto &d : nb) {
+    int nx = ix + d[0];
+    int ny = iy + d[1];
+    if (!inBounds(nx, ny)) continue;
+    int ni = idx(nx, ny);
+    if (latest_map_->data[ni] == -1) {
+      return true; // adjacent unknown
+    }
+  }
+  return false;
+}
+
+bool RoverController::findBestFrontier(double &gx, double &gy)
+{
+  const auto &info = latest_map_->info;
+  //const auto &data = latest_map_->data;
+
+  const double res = info.resolution;
+  const double ox  = info.origin.position.x;
+  const double oy  = info.origin.position.y;
+
+  // Collect frontier cells
+  std::vector<std::pair<int,int>> frontiers;
+  frontiers.reserve(4096);
+
+  for (int iy = 1; iy < static_cast<int>(info.height) - 1; ++iy) {
+    for (int ix = 1; ix < static_cast<int>(info.width) - 1; ++ix) {
+      if (isFrontierCell(ix, iy)) {
+        frontiers.emplace_back(ix, iy);
       }
     }
   }
+  if (frontiers.empty())
+    return false;
 
-  // Find the longest contiguous segment with ranges > safety_bubble
-  int best_a=-1, best_b=-1;
-  int cur_a=-1;
-  for(int i=0; i<(int)bubble.size(); ++i){
-    if(bubble[i] > ftg_safety_bubble_){
-      if(cur_a < 0) cur_a = i;
-    } else {
-      if(cur_a >= 0){
-        if(best_a < 0 || (i-1 - cur_a) > (best_b - best_a)){
-          best_a = cur_a; best_b = i-1;
-        }
-        cur_a = -1;
-      }
+  // Very simple clustering: scan buckets by coarse tiles to count density
+  // and pick the densest cell as goal seed.
+  const int tile = 5; // cells
+  int best_count = 0;
+  int best_ix = frontiers.front().first;
+  int best_iy = frontiers.front().second;
+
+  for (auto [ix, iy] : frontiers) {
+    int count = 0;
+    for (auto [jx, jy] : frontiers) {
+      if (std::abs(ix - jx) <= tile && std::abs(iy - jy) <= tile)
+        ++count;
+    }
+    if (count > best_count) {
+      best_count = count;
+      best_ix = ix;
+      best_iy = iy;
     }
   }
-  if(cur_a >= 0){
-    if(best_a < 0 || ((int)bubble.size()-1 - cur_a) > (best_b - best_a)){
-      best_a = cur_a; best_b = (int)bubble.size()-1;
-    }
+
+  if (best_count < min_cluster_cells_) {
+    RCLCPP_DEBUG(get_logger(),
+                 "Frontier density too low (cluster=%d < min=%d)",
+                 best_count, min_cluster_cells_);
   }
 
-  if(best_a < 0) return false; // no gap
+  // Convert to world; nudge a bit into free space along +x
+  const double wx = ox + (best_ix + 0.5) * res + goal_offset_m_;
+  const double wy = oy + (best_iy + 0.5) * res;
 
-  // Center of the best gap
-  int mid = (best_a + best_b)/2;
-  double gap_angle = scan_angles_[mid];
-  steer_dir = gap_angle;               // where to steer
-  clearance = bubble[mid];             // how open it is
+  gx = wx;
+  gy = wy;
   return true;
 }
 
-// ===== control loop =====
-void RoverController::tick(){
-  geometry_msgs::msg::Twist cmd;
-
-  if(!have_odom_ || !have_scan_ || !have_target_){ 
-    pub_cmd_->publish(cmd); 
-    return; 
-  }
-
-  // --- Goal control ---
-  double ex = tx_ - x_, ey = ty_ - y_;
-  double dist = std::hypot(ex, ey);
-  double heading_to_wp = std::atan2(ey, ex);
-  double rel_goal = ang_wrap(heading_to_wp - yaw_);
-
-  // --- Arrival check ---
-  if(dist < pos_tol_){
-    if(reached_since_.nanoseconds() == 0) reached_since_ = now();
-    if((now() - reached_since_).seconds() >= hold_time_s_){
-      std_msgs::msg::String s; s.data = "ARRIVED";
-      pub_status_->publish(s);
-      have_target_ = false;
-      pub_cmd_->publish(geometry_msgs::msg::Twist{});
-      RCLCPP_INFO(get_logger(), "✅ Arrived at target.");
-      return;
-    }
-  } else {
-    reached_since_ = rclcpp::Time{};
-  }
-
-  // --- Simple collision detection (front arc only) ---
-  float front_min = std::numeric_limits<float>::infinity();
-  if(!scan_preproc_.empty()){
-    // take ~±15° around forward direction
-    int mid = (int)scan_preproc_.size()/2;
-    for(int i=std::max(0, mid-5); i<=std::min(mid+5, (int)scan_preproc_.size()-1); ++i){
-      front_min = std::min(front_min, scan_preproc_[i]);
-    }
-  }
-
-  // --- Decide speed ---
-  double v = clamp(kp_lin_ * dist, -max_speed_, max_speed_);
-  double w = clamp(kp_yaw_ * rel_goal, -max_yaw_rate_, max_yaw_rate_);
-
-  // stop or slow down if obstacle detected
-  if(std::isfinite(front_min)){
-    if(front_min < obs_stop_range_){
-      v = 0.0;
-      RCLCPP_WARN_THROTTLE(get_logger(), *get_clock(), 1000,
-                           "Obstacle detected: %.2fm ahead → stopping", front_min);
-    } else if(front_min < obs_slow_range_){
-      v *= 0.4;
-      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 1000,
-                           "Obstacle %.2fm ahead → slowing", front_min);
-    }
-  }
-
-  cmd.linear.x  = v;
-  cmd.angular.z = w;
-  pub_cmd_->publish(cmd);
-}
-
-
-
-// simple C-style main wrapper (optional)
-int rover_controller_main(int argc, char **argv){
+int main(int argc, char **argv)
+{
   rclcpp::init(argc, argv);
   rclcpp::spin(std::make_shared<RoverController>());
   rclcpp::shutdown();
   return 0;
 }
-
-// canonical main
-int main(int argc, char **argv){ return rover_controller_main(argc, argv); }

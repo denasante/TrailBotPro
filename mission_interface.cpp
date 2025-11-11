@@ -1,223 +1,238 @@
-// #include "mission_interface.h"
-// #include <chrono>
-
-// using namespace std::chrono_literals;
-
-// MissionInterface::MissionInterface()
-// : rclcpp::Node("mission_interface"),
-//   have_odom_(false),
-//   x_(0.0),
-//   phase_(Phase::WAIT_ODOM)
-// {
-//   // --- Parameters ---
-//   odom_topic_        = declare_parameter<std::string>("odom_topic", "/parrot/odometry");
-//   cmd_vel_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/parrot/cmd_vel");
-//   fwd_speed_         = declare_parameter<double>("fwd_speed", 0.5);
-//   rev_speed_         = declare_parameter<double>("rev_speed", -0.5);
-//   target_forward_x_  = declare_parameter<double>("target_forward_x", 2.0);
-//   target_back_x_     = declare_parameter<double>("target_back_x", 0.0);
-//   pause_secs_        = declare_parameter<double>("pause_secs", 2.0);
-
-//   // --- Interfaces ---
-//   auto qos = rclcpp::QoS(10).reliable();
-
-//   pub_ = create_publisher<geometry_msgs::msg::Twist>(cmd_vel_topic_, qos);
-
-//   sub_ = create_subscription<nav_msgs::msg::Odometry>(
-//     odom_topic_, qos,
-//     [this](nav_msgs::msg::Odometry::SharedPtr msg)
-//     {
-//       x_ = msg->pose.pose.position.x;
-//       have_odom_ = true;
-//     });
-
-//   timer_ = create_wall_timer(50ms, std::bind(&MissionInterface::tick, this));
-
-//   RCLCPP_INFO(get_logger(),
-//               "MissionInterface up. odom='%s' cmd_vel='%s' → forward to x>=%.2f, pause %.1fs, back to x<=%.2f",
-//               odom_topic_.c_str(), cmd_vel_topic_.c_str(),
-//               target_forward_x_, pause_secs_, target_back_x_);
-// }
-
-// void MissionInterface::publish_stop() {
-//   geometry_msgs::msg::Twist t;
-//   pub_->publish(t);
-// }
-
-// void MissionInterface::tick() {
-//   geometry_msgs::msg::Twist cmd;
-
-//   switch (phase_) {
-//     case Phase::WAIT_ODOM:
-//       if (!have_odom_) {
-//         RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
-//                              "Waiting for odometry on %s ...", odom_topic_.c_str());
-//         publish_stop();
-//         return;
-//       }
-//       RCLCPP_INFO(get_logger(), "Odom ready (x=%.3f). Starting FORWARD.", x_);
-//       phase_ = Phase::FORWARD;
-//       return;
-
-//     case Phase::FORWARD:
-//       if (x_ >= target_forward_x_) {
-//         publish_stop();
-//         pause_start_ = now();
-//         phase_ = Phase::PAUSE;
-//         RCLCPP_INFO(get_logger(),
-//                     "Reached x >= %.2f (x=%.3f). Pausing %.1fs.",
-//                     target_forward_x_, x_, pause_secs_);
-//         return;
-//       }
-//       cmd.linear.x = fwd_speed_;
-//       pub_->publish(cmd);
-//       return;
-
-//     case Phase::PAUSE:
-//       publish_stop();
-//       if ((now() - pause_start_).seconds() >= pause_secs_) {
-//         RCLCPP_INFO(get_logger(), "Pause done. Starting REVERSE.");
-//         phase_ = Phase::REVERSE;
-//       }
-//       return;
-
-//     case Phase::REVERSE:
-//       if (x_ <= target_back_x_) {
-//         publish_stop();
-//         RCLCPP_INFO(get_logger(), "Reached x <= %.2f (x=%.3f). Mission DONE.", target_back_x_, x_);
-//         phase_ = Phase::DONE;
-//         return;
-//       }
-//       cmd.linear.x = rev_speed_;
-//       pub_->publish(cmd);
-//       return;
-
-//     case Phase::DONE:
-//       publish_stop();
-//       return;
-//   }
-// }
-
-// int main(int argc, char **argv) {
-//   rclcpp::init(argc, argv);
-//   rclcpp::spin(std::make_shared<MissionInterface>());
-//   rclcpp::shutdown();
-//   return 0;
-// }
-
-
-
-// ---------------------------------------------------
-// ---------------------------------------------------
-
 #include "mission_interface.h"
+
 #include <chrono>
+#include <fstream>
+#include <sstream>
+#include <cmath>
 
 using namespace std::chrono_literals;
 
-MissionInterface::MissionInterface()
-: rclcpp::Node("mission_interface"),
-  phase_(Phase::WAIT_ODOM),
-  have_odom_(false)
-{
-  // Parameters
-  odom_topic_   = declare_parameter<std::string>("odom_topic", "/parrot/odometry");
-  target_topic_ = declare_parameter<std::string>("target_topic", "/mission/target");
-  status_topic_ = declare_parameter<std::string>("status_topic", "/mission/status");
-
-  pause_secs_   = declare_parameter<double>("pause_secs", 2.0);
-
-  // Mission waypoints
-  waypoints_ = {
-    {2.0, 0.0, 0.0},  // forward
-    {0.0, -3.0, 0.0},
-    {-2.0, 0.0, 0.0},
-    {0.0, 0.0, 0.0}   // back to start
-  };
-  current_idx_ = 0;
-
-  auto qos = rclcpp::QoS(10).reliable();
-
-  // Publishers/subscribers
-  pub_target_ = create_publisher<geometry_msgs::msg::PoseStamped>(target_topic_, qos);
-  sub_status_ = create_subscription<std_msgs::msg::String>(
-      status_topic_, qos,
-      std::bind(&MissionInterface::status_cb, this, std::placeholders::_1));
-  sub_odom_ = create_subscription<nav_msgs::msg::Odometry>(
-      odom_topic_, qos,
-      [this](nav_msgs::msg::Odometry::SharedPtr msg)
-      {
-        x_ = msg->pose.pose.position.x;
-        have_odom_ = true;
-      });
-
-  timer_ = create_wall_timer(200ms, std::bind(&MissionInterface::tick, this));
-
-  RCLCPP_INFO(get_logger(), "MissionInterface up. Waiting for odom...");
+// ---------- helpers ----------
+bool MissionInterface::isZeroQuat(const geometry_msgs::msg::Quaternion &q) {
+  return q.x == 0.0 && q.y == 0.0 && q.z == 0.0 && q.w == 0.0;
 }
 
-// --- Status callback ---
-void MissionInterface::status_cb(const std_msgs::msg::String::SharedPtr msg)
+geometry_msgs::msg::Quaternion MissionInterface::yawToQuat(double yaw_rad) {
+  geometry_msgs::msg::Quaternion q;
+  const double half = yaw_rad * 0.5;
+  q.x = 0.0;
+  q.y = 0.0;
+  q.z = std::sin(half);
+  q.w = std::cos(half);
+  return q;
+}
+
+// ---------- ctor ----------
+MissionInterface::MissionInterface() : Node("mission_interface")
 {
-  if (msg->data == "ARRIVED")
-  {
-    RCLCPP_INFO(get_logger(), "✅ Drone reported ARRIVED");
-    phase_ = Phase::PAUSE;
-    pause_start_ = now();
+  // Declare + read params
+  this->declare_parameter<std::string>("frame_id",   frame_id_);
+  this->declare_parameter<double>("timeout_sec",     timeout_sec_);
+  this->declare_parameter<std::string>("path_csv",   path_csv_);
+  this->declare_parameter<bool>("loop",              loop_path_);
+
+  this->get_parameter("frame_id",   frame_id_);
+  this->get_parameter("timeout_sec",timeout_sec_);
+  this->get_parameter("path_csv",   path_csv_);
+  this->get_parameter("loop",       loop_path_);
+
+  // Action client
+  nav_client_ = rclcpp_action::create_client<NavigateToPose>(this, "navigate_to_pose");
+
+  // Wait for server (prints once) then start CSV mission if provided
+  connect_timer_ = this->create_wall_timer(500ms, [this]{
+    if (!nav_client_->wait_for_action_server(0s)) {
+      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 5000,
+        "Waiting for action server 'navigate_to_pose'…");
+      return;
+    }
+    RCLCPP_INFO(get_logger(), "MissionInterface ready. Publish PoseStamped to /waypoint, "
+                              "or supply -p path_csv:=<file>.");
+    connect_timer_->cancel();
+    startCsvMissionIfAny();
+  });
+
+  // Optional manual single-goal input
+  wp_sub_ = this->create_subscription<geometry_msgs::msg::PoseStamped>(
+    "/waypoint", rclcpp::QoS(10),
+    std::bind(&MissionInterface::waypointCb, this, std::placeholders::_1));
+}
+
+// ---------- CSV loading ----------
+bool MissionInterface::loadCsv(const std::string &path,
+                               std::vector<geometry_msgs::msg::PoseStamped> &out)
+{
+  out.clear();
+  std::ifstream f(path);
+  if (!f.is_open()) {
+    RCLCPP_ERROR(get_logger(), "Failed to open CSV: %s", path.c_str());
+    return false;
   }
+
+  std::string line;
+  int line_no = 0;
+  while (std::getline(f, line)) {
+    ++line_no;
+    if (line.empty()) continue;
+
+    std::stringstream ss(line);
+    std::string tok;
+    std::vector<double> vals;
+    while (std::getline(ss, tok, ',')) {
+      try {
+        vals.push_back(std::stod(tok));
+      } catch (...) {
+        RCLCPP_WARN(get_logger(), "CSV parse warning at line %d: '%s'", line_no, tok.c_str());
+      }
+    }
+    if (vals.size() < 2) {
+      RCLCPP_WARN(get_logger(), "CSV line %d has <2 values; skipping", line_no);
+      continue;
+    }
+
+    const double x = vals[0];
+    const double y = vals[1];
+    const double yaw_deg = (vals.size() >= 3) ? vals[2] : 0.0;
+
+    geometry_msgs::msg::PoseStamped p;
+    p.header.frame_id = frame_id_;
+    p.pose.position.x = x;
+    p.pose.position.y = y;
+    p.pose.position.z = 0.0;
+    p.pose.orientation = yawToQuat(yaw_deg * M_PI / 180.0);
+    out.push_back(p);
+  }
+
+  RCLCPP_INFO(get_logger(), "Loaded %zu waypoints from '%s'", out.size(), path.c_str());
+  return !out.empty();
 }
 
-// --- Publish next waypoint ---
-void MissionInterface::send_target(double x, double y, double yaw)
+void MissionInterface::startCsvMissionIfAny()
 {
-  geometry_msgs::msg::PoseStamped t;
-  t.header.frame_id = "map";
-  t.pose.position.x = x;
-  t.pose.position.y = y;
-  t.pose.orientation.z = std::sin(yaw/2);
-  t.pose.orientation.w = std::cos(yaw/2);
-  pub_target_->publish(t);
-  RCLCPP_INFO(get_logger(), "🚀 Sent new target (x=%.2f, y=%.2f, yaw=%.2f)", x, y, yaw);
+  if (path_csv_.empty()) return;
+
+  if (!loadCsv(path_csv_, waypoints_)) {
+    RCLCPP_ERROR(get_logger(), "CSV mission not started (load failed).");
+    return;
+  }
+  next_idx_ = 0;
+  sendNextFromList();
 }
 
-// --- Main tick ---
-void MissionInterface::tick()
+void MissionInterface::sendNextFromList()
 {
-  switch (phase_)
-  {
-    case Phase::WAIT_ODOM:
-      if (!have_odom_) {
-        RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000, "Waiting for odometry...");
+  if (waypoints_.empty()) return;
+
+  if (next_idx_ >= waypoints_.size()) {
+    if (loop_path_) {
+      next_idx_ = 0;
+      RCLCPP_INFO(get_logger(), "Looping mission back to start.");
+    } else {
+      RCLCPP_INFO(get_logger(), "🎉 Mission complete.");
+      return;
+    }
+  }
+
+  auto pose = waypoints_[next_idx_];
+  pose.header.stamp = now();
+  RCLCPP_INFO(get_logger(), "[%zu/%zu] Sending waypoint (%.2f, %.2f)",
+              next_idx_ + 1, waypoints_.size(),
+              pose.pose.position.x, pose.pose.position.y);
+  sendGoal(pose);
+}
+
+// ---------- manual /waypoint path (single goal) ----------
+void MissionInterface::waypointCb(const geometry_msgs::msg::PoseStamped::SharedPtr msg)
+{
+  if (!nav_client_->wait_for_action_server(0s)) {
+    RCLCPP_WARN(get_logger(), "Nav2 action server not available yet.");
+    return;
+  }
+  if (goal_active_) {
+    RCLCPP_WARN(get_logger(), "A goal is already active; ignoring /waypoint.");
+    return;
+  }
+
+  auto pose = *msg;
+  if (pose.header.frame_id.empty())
+    pose.header.frame_id = frame_id_;
+  if (isZeroQuat(pose.pose.orientation))
+    pose.pose.orientation.w = 1.0;
+
+  sendGoal(pose);
+}
+
+// ---------- action send ----------
+void MissionInterface::sendGoal(const geometry_msgs::msg::PoseStamped &pose)
+{
+  goal_active_ = true;
+
+  NavigateToPose::Goal goal;
+  goal.pose = pose;
+
+  rclcpp_action::Client<NavigateToPose>::SendGoalOptions opts;
+
+  // Feedback (throttled)
+  opts.feedback_callback =
+    [this](GoalHandleNav::SharedPtr,
+           const std::shared_ptr<const NavigateToPose::Feedback> fb)
+    {
+      if (!fb) return;
+      RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000,
+                           "Distance remaining: %.2f m", fb->distance_remaining);
+    };
+
+  // Result
+  opts.result_callback =
+    [this](const GoalHandleNav::WrappedResult &result)
+    {
+      goal_active_ = false;
+
+      if (result.code == rclcpp_action::ResultCode::SUCCEEDED) {
+        RCLCPP_INFO(get_logger(), "✅ Goal reached.");
+        if (!waypoints_.empty()) {
+          ++next_idx_;
+          // Send next after a short breather so TF/Costmaps settle
+          this->create_wall_timer(750ms, [this]{ sendNextFromList(); });
+        }
         return;
       }
-      RCLCPP_INFO(get_logger(), "Odom ready. Starting mission.");
-      send_target(waypoints_[current_idx_].x, waypoints_[current_idx_].y, waypoints_[current_idx_].yaw);
-      phase_ = Phase::WAIT_ARRIVAL;
-      break;
 
-    case Phase::WAIT_ARRIVAL:
-      // just wait for "ARRIVED" callback
-      break;
-
-    case Phase::PAUSE:
-      if ((now() - pause_start_).seconds() >= pause_secs_) {
-        current_idx_++;
-        if (current_idx_ >= waypoints_.size()) {
-          RCLCPP_INFO(get_logger(), "🛑 Mission complete!");
-          phase_ = Phase::DONE;
-          return;
-        }
-        send_target(waypoints_[current_idx_].x, waypoints_[current_idx_].y, waypoints_[current_idx_].yaw);
-        phase_ = Phase::WAIT_ARRIVAL;
+      if (result.code == rclcpp_action::ResultCode::CANCELED) {
+        RCLCPP_WARN(get_logger(), "⚠️ Goal canceled (timeout/user).");
+      } else if (result.code == rclcpp_action::ResultCode::ABORTED) {
+        RCLCPP_ERROR(get_logger(), "❌ Goal aborted by Nav2.");
+      } else {
+        RCLCPP_ERROR(get_logger(), "❌ Unknown result code.");
       }
-      break;
 
-    case Phase::DONE:
-      // nothing left
-      break;
-  }
+      // On failure in a CSV mission, try next waypoint anyway
+      if (!waypoints_.empty()) {
+        ++next_idx_;
+        this->create_wall_timer(750ms, [this]{ sendNextFromList(); });
+      }
+    };
+
+  auto gh_future = nav_client_->async_send_goal(goal, opts);
+
+  // Timeout watchdog
+  auto timeout_ms = std::chrono::milliseconds(
+      static_cast<int>(timeout_sec_ * 1000.0));
+
+  auto weak_client = nav_client_;
+  this->create_wall_timer(timeout_ms,
+    [this, weak_client, gh_future]()
+    {
+      if (!goal_active_) return;
+      auto gh = gh_future.get();
+      if (gh) {
+        RCLCPP_WARN(get_logger(), "⏱️ Nav2 goal timeout — canceling goal.");
+        weak_client->async_cancel_goal(gh);
+      }
+    });
 }
 
+// ---------- main ----------
 int main(int argc, char **argv)
 {
   rclcpp::init(argc, argv);
@@ -225,5 +240,3 @@ int main(int argc, char **argv)
   rclcpp::shutdown();
   return 0;
 }
-
-

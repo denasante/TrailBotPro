@@ -1,150 +1,207 @@
 #include "dronecontroller.h"
-#include <cmath>
 #include <algorithm>
-#include <chrono>
+#include <cmath>
 
 using std::placeholders::_1;
-using namespace std::chrono_literals;
 
-// --- helpers ---
-static inline double clamp(double v, double lo, double hi) {
-  return std::max(lo, std::min(hi, v));
+DroneController::DroneController()
+: rclcpp::Node("dronecontroller")
+{
+  // ---- Sweep boundaries ----
+  min_x_        = this->declare_parameter("min_x", -10.0);
+  min_y_        = this->declare_parameter("min_y", -10.0);
+  max_x_        = this->declare_parameter("max_x",  10.0);
+  max_y_        = this->declare_parameter("max_y",  10.0);
+  lane_spacing_ = this->declare_parameter("lane_spacing", 2.0);
+  v_            = this->declare_parameter("v", 0.8);
+  k_yaw_        = this->declare_parameter("k_yaw", 1.0);
+  waypoint_tol_ = this->declare_parameter("waypoint_tol", 0.25);
+  timer_hz_     = this->declare_parameter("timer_hz", 20.0);
+
+  // ---- LiDAR parameters ----
+  scan_topic_                = this->declare_parameter<std::string>("scan_topic", "/scan");
+  scan_stop_dist_            = this->declare_parameter("scan_stop_dist", 1.2);
+  scan_clear_dist_           = this->declare_parameter("scan_clear_dist", 1.8);
+  scan_front_half_angle_deg_ = this->declare_parameter("scan_front_half_angle_deg", 40.0);
+  scan_required_hits_        = this->declare_parameter("scan_required_hits", 2);
+
+  // ---- Pubs/Subs ----
+  cmd_pub_ = this->create_publisher<geometry_msgs::msg::Twist>("cmd_vel", 10);
+
+  odom_sub_ = this->create_subscription<nav_msgs::msg::Odometry>(
+      "/odometry", 10, std::bind(&DroneController::odomCb, this, _1));
+
+  scan_sub_ = this->create_subscription<sensor_msgs::msg::LaserScan>(
+      scan_topic_, rclcpp::SensorDataQoS(),
+      std::bind(&DroneController::onScan, this, _1));
+
+  RCLCPP_INFO(get_logger(),
+    "DroneController active with avoidance on '%s' (stop<%.2fm, clear>%.2fm, ±%.1f°)",
+    scan_topic_.c_str(), scan_stop_dist_, scan_clear_dist_, scan_front_half_angle_deg_);
+
+  // Build sweep plan
+  buildLawnmowerPlan();
+
+  using namespace std::chrono_literals;
+  timer_ = this->create_wall_timer(
+      std::chrono::milliseconds(static_cast<int>(1000.0 / timer_hz_)),
+      std::bind(&DroneController::step, this));
 }
 
-double DroneController::angle_wrap(double a) {
-  while (a > M_PI)  a -= 2.0 * M_PI;
-  while (a < -M_PI) a += 2.0 * M_PI;
+void DroneController::odomCb(const nav_msgs::msg::Odometry & msg) {
+  odom_ = std::make_shared<nav_msgs::msg::Odometry>(msg);
+}
+
+// --- Scan callback: detect obstacles + pick avoidance direction ---
+void DroneController::onScan(const sensor_msgs::msg::LaserScan &msg)
+{
+  const double half = scan_front_half_angle_deg_ * M_PI / 180.0;
+  int hits = 0;
+  double min_front = std::numeric_limits<double>::infinity();
+  double left_avg = 0, right_avg = 0;
+  int left_count = 0, right_count = 0;
+
+  for (size_t i = 0; i < msg.ranges.size(); ++i) {
+    double ang = msg.angle_min + i * msg.angle_increment;
+    double r = msg.ranges[i];
+    if (!std::isfinite(r)) continue;
+
+    if (std::abs(ang) <= half) {
+      if (r < scan_stop_dist_) hits++;
+      min_front = std::min(min_front, r);
+    }
+
+    // Collect side averages for steering decisions
+    if (ang > 0 && ang < 1.0) { left_avg += r; left_count++; }
+    if (ang < 0 && ang > -1.0){ right_avg += r; right_count++; }
+  }
+
+  double left_mean = (left_count > 0) ? left_avg / left_count : msg.range_max;
+  double right_mean = (right_count > 0) ? right_avg / right_count : msg.range_max;
+
+  if (hits >= scan_required_hits_) {
+    // Obstacle detected → choose side with more open space
+    blocked_ = true;
+    clear_count_ = 0;
+    logObstacle("LiDAR");
+
+    if (left_mean > right_mean) {
+      RCLCPP_WARN(get_logger(), "🟠 Obstacle %.2fm ahead → detouring LEFT (L=%.2f, R=%.2f)",
+                  min_front, left_mean, right_mean);
+      detour_dir_ = +1; // left
+    } else {
+      RCLCPP_WARN(get_logger(), "🟠 Obstacle %.2fm ahead → detouring RIGHT (L=%.2f, R=%.2f)",
+                  min_front, left_mean, right_mean);
+      detour_dir_ = -1; // right
+    }
+  } else if (blocked_) {
+    // Check if clear
+    clear_count_++;
+    if (min_front > scan_clear_dist_ && clear_count_ > 5) {
+      blocked_ = false;
+      RCLCPP_INFO(get_logger(), "🟢 Path clear → resuming toward waypoint.");
+    }
+  }
+}
+
+// --- Main control loop ---
+void DroneController::step() {
+  if (!odom_) return;
+
+  geometry_msgs::msg::Twist cmd;
+
+  if (blocked_) {
+    // Simple avoidance: yaw in chosen direction while creeping forward
+    cmd.linear.x = 0.2 * v_;
+    cmd.angular.z = detour_dir_ * 0.8;
+    cmd_pub_->publish(cmd);
+    return;
+  }
+
+  if (wpt_idx_ >= waypoints_.size()) {
+    publishStop();
+    RCLCPP_INFO_THROTTLE(get_logger(), *this->get_clock(), 2000,
+                         "Mission complete. Hovering.");
+    return;
+  }
+
+  driveToWaypoint();
+}
+
+void DroneController::buildLawnmowerPlan() {
+  waypoints_.clear();
+  const int cols = std::max(1, static_cast<int>(
+      std::floor((max_x_ - min_x_) / std::max(0.01, lane_spacing_)) + 1));
+
+  for (int i = 0; i < cols; ++i) {
+    const double x = min_x_ + i * lane_spacing_;
+    geometry_msgs::msg::Pose2D p1, p2;
+    if ((i % 2) == 0) {
+      p1.x = x; p1.y = min_y_;
+      p2.x = x; p2.y = max_y_;
+    } else {
+      p1.x = x; p1.y = max_y_;
+      p2.x = x; p2.y = min_y_;
+    }
+    waypoints_.push_back(p1);
+    waypoints_.push_back(p2);
+  }
+  wpt_idx_ = 0;
+}
+
+double DroneController::wrapToPi(double a) {
+  while (a >  M_PI) a -= 2*M_PI;
+  while (a < -M_PI) a += 2*M_PI;
   return a;
 }
 
-double DroneController::yaw_from_quat(double x, double y, double z, double w) {
-  return std::atan2(2.0 * (w * z + x * y),
-                    1.0 - 2.0 * (y * y + z * z));
-}
+void DroneController::driveToWaypoint() {
+  const auto &o = *odom_;
+  const double x = o.pose.pose.position.x;
+  const double y = o.pose.pose.position.y;
 
-// --- constructor ---
-DroneController::DroneController() : rclcpp::Node("dronecontroller") {
-  // Parameters
-  odom_topic_        = declare_parameter<std::string>("odom_topic", "/parrot/odometry");
-  cmd_vel_topic_     = declare_parameter<std::string>("cmd_vel_topic", "/parrot/cmd_vel");
-  mission_target_topic_ = declare_parameter<std::string>("mission_target_topic", "/mission/target");
-  status_topic_      = declare_parameter<std::string>("status_topic", "/mission/status");
+  const auto &q = o.pose.pose.orientation;
+  const double yaw = std::atan2(2.0*(q.w*q.z + q.x*q.y),
+                                1.0 - 2.0*(q.y*q.y + q.z*q.z));
 
-  kp_lin_            = declare_parameter<double>("kp_lin", 0.8);
-  kp_yaw_            = declare_parameter<double>("kp_yaw", 1.0);
-  max_speed_         = declare_parameter<double>("max_speed", 0.8);
-  max_yaw_rate_      = declare_parameter<double>("max_yaw_rate", 0.8);
-  pos_tol_           = declare_parameter<double>("pos_tol", 0.25);
-  yaw_tol_           = declare_parameter<double>("yaw_tol", 0.25);
-  hold_time_s_       = declare_parameter<double>("hold_time_s", 0.5);
+  const auto &wpt = waypoints_[wpt_idx_];
+  const double dx = wpt.x - x;
+  const double dy = wpt.y - y;
+  const double dist = std::hypot(dx, dy);
 
-  auto qos = rclcpp::QoS(10).reliable();
+  const double target_yaw = std::atan2(dy, dx);
+  const double err_yaw = wrapToPi(target_yaw - yaw);
 
-  // Publishers
-  pub_cmd_ = create_publisher<geometry_msgs::msg::Twist>(cmd_vel_topic_, qos);
-  pub_status_ = create_publisher<std_msgs::msg::String>(status_topic_, qos);
-
-  // Subscribers
-  sub_odom_ = create_subscription<nav_msgs::msg::Odometry>(
-      odom_topic_, qos, std::bind(&DroneController::odom_cb, this, _1));
-
-  sub_target_ = create_subscription<geometry_msgs::msg::PoseStamped>(
-      mission_target_topic_, qos, std::bind(&DroneController::target_cb, this, _1));
-
-  timer_ = create_wall_timer(50ms, std::bind(&DroneController::control_tick, this));
-
-  have_odom_ = false;
-  have_target_ = false;
-  within_tol_since_ = rclcpp::Time{};
-
-  RCLCPP_INFO(get_logger(),
-              "DroneController up. Tracking mission targets on '%s', publishing status on '%s'.",
-              mission_target_topic_.c_str(), status_topic_.c_str());
-}
-
-// --- Callbacks ---
-void DroneController::odom_cb(const nav_msgs::msg::Odometry::SharedPtr msg) {
-  x_ = msg->pose.pose.position.x;
-  y_ = msg->pose.pose.position.y;
-  yaw_ = yaw_from_quat(
-      msg->pose.pose.orientation.x,
-      msg->pose.pose.orientation.y,
-      msg->pose.pose.orientation.z,
-      msg->pose.pose.orientation.w);
-  have_odom_ = true;
-}
-
-void DroneController::target_cb(const geometry_msgs::msg::PoseStamped::SharedPtr msg) {
-  target_x_ = msg->pose.position.x;
-  target_y_ = msg->pose.position.y;
-  target_yaw_ = yaw_from_quat(
-      msg->pose.orientation.x,
-      msg->pose.orientation.y,
-      msg->pose.orientation.z,
-      msg->pose.orientation.w);
-  have_target_ = true;
-  within_tol_since_ = rclcpp::Time{};
-  RCLCPP_INFO(get_logger(), "Received new mission target (x=%.2f, y=%.2f, yaw=%.2f)",
-              target_x_, target_y_, target_yaw_);
-}
-
-// --- Control loop ---
-void DroneController::control_tick() {
   geometry_msgs::msg::Twist cmd;
+  cmd.angular.z = std::clamp(k_yaw_ * err_yaw, -1.2, 1.2);
+  cmd.linear.x  = std::clamp(v_ * std::cos(err_yaw), 0.0, v_);
 
-  if (!have_odom_) {
-    RCLCPP_INFO_THROTTLE(get_logger(), *get_clock(), 2000, "Waiting for odometry...");
-    pub_cmd_->publish(cmd);
-    return;
+  cmd_pub_->publish(cmd);
+
+  if (dist < waypoint_tol_) {
+    ++wpt_idx_;
+    RCLCPP_INFO(get_logger(), "✅ Reached waypoint %zu/%zu (%.2f, %.2f)",
+                wpt_idx_, waypoints_.size(), wpt.x, wpt.y);
   }
-
-  if (!have_target_) {
-    pub_cmd_->publish(cmd); // stop
-    return;
-  }
-
-  // Compute errors
-  double ex = target_x_ - x_;
-  double ey = target_y_ - y_;
-  double dist = std::hypot(ex, ey);
-  double heading_to_wp = std::atan2(ey, ex);
-  double yaw_err = angle_wrap(heading_to_wp - yaw_);
-
-  // Check if within tolerance
-  if (dist < pos_tol_) {
-    if (within_tol_since_.nanoseconds() == 0)
-      within_tol_since_ = now();
-
-    double held = (now() - within_tol_since_).seconds();
-    if (held >= hold_time_s_) {
-      std_msgs::msg::String done;
-      done.data = "ARRIVED";
-      pub_status_->publish(done);
-      RCLCPP_INFO(get_logger(), "✅ Arrived at target (x=%.2f, y=%.2f). Holding.", target_x_, target_y_);
-      have_target_ = false;
-      pub_cmd_->publish(cmd);
-      return;
-    }
-  } else {
-    within_tol_since_ = rclcpp::Time{};
-  }
-
-  // Compute control
-  double vx_cmd = kp_lin_ * dist;
-  double wz_cmd = kp_yaw_ * yaw_err;
-  vx_cmd = clamp(vx_cmd, -max_speed_, max_speed_);
-  wz_cmd = clamp(wz_cmd, -max_yaw_rate_, max_yaw_rate_);
-
-  cmd.linear.x = vx_cmd;
-  cmd.angular.z = wz_cmd;
-  pub_cmd_->publish(cmd);
 }
 
-// --- main ---
-int main(int argc, char **argv) {
+void DroneController::publishStop() {
+  geometry_msgs::msg::Twist zero{};
+  cmd_pub_->publish(zero);
+}
+
+void DroneController::logObstacle(const char* source) {
+  if (odom_) {
+    const auto &p = odom_->pose.pose.position;
+    RCLCPP_WARN(get_logger(), "🚧 Logged obstacle (%s) at (x=%.2f, y=%.2f, z=%.2f)",
+                source, p.x, p.y, p.z);
+  }
+}
+
+int main(int argc, char ** argv) {
   rclcpp::init(argc, argv);
-  rclcpp::spin(std::make_shared<DroneController>());
+  auto node = std::make_shared<DroneController>();
+  rclcpp::spin(node);
   rclcpp::shutdown();
   return 0;
 }
-

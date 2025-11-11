@@ -7,3 +7,4 @@ install/
 .vscode/
 
 # Keep other patterns below as needed
+log/
