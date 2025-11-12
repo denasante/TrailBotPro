@@ -1,6 +1,7 @@
 from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo
+from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, LogInfo, GroupAction
 from launch.substitutions import LaunchConfiguration, PathJoinSubstitution
+from launch_ros.actions import SetRemap
 from launch_ros.substitutions import FindPackageShare
 
 
@@ -32,13 +33,16 @@ def generate_launch_description():
     nav2_params_path = PathJoinSubstitution([config_path, 'nav2_params.yaml'])
     nav2_log = LogInfo(msg=['Nav2 params file: ', nav2_params_path])
 
-    navigation = IncludeLaunchDescription(
-        PathJoinSubstitution([FindPackageShare('nav2_bringup'), 'launch', 'navigation_launch.py']),
-        launch_arguments={
-            'use_sim_time': use_sim_time,
-            'params_file': nav2_params_path
-        }.items()
-    )
+    navigation = GroupAction(actions=[
+        SetRemap('cmd_vel', '/husky/cmd_vel'),
+        IncludeLaunchDescription(
+            PathJoinSubstitution([FindPackageShare('nav2_bringup'), 'launch', 'navigation_launch.py']),
+            launch_arguments={
+                'use_sim_time': use_sim_time,
+                'params_file': nav2_params_path,
+            }.items()
+        )
+    ])
 
     ld.add_action(use_sim_time_launch_arg)
     ld.add_action(slam)
