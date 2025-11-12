@@ -13,7 +13,7 @@ slam_toolbox:
     odom_frame: odom          # Will become parrot/odom
     map_frame: map            # Will become parrot/map
     base_frame: base_link     # Will become parrot/base_link
-    scan_topic: /parrot/scan  # Keep full path for topics
+    scan_topic: /scan  # Keep full path for topics
     use_map_saver: true
     mode: mapping
 

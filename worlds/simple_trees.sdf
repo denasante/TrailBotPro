@@ -76,7 +76,7 @@
       <pose>9.0 0.0 0 0 0 0</pose>
     </include>
 
-    <!-- Green Bamboo Cluster -->
+    <!-- Purple Bamboo Cluster -->
       <include>
       <uri>model://bamboo_thicket_PURPLE</uri>
       <name>bamboo_thicket_PURPLE_1</name>

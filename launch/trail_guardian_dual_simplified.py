@@ -146,7 +146,7 @@ def generate_launch_description():
             '/model/husky/joint_states@sensor_msgs/msg/JointState[ignition.msgs.Model',
             '/model/husky/odometry@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
             '/model/husky/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU',
-            '/model/husky/cmd_vel@geometry_msgs/msg/Twist[ignition.msgs.Twist',
+            '/model/husky/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
             '/model/husky/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
             '/model/husky/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
             '/model/husky/camera/image@sensor_msgs/msg/Image[ignition.msgs.Image',
