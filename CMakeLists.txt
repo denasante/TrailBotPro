@@ -95,6 +95,7 @@ install(PROGRAMS
   tree_detector.py
   drone_keyboard_teleop.py
   square_pattern_flight.py
+  scripts/frame_id_relay.py
   DESTINATION lib/${PROJECT_NAME}
 )
 
@@ -104,11 +105,6 @@ install(PROGRAMS
   scripts/frontier_explorer.py
   scripts/drone_goal_publisher.py
   DESTINATION lib/${PROJECT_NAME}
-)
-
-# Install config files
-install(DIRECTORY config/
-  DESTINATION share/${PROJECT_NAME}/config
 )
 
 

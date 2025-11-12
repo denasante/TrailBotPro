@@ -11,15 +11,28 @@ robot_localization:
         world_frame: odom
 
         odom0: odometry
-        odom0_config: [true,  true,  false,    # ✅ Enable X, Y position (not Z for 2D)
-                      false, false, false,     # Roll, Pitch, Yaw position (disabled - use velocities instead)
-                      true,  true,  false,     # ✅ X, Y velocity enabled
-                      false, false, true,      # ✅ Yaw rate enabled  
-                      false, false, false]     # Accelerations disabled
+        odom0_config: [
+            true,  true,  false,   # position x, y
+            false, false, false,   # roll/pitch/yaw positions (unused in 2D)
+            true,  true,  false,   # linear velocities x, y
+            false, false, true,    # yaw rate
+            false, false, false    # accelerations
+        ]
+        odom0_differential: true
+        odom0_relative: false
+        odom0_nodelay: true
+        odom0_pose_rejection_threshold: 5.0
+        odom0_twist_rejection_threshold: 1.0
+        odom0_queue_size: 10
 
         imu0: imu
-        imu0_config: [false, false, false,     # Position (IMU doesn't provide this)
-                      false, false, false,     # Orientation (disabled - causes drift)
-                      false, false, false,     # Velocity (IMU doesn't provide this directly)
-                      false, false, true,      # ✅ Yaw rate enabled
-                      true,  true,  true]      # ✅ Enable linear accelerations X, Y, Z
+        imu0_config: [
+            false, false, false,   # position
+            false, false, false,   # roll/pitch/yaw (use odom yaw to avoid drift)
+            false, false, false,   # linear velocity
+            false, false, true,    # yaw rate
+            true,  true,  true     # linear acceleration
+        ]
+        imu0_nodelay: true
+        imu0_remove_gravitational_acceleration: true
+        imu0_queue_size: 50

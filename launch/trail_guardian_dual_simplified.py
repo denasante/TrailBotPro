@@ -132,7 +132,7 @@ def generate_launch_description():
         arguments=[
             '-name', 'husky',
             '-topic', '/husky/robot_description',
-            '-x', '0.0', '-y', '-2.0', '-z', '0.5'
+            '-x', '0.0', '-y', '-1.0', '-z', '0.5'
         ],
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
@@ -155,10 +155,10 @@ def generate_launch_description():
         ],
         remappings=[
             ('/model/husky/joint_states', '/husky/joint_states'),
-            ('/model/husky/odometry', '/husky/odometry'),
-            ('/model/husky/imu', '/husky/imu'),
+            ('/model/husky/odometry', '/husky/odometry/raw'),
+            ('/model/husky/imu', '/husky/imu/raw'),
             ('/model/husky/cmd_vel', '/husky/cmd_vel'),
-            ('/model/husky/scan', '/husky/scan'),
+            ('/model/husky/scan', '/husky/scan/raw'),
             ('/model/husky/scan/points', '/husky/scan/points'),
             ('/model/husky/camera/image', '/husky/camera/image'),
             ('/model/husky/camera/depth_image', '/husky/camera/depth_image'),
@@ -168,8 +168,60 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
 
+    husky_odom_relay = Node(
+        package='41068_ignition_bringup',
+        executable='frame_id_relay.py',
+        name='husky_odom_frame_relay',
+        parameters=[{
+            'input_topic': '/husky/odometry/raw',
+            'output_topic': '/husky/odometry',
+            'message_type': 'nav_msgs/msg/Odometry',
+            'frame_id': 'husky/odom',
+            'child_frame_id': 'husky/base_link',
+            'broadcast_tf': True,
+            'tf_frame_id': 'husky/odom',
+            'tf_child_frame_id': 'husky/base_link',
+            'tf_use_msg_time': False,
+        }],
+        condition=IfCondition(LaunchConfiguration('start_husky'))
+    )
+
+    husky_imu_relay = Node(
+        package='41068_ignition_bringup',
+        executable='frame_id_relay.py',
+        name='husky_imu_frame_relay',
+        parameters=[{
+            'input_topic': '/husky/imu/raw',
+            'output_topic': '/husky/imu',
+            'message_type': 'sensor_msgs/msg/Imu',
+            'frame_id': 'husky/base_link',
+        }],
+        condition=IfCondition(LaunchConfiguration('start_husky'))
+    )
+
+    husky_scan_relay = Node(
+        package='41068_ignition_bringup',
+        executable='frame_id_relay.py',
+        name='husky_scan_frame_relay',
+        parameters=[{
+            'input_topic': '/husky/scan/raw',
+            'output_topic': '/husky/scan',
+            'message_type': 'sensor_msgs/msg/LaserScan',
+            'frame_id': 'husky/base_scan',
+        }],
+        condition=IfCondition(LaunchConfiguration('start_husky'))
+    )
+
     husky_group = GroupAction(
-        actions=[husky_rsp, husky_ekf, husky_spawn, husky_bridge],
+        actions=[
+            husky_rsp,
+            husky_ekf,
+            husky_spawn,
+            husky_bridge,
+            husky_odom_relay,
+            husky_imu_relay,
+            husky_scan_relay,
+        ],
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
 
@@ -251,8 +303,8 @@ def generate_launch_description():
         ],
         remappings=[
             ('/model/parrot/joint_states', '/parrot/joint_states'),
-            ('/model/parrot/odometry', '/parrot/odometry'),
-            ('/model/parrot/imu', '/parrot/imu'),
+            ('/model/parrot/odometry', '/parrot/odometry/raw'),
+            ('/model/parrot/imu', '/parrot/imu/raw'),
             ('/model/parrot/cmd_vel', '/parrot/cmd_vel'),
             ('/model/parrot/camera/image', '/parrot/camera/image'),
             ('/model/parrot/camera/depth_image', '/parrot/camera/depth_image'),
@@ -261,8 +313,46 @@ def generate_launch_description():
         condition=IfCondition(LaunchConfiguration('start_drone'))
     )
 
+    parrot_odom_relay = Node(
+        package='41068_ignition_bringup',
+        executable='frame_id_relay.py',
+        name='parrot_odom_frame_relay',
+        parameters=[{
+            'input_topic': '/parrot/odometry/raw',
+            'output_topic': '/parrot/odometry',
+            'message_type': 'nav_msgs/msg/Odometry',
+            'frame_id': 'parrot/odom',
+            'child_frame_id': 'parrot/base_link',
+            'broadcast_tf': True,
+            'tf_frame_id': 'parrot/odom',
+            'tf_child_frame_id': 'parrot/base_link',
+            'tf_use_msg_time': False,
+        }],
+        condition=IfCondition(LaunchConfiguration('start_drone'))
+    )
+
+    parrot_imu_relay = Node(
+        package='41068_ignition_bringup',
+        executable='frame_id_relay.py',
+        name='parrot_imu_frame_relay',
+        parameters=[{
+            'input_topic': '/parrot/imu/raw',
+            'output_topic': '/parrot/imu',
+            'message_type': 'sensor_msgs/msg/Imu',
+            'frame_id': 'parrot/base_link',
+        }],
+        condition=IfCondition(LaunchConfiguration('start_drone'))
+    )
+
     parrot_group = GroupAction(
-        actions=[parrot_rsp, parrot_ekf, parrot_spawn, parrot_bridge],
+        actions=[
+            parrot_rsp,
+            parrot_ekf,
+            parrot_spawn,
+            parrot_bridge,
+            parrot_odom_relay,
+            parrot_imu_relay,
+        ],
         condition=IfCondition(LaunchConfiguration('start_drone'))
     )
 
@@ -284,7 +374,7 @@ def generate_launch_description():
     ld.add_action(rviz_node)
 
     nav2 = IncludeLaunchDescription(
-        PathJoinSubstitution([pkg_path, 'launch', '41068_navigation_launch.py']),
+        PathJoinSubstitution([pkg_path, 'launch', '41068_navigation.launch.py']),
         launch_arguments={'use_sim_time': use_sim_time}.items(),
         condition=IfCondition(LaunchConfiguration('nav2'))
     )
