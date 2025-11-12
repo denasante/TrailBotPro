@@ -10,10 +10,10 @@ slam_toolbox:
     ceres_loss_function: None
 
     # ROS Parameters
-    odom_frame: husky/odom
-    map_frame: map
-    base_frame: husky/base_link
-    scan_topic: /husky/scan
+    odom_frame: parrot/odom
+    map_frame: parrot/map
+    base_frame: parrot/base_link
+    scan_topic: /parrot/scan
     use_map_saver: true
     mode: mapping #localization
 

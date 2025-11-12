@@ -91,5 +91,148 @@
     <include><uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Oak%20tree</uri><name>ring_oak_14</name><pose> 6.93 -6.93 -0.3 0 0 7.07</pose></include>
     <include><uri>https://fuel.gazebosim.org/1.0/OpenRobotics/models/Pine%20tree</uri><name>ring_pine_15</name><pose> 9.05 -3.75 0 0 0 7.46</pose></include>
 
+
+
+    <!-- ===== COLORED BAMBOO CLUSTERS ===== -->
+    
+    <!-- Purple Bamboo Clusters (10 total) -->
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_1</name>
+      <pose>5 -1 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_2</name>
+      <pose>-9 6 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_3</name>
+      <pose>-10.5 -4.2 0 0 0 0.8</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_4</name>
+      <pose>8.3 6.7 0 0 0 1.5</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_5</name>
+      <pose>-3.5 -8.9 0 0 0 2.1</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_6</name>
+      <pose>10.2 -7.5 0 0 0 0.4</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_PURPLE</uri>
+      <name>bamboo_thicket_PURPLE_7</name>
+      <pose>-1.8 9.3 0 0 0 1.9</pose>
+    </include>
+
+
+    <!-- Red Bamboo Clusters (12 total) -->
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_1</name>
+      <pose>5 1 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_2</name>
+      <pose>-2 7 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_3</name>
+      <pose>-8.7 -9.2 0 0 0 1.2</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_4</name>
+      <pose>9.8 3.4 0 0 0 0.7</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_5</name>
+      <pose>-5.5 10.1 0 0 0 2.3</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_6</name>
+      <pose>7.2 -10.4 0 0 0 1.8</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_7</name>
+      <pose>-11.3 2.8 0 0 0 0.9</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_8</name>
+      <pose>-0.7 -11.6 0 0 0 2.5</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_RED</uri>
+      <name>bamboo_thicket_RED_9</name>
+      <pose>11.4 8.2 0 0 0 0.3</pose>
+    </include>
+
+
+    <!-- Yellow Bamboo Clusters (13 total) -->
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_1</name>
+      <pose>5 3 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_2</name>
+      <pose>-7 1 0 0 0 0</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_3</name>
+      <pose>6.8 9.5 0 0 0 1.4</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_4</name>
+      <pose>-4.2 -10.8 0 0 0 0.6</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_5</name>
+      <pose>11.1 -2.3 0 0 0 2.5</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_6</name>
+      <pose>-10.9 8.6 0 0 0 1.1</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_7</name>
+      <pose>2.9 -9.7 0 0 0 1.9</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_8</name>
+      <pose>-6.4 -6.1 0 0 0 0.3</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_9</name>
+      <pose>10.6 5.2 0 0 0 2.2</pose>
+    </include>
+    <include>
+      <uri>model://bamboo_thicket_YELLOW</uri>
+      <name>bamboo_thicket_YELLOW_10</name>
+      <pose>-2.5 -7.3 0 0 0 0.8</pose>
+    </include>
+
+
   </world>
 </sdf>

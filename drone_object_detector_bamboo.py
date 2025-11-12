@@ -4,7 +4,7 @@ Trail Guardian Drone Object Detection Node - Bamboo Cluster Detection
 Group 16 - 41068 Robotics Studio 1
 
 Detects colored bamboo clusters from aerial surveillance:
-- Red Bamboo (bamboo_thicket_RED)
+- Red wolf (bamboo_thicket_RED)
 - Yellow Bamboo (bamboo_thicket_YELLOW)
 - Purple Bamboo (bamboo_thicket_PURPLE)
 
@@ -117,7 +117,7 @@ class DroneObjectDetector(Node):
         self.get_logger().info(f'Detection rate: {self.detection_rate} Hz')
         self.get_logger().info(f'Min area: {self.min_area} px, Max area: {self.max_area} px')
         self.get_logger().info(f'Confidence threshold: {self.confidence_threshold}')
-        self.get_logger().info('Detecting: RED, YELLOW, PURPLE bamboo clusters')
+        self.get_logger().info('Detecting: RED, YELLOW, PURPLE Wolves')
         self.get_logger().info('=' * 60)
 
     def depth_callback(self, msg):
@@ -164,9 +164,9 @@ class DroneObjectDetector(Node):
         Detect colored bamboo clusters using HSV color space.
         
         Detects:
-        - Red Bamboo Clusters
-        - Yellow Bamboo Clusters
-        - Purple Bamboo Clusters
+        - Red Wolf
+        - Yellow Wolf
+        - Purple Wolf
         """
         detections = []
         
@@ -181,31 +181,31 @@ class DroneObjectDetector(Node):
         # HSV ranges tuned for the bamboo cluster colors
         # ===================================================================
         color_ranges = {
-            'red_bamboo': {
+            'red_Wolf': {
                 'lower': np.array([0, 120, 70]),      # Red lower bound
                 'upper': np.array([10, 255, 255]),    # Red upper bound
                 'color': (0, 0, 255),                 # BGR: Red
-                'display_name': 'Red Bamboo'
+                'display_name': 'Red Wolf'
             },
-            'red_bamboo_wrap': {  # Red wraps around in HSV (170-180)
+            'red_wolf_wrap': {  # Red wraps around in HSV (170-180)
                 'lower': np.array([170, 120, 70]),
                 'upper': np.array([180, 255, 255]),
                 'color': (0, 0, 255),
-                'display_name': 'Red Bamboo'
+                'display_name': 'Red Wolf'
             },
-            'yellow_bamboo': {
+            'yellow_wolf': {
                 'lower': np.array([20, 100, 100]),    # Yellow lower bound
                 'upper': np.array([35, 255, 255]),    # Yellow upper bound
                 'color': (0, 255, 255),               # BGR: Yellow
-                'display_name': 'Yellow Bamboo'
+                'display_name': 'Yellow Wolf'
             },
-            'purple_bamboo': {
+            'purple_Wolf': {
                 # Purple: Hue 0.737 = 133° in OpenCV (0-180 scale)
                 # Sat 0.981 = 250, Val 1.0 = 255
                 'lower': np.array([120, 100, 100]),   # Purple lower bound
                 'upper': np.array([150, 255, 255]),   # Purple upper bound
                 'color': (255, 0, 255),               # BGR: Magenta/Purple
-                'display_name': 'Purple Bamboo'
+                'display_name': 'Purple Wolf'
             }
         }
         
@@ -217,12 +217,12 @@ class DroneObjectDetector(Node):
             mask = cv2.inRange(hsv, color_config['lower'], color_config['upper'])
             
             # For red, we need to combine both ranges (0-10 and 170-180)
-            if color_name == 'red_bamboo':
+            if color_name == 'red_wolf':
                 mask_wrap = cv2.inRange(hsv, 
-                                       color_ranges['red_bamboo_wrap']['lower'],
-                                       color_ranges['red_bamboo_wrap']['upper'])
+                                       color_ranges['red_wolf_wrap']['lower'],
+                                       color_ranges['red_wolf_wrap']['upper'])
                 mask = cv2.bitwise_or(mask, mask_wrap)
-            elif color_name == 'red_bamboo_wrap':
+            elif color_name == 'red_wolf_wrap':
                 continue  # Skip, already handled above
             
             # Clean up mask with morphological operations
@@ -388,7 +388,7 @@ class DroneObjectDetector(Node):
             self.marker_pub.publish(markers)
         
         self.get_logger().info(
-            f'Published {len(detections)} bamboo detections (total: {self.detection_count})'
+            f'Published {len(detections)} wolves detections (total: {self.detection_count})'
         )
 
     def calculate_3d_position(self, detection, header):
@@ -466,7 +466,7 @@ class DroneObjectDetector(Node):
         """Create RViz visualization marker for detection"""
         marker = Marker()
         marker.header = pose.header
-        marker.ns = "bamboo_clusters"
+        marker.ns = "wolf_clusters"
         marker.id = self.marker_id + marker_id
         marker.type = Marker.CYLINDER  # Better representation for bamboo clusters
         marker.action = Marker.ADD
