@@ -146,7 +146,7 @@ def generate_launch_description():
             '/model/husky/joint_states@sensor_msgs/msg/JointState[ignition.msgs.Model',
             '/model/husky/odometry@nav_msgs/msg/Odometry[ignition.msgs.Odometry',
             '/model/husky/imu@sensor_msgs/msg/Imu[ignition.msgs.IMU',
-            '/model/husky/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',
+            '/model/husky/cmd_vel@geometry_msgs/msg/Twist]ignition.msgs.Twist',  # ROS->GZ command bridge
             '/model/husky/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan',
             '/model/husky/scan/points@sensor_msgs/msg/PointCloud2[gz.msgs.PointCloudPacked',
             '/model/husky/camera/image@sensor_msgs/msg/Image[ignition.msgs.Image',
@@ -181,7 +181,8 @@ def generate_launch_description():
             'broadcast_tf': True,
             'tf_frame_id': 'husky/odom',
             'tf_child_frame_id': 'husky/base_link',
-            'tf_use_msg_time': False,
+            'tf_use_msg_time': True,
+            'use_sim_time': use_sim_time,
         }],
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
@@ -195,6 +196,7 @@ def generate_launch_description():
             'output_topic': '/husky/imu',
             'message_type': 'sensor_msgs/msg/Imu',
             'frame_id': 'husky/base_link',
+            'use_sim_time': use_sim_time,
         }],
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
@@ -208,6 +210,7 @@ def generate_launch_description():
             'output_topic': '/husky/scan',
             'message_type': 'sensor_msgs/msg/LaserScan',
             'frame_id': 'husky/base_scan',
+            'use_sim_time': use_sim_time,
         }],
         condition=IfCondition(LaunchConfiguration('start_husky'))
     )
@@ -326,7 +329,8 @@ def generate_launch_description():
             'broadcast_tf': True,
             'tf_frame_id': 'parrot/odom',
             'tf_child_frame_id': 'parrot/base_link',
-            'tf_use_msg_time': False,
+            'tf_use_msg_time': True,
+            'use_sim_time': use_sim_time,
         }],
         condition=IfCondition(LaunchConfiguration('start_drone'))
     )
@@ -340,6 +344,7 @@ def generate_launch_description():
             'output_topic': '/parrot/imu',
             'message_type': 'sensor_msgs/msg/Imu',
             'frame_id': 'parrot/base_link',
+            'use_sim_time': use_sim_time,
         }],
         condition=IfCondition(LaunchConfiguration('start_drone'))
     )
