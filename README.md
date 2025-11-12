@@ -90,6 +90,58 @@ By popular request, I've added a simple drone to the package, which requires a f
 
 
 
+## Standalone ROS 2 Nodes
+
+Again, make sure the workspace is built and `source install/setup.bash` has been run so `ros2 run` can find the executables.
+
+### Autonomy & perception nodes (`ros2 run 41068_ignition_bringup <executable>`)
+
+- **`dronecontroller`** (`dronecontroller.cpp`): Lawn-mower coverage controller for the Parrot with LiDAR-based obstacle avoidance (`/odometry`, `/scan` → `cmd_vel`).  
+  Launch: `ros2 run 41068_ignition_bringup dronecontroller --ros-args -p min_x:=-12.0 -p max_x:=12.0 -p scan_topic:=/parrot/scan`
+
+- **`rover_controller`** (`rover_controller.cpp`): Frontier-based waypoint generator for Husky (`/map` → `/waypoint`).  
+  Launch: `ros2 run 41068_ignition_bringup rover_controller --ros-args -p map_frame:=husky/map -p goal_offset_m:=0.5`
+
+- **`mission_interface`** (`mission_interface.cpp`): Nav2 NavigateToPose action client that streams `/waypoint` topics or CSV paths to Nav2.  
+  Launch: `ros2 run 41068_ignition_bringup mission_interface --ros-args -p path_csv:=/tmp/mission.csv -p loop:=true`
+
+- **`drone_object_detector_bamboo.py`**: HSV + depth based bamboo-cluster detector publishing `/trail_guardian/detections`, `/trail_guardian/anomaly_location`, `/trail_guardian/detection_markers`.  
+  Launch: `ros2 run 41068_ignition_bringup drone_object_detector_bamboo.py --ros-args -p visualization:=true -p detection_rate:=2.0`
+
+- **`tree_detector.py`**: Oak/pine detector that fuses color, shape, and depth cues and republishes markers + `/trail_guardian/tree_location`.  
+  Launch: `ros2 run 41068_ignition_bringup tree_detector.py --ros-args -p detection_rate:=0.5`
+
+- **`square_pattern_flight.py`**: Publishes `/parrot/goal_pose` waypoints to fly a calibration square for perception testing.  
+  Launch: `ros2 run 41068_ignition_bringup square_pattern_flight.py --ros-args -p square_size:=12.0 -p flight_height:=3.5`
+
+- **`frontier_explorer.py`** (`scripts/frontier_explorer.py`): Consumes an occupancy grid (`/parrot/map`) and publishes frontier goals to `/parrot/goal_pose`, plus RViz markers.  
+  Launch: `ros2 run 41068_ignition_bringup frontier_explorer.py --ros-args -p exploration_radius:=20.0`
+
+- **`object_landmark_mapper.py`** (`scripts/object_landmark_mapper.py`): RGB-D landmark mapper that deduplicates detections and exports GeoJSON/CSV plus `/unique_objects_viz`.  
+  Launch: `ros2 run 41068_ignition_bringup object_landmark_mapper.py --ros-args -p output_dir:=/tmp/landmarks -p dedup_radius:=0.6`
+
+- **`drone_goal_publisher.py`** (`scripts/drone_goal_publisher.py`): Convenience Nav2 goal sender (CLI or command-line coordinates) for any namespace.  
+  Launch: `ros2 run 41068_ignition_bringup drone_goal_publisher.py --ros-args -p namespace:=parrot`
+
+### Teleop, bridging, and infrastructure
+
+- **`drone_keyboard_teleop.py`**: Raw terminal teleop for the Parrot (`/parrot/cmd_vel`). Run in a dedicated terminal with focus on the window.  
+  Launch: `ros2 run 41068_ignition_bringup drone_keyboard_teleop.py`
+
+- **`frame_id_relay.py`** (`scripts/frame_id_relay.py`): Generic relay that rewrites `header.frame_id` / `child_frame_id` and can also broadcast TF for odometry streams.  
+  Launch: `ros2 run 41068_ignition_bringup frame_id_relay.py --ros-args -p input_topic:=/husky/odometry/raw -p output_topic:=/husky/odometry -p message_type:=nav_msgs/msg/Odometry -p frame_id:=husky/odom -p child_frame_id:=husky/base_link -p broadcast_tf:=true`
+
+- **`static_camera_info_pub`** (`static_camera_info_pub.cpp`): Publishes `sensor_msgs/CameraInfo` matching a YAML file whenever `/camera/image` arrives (useful for AprilTag).  
+  Launch: `ros2 run 41068_ignition_bringup static_camera_info_pub --ros-args -p camera_info_yaml:=$(ros2 pkg prefix 41068_ignition_bringup)/share/41068_ignition_bringup/config/camera_info.yaml`
+
+### Developer-only scripts (run from the package root)
+
+- **`autonomous_scout.py`**: High-level finite-state autonomous scout for the Parrot (coverage path + POI reporting). Run with `python3 autonomous_scout.py` after sourcing the workspace; it talks to `/parrot/odometry`, `/parrot/cmd_vel`, and `/trail_guardian/*` topics.
+
+- **`control_ui.py`**: Tkinter control surface for Husky teleop (`/husky/cmd_vel`) plus status channel. Either run `python3 control_ui.py` or use the packaged launch file (`ros2 launch 41068_ignition_bringup ui_launch.py`) once you have a GUI session.
+
+- **`drone_object_detector copy.py`**: Legacy hazard detector variant that looks for erosion/obstacle colors instead of bamboo. Run manually via `python3 "drone_object_detector copy.py"` if you still need that pipeline.
+
 
 ## Errors
 
@@ -120,3 +172,19 @@ I found [this thread](https://robotics.stackexchange.com/questions/111547/gazebo
 ```bash
 export QT_QPA_PLATFORM=xcb
 ```
+## Launch Files At-a-Glance
+
+All `ros2 launch` examples below assume you have already built the workspace with `colcon build --symlink-install` and sourced `install/setup.bash`.
+
+| Launch file | What it starts | Key arguments | Command |
+| --- | --- | --- | --- |
+| `41068_ignition.launch.py` | Husky in Ignition Gazebo (robot_state_publisher, robot_localization EKF, ROS⇔Ign bridge, optional SLAM/Nav2 + RViz) | `world`, `nav2`, `rviz`, `use_sim_time` | `ros2 launch 41068_ignition_bringup 41068_ignition.launch.py world:=simple_trees nav2:=true rviz:=true` |
+| `41068_ignition_drone.launch.py` | Parrot drone only: Gazebo spawn, EKF, ROS⇔Ign bridges, static camera info pub, AprilTag node, `dronecontroller`, optional Nav2/RViz | `world`, `nav2`, `rviz`, `use_sim_time` | `ros2 launch 41068_ignition_bringup 41068_ignition_drone.launch.py world:=forest_trail nav2:=true` |
+| `trail_guardian_autonomous_explorer.launch.py` | Stage-by-stage bring-up tuned for the autonomous explorer mission (Gazebo, Parrot spawn, EKF, SLAM Toolbox, direct Nav2 launch, RViz) | `world`, `enable_slam`, `enable_nav2`, `rviz` | `ros2 launch 41068_ignition_bringup trail_guardian_autonomous_explorer.launch.py world:=large_demo enable_nav2:=true` |
+| `trail_guardian_dual_simplified.py` | Simplified dual-robot launch (Husky + Parrot) with namespaced robot_state_publishers, EKFs, Ign bridges, and frame relays | `world`, `start_husky`, `start_drone`, `nav2`, `rviz`, `use_sim_time` | `ros2 launch 41068_ignition_bringup trail_guardian_dual_simplified.py start_husky:=true start_drone:=true nav2:=false` |
+| `dual_sim.launch.py` | Feature-rich dual simulation with optional sensor stripping, headless Ignition mode, and Nav2 toggles | `world_file`, `start_rover`, `start_drone`, `rviz`, `nav2`, `strip_cameras_on`, `headless` | `ros2 launch 41068_ignition_bringup dual_sim.launch.py start_rover:=true start_drone:=false strip_cameras_on:=parrot` |
+| `41068_navigation.launch.py` | SLAM Toolbox + Nav2 stack for Husky (also included from the other launchers) | `use_sim_time` | `ros2 launch 41068_ignition_bringup 41068_navigation.launch.py use_sim_time:=true` |
+| `parrot_nav2.launch.py` | Full Nav2 stack for the Parrot namespace using YAML parameters (controller, planner, behaviors, BT navigator, waypoint follower, velocity smoother) | `namespace`, `params_file`, `autostart`, `use_sim_time` | `ros2 launch 41068_ignition_bringup parrot_nav2.launch.py namespace:=parrot use_sim_time:=true` |
+| `parrot_nav2_direct_launch.py` | Hard-coded Nav2 configuration (no YAML) used by the autonomous explorer launch | `namespace`, `use_sim_time` | `ros2 launch 41068_ignition_bringup parrot_nav2_direct_launch.py namespace:=parrot` |
+| `"Test husky only launch.py"` | Minimal Husky-only Gazebo bring-up for debugging (rsp, EKF, Ign bridge) | `world`, `use_sim_time` | `ros2 launch 41068_ignition_bringup "Test husky only launch.py" world:=simple_trees` |
+| `ui_launch.py` | Starts the Tk-based `control_ui` node so you can drive Husky via GUI buttons/WASD | *(none)* | `ros2 launch 41068_ignition_bringup ui_launch.py` |
